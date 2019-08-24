@@ -1,0 +1,9 @@
+{
+  "name": "mentions",
+  "version": "0.0.0",
+  "description": "Adds a 'mentions' section to knowledge base documents",
+  "main": "index.js",
+  "author": "Kevin Goslar",
+  "license": "MIT",
+  "private": false
+}
