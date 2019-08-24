@@ -1,22 +1,39 @@
-import { Given, Then, When } from "cucumber"
+import { Before, setWorldConstructor, Given, Then, When } from "cucumber"
+import { promises as fsp } from "fs"
+import fse from "fs-extra"
+import path from "path"
+import { mentions } from "../src/mentions"
+import assert from "assert"
 
-Given("the workspace contains file {string} with content:", function(
-  string,
-  docString
+setWorldConstructor(function CustomWorld() {
+  this.workspacePath = function(filePath: string) {
+    return path.join(this.workspace, filePath)
+  }
+})
+
+Before(async function() {
+  this.workspace = "./tmp"
+  await fse.emptyDir(this.workspace)
+})
+
+Given("the workspace contains file {string} with content:", async function(
+  filename,
+  content
 ) {
-  // Write code here that turns the phrase above into concrete actions
-  return "pending"
+  return fsp.writeFile(this.workspacePath(filename), content)
 })
 
-Then("the workspace should contain the file {string} with content:", function(
-  string,
-  docString
-) {
-  // Write code here that turns the phrase above into concrete actions
-  return "pending"
+When("running Mentions", async function() {
+  await mentions()
 })
 
-When("running Mentions", function() {
-  // Write code here that turns the phrase above into concrete actions
-  return "pending"
-})
+Then(
+  "the workspace should contain the file {string} with content:",
+  async function(filename, expectedContent) {
+    const actualContent = await fsp.readFile(
+      this.workspacePath(filename),
+      "utf8"
+    )
+    assert.equal(actualContent, expectedContent)
+  }
+)

@@ -4,7 +4,7 @@ build: clean    # builds for the current platform
 clean:   # Removes all build artifacts
 	@rm -rf dist
 
-cuke: build   # runs the feature specs
+cuke:  # runs the feature specs
 	@node_modules/.bin/cucumber-js --format progress
 
 help:   # prints all make targets
