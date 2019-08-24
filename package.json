@@ -1,9 +1,14 @@
 {
   "name": "mentions",
   "version": "0.0.0",
-  "description": "Adds a 'mentions' section to knowledge base documents",
-  "main": "index.js",
   "author": "Kevin Goslar",
-  "license": "MIT",
-  "private": false
+  "description": "Adds a 'mentions' section to knowledge base documents",
+  "devDependencies": {
+    "@types/cucumber": "4.0.7",
+    "@types/node": "12.7.2",
+    "cucumber": "5.1.0",
+    "ts-node": "8.3.0",
+    "typescript": "3.5.3"
+  },
+  "license": "MIT"
 }
