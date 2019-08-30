@@ -1,8 +1,8 @@
 {
-  "name": "mentions",
+  "name": "tikibase",
   "version": "0.0.0",
   "author": "Kevin Goslar",
-  "description": "Adds a 'mentions' section to knowledge base documents",
+  "description": "Timeless wiki-style information system",
   "devDependencies": {
     "@types/cucumber": "4.0.7",
     "@types/fs-extra": "8.0.0",
