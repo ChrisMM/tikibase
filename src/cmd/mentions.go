@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"github.com/kevgo/exit"
 	"github.com/kevgo/tikibase/src/mentions"
 	"github.com/spf13/cobra"
 )
 
+//nolint:gochecknoglobals
 // mentionsCmd represents the mentions command
 var mentionsCmd = &cobra.Command{
 	Use:   "mentions",
@@ -12,10 +14,12 @@ var mentionsCmd = &cobra.Command{
 	Long: `Updates the 'mentions' section of all documents,
 which contains backlinks to the current documents.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		mentions.Run()
+		err := mentions.Run(".")
+		exit.If(err)
 	},
 }
 
+//nolint:gochecknoinits
 func init() {
 	rootCmd.AddCommand(mentionsCmd)
 }

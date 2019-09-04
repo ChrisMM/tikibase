@@ -10,6 +10,7 @@ import (
 	"github.com/kevgo/tikibase/src/mentions"
 )
 
+//nolint:unused
 type workspaceFeature struct {
 	root string
 }
@@ -29,7 +30,7 @@ func (w *workspaceFeature) containsFileWithContent(filename string, content *ghe
 }
 
 func (w *workspaceFeature) runMentions() error {
-	return mentions.Run()
+	return mentions.Run(w.root)
 }
 
 func (w *workspaceFeature) shouldContainFileWithContent(filename string, content *gherkin.DocString) error {
