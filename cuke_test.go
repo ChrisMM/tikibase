@@ -11,6 +11,8 @@ import (
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
 	"github.com/kevgo/tikibase/src/mentions"
+	"github.com/pkg/errors"
+	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 //nolint:unused
@@ -47,7 +49,10 @@ func (w *workspaceFeature) shouldContainFileWithContent(filename string, content
 	}
 	text := string(data)
 	if strings.Compare(text, content.Content) != 0 {
-		return fmt.Errorf("text is different:\n\nEXPECTED:\n%s\n\nACTUAL:\n%s", content.Content, text)
+		dmp := diffmatchpatch.New()
+		diffs := dmp.DiffMain(text, content.Content, false)
+		fmt.Println(dmp.DiffPrettyText(diffs))
+		return fmt.Errorf("mismatching content for file %s", filename)
 	}
 	return nil
 }
