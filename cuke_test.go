@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 	"strings"
 
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
-	"github.com/kevgo/exit"
 	"github.com/kevgo/tikibase/src/mentions"
 )
 
@@ -22,10 +22,14 @@ func (w *workspaceFeature) createWorkspace(arg interface{}) {
 	_, err := os.Stat("tmp")
 	if os.IsNotExist(err) {
 		err = os.Mkdir("tmp", os.ModeDir|0777)
-		exit.IfWrap(err, "cannot create root tmp directory")
+		if err != nil {
+			log.Fatalf("cannot create root tmp directory: %s", err.Error())
+		}
 	}
 	w.root, err = ioutil.TempDir("tmp", "")
-	exit.IfWrap(err, "cannot create workspace")
+	if err != nil {
+		log.Fatalf("cannot create workspace: %s", err.Error())
+	}
 }
 
 func (w *workspaceFeature) containsFileWithContent(filename string, content *gherkin.DocString) error {
@@ -38,7 +42,9 @@ func (w *workspaceFeature) runMentions() error {
 
 func (w *workspaceFeature) shouldContainFileWithContent(filename string, content *gherkin.DocString) error {
 	data, err := ioutil.ReadFile(path.Join(w.root, filename))
-	exit.IfWrapf(err, "Cannot find file '%s' in workspace", filename)
+	if err != nil {
+		return errors.Wrapf(err, "Cannot find file '%s' in workspace", filename)
+	}
 	text := string(data)
 	if strings.Compare(text, content.Content) != 0 {
 		return fmt.Errorf("text is different:\n\nEXPECTED:\n%s\n\nACTUAL:\n%s", content.Content, text)

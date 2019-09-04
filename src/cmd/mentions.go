@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"github.com/kevgo/exit"
+	"log"
+
 	"github.com/kevgo/tikibase/src/mentions"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +16,9 @@ var mentionsCmd = &cobra.Command{
 which contains backlinks to the current documents.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := mentions.Run(".")
-		exit.If(err)
+		if err != nil {
+			log.Fatal(err)
+		}
 	},
 }
 

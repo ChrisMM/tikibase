@@ -22,22 +22,6 @@
   version = "v1.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:9e5be73250cb0c913f622d3d05922506400847677f7ce72816cd6059ef152323"
-  name = "github.com/kevgo/exit"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "aae62598982139b501b946545e0599968f2e5cbc"
-
-[[projects]]
-  digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
-  name = "github.com/pkg/errors"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
-  version = "v0.8.1"
-
-[[projects]]
   digest = "1:e096613fb7cf34743d49af87d197663cfccd61876e2219853005a57baedfa562"
   name = "github.com/spf13/cobra"
   packages = ["."]
@@ -59,7 +43,6 @@
   input-imports = [
     "github.com/DATA-DOG/godog",
     "github.com/DATA-DOG/godog/gherkin",
-    "github.com/kevgo/exit",
     "github.com/spf13/cobra",
   ]
   solver-name = "gps-cdcl"
