@@ -7,6 +7,7 @@ import (
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
 	"github.com/kevgo/exit"
+	"github.com/kevgo/tikibase/src/mentions"
 )
 
 type workspaceFeature struct {
@@ -28,7 +29,7 @@ func (w *workspaceFeature) containsFileWithContent(filename string, content *ghe
 }
 
 func (w *workspaceFeature) runMentions() error {
-	return godog.ErrPending
+	return mentions.Run()
 }
 
 func (w *workspaceFeature) shouldContainFileWithContent(filename string, content *gherkin.DocString) error {

@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/kevgo/tikibase/src/mentions"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +12,7 @@ var mentionsCmd = &cobra.Command{
 	Long: `Updates the 'mentions' section of all documents,
 which contains backlinks to the current documents.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("mentions called")
+		mentions.Run()
 	},
 }
 
