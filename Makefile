@@ -13,5 +13,11 @@ help:   # prints all make targets
 lint:  # runs all linters
 	@golangci-lint run --enable-all -D lll
 
+mentions:  # runs the 'mentions' command
+	@go run main.go mentions
+
+run:  # runs the command
+	@go run main.go
+
 test:  # runs the unit tests
 	@go test
