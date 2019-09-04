@@ -24,7 +24,7 @@ func (w *workspaceFeature) createWorkspace(arg interface{}) {
 }
 
 func (w *workspaceFeature) containsFileWithContent(filename string, content *gherkin.DocString) error {
-	return godog.ErrPending
+	return ioutil.WriteFile(filename, []byte(content.Content), 0644)
 }
 
 func (w *workspaceFeature) runMentions() error {
