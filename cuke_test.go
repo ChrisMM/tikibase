@@ -27,7 +27,7 @@ func (w *workspaceFeature) containsFileWithContent(filename string, content *ghe
 	return godog.ErrPending
 }
 
-func (w *workspaceFeature) runningMentions() error {
+func (w *workspaceFeature) runMentions() error {
 	return godog.ErrPending
 }
 
@@ -40,6 +40,6 @@ func FeatureContext(s *godog.Suite) {
 	workspace := &workspaceFeature{}
 	s.BeforeScenario(workspace.createWorkspace)
 	s.Step(`^the workspace contains file "([^"]*)" with content:$`, workspace.containsFileWithContent)
-	s.Step(`^running Mentions$`, workspace.runningMentions)
+	s.Step(`^running Mentions$`, workspace.runMentions)
 	s.Step(`^the workspace should contain the file "([^"]*)" with content:$`, workspace.shouldContainFileWithContent)
 }
