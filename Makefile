@@ -10,5 +10,8 @@ cuke:  # runs the feature specs
 help:   # prints all make targets
 	@cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
+lint:  # runs all linters
+	@golangci-lint run --enable-all -D lll
+
 test:  # runs the unit tests
 	@go test

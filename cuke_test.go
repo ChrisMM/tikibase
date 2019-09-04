@@ -5,6 +5,7 @@ import (
 	"github.com/DATA-DOG/godog/gherkin"
 )
 
+//nolint:deadcode,unused
 func FeatureContext(s *godog.Suite) {
 	s.Step(`^the workspace contains file "([^"]*)" with content:$`, func(arg1 string, arg2 *gherkin.DocString) error {
 		return godog.ErrPending
