@@ -11,11 +11,10 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "tikibase",
 	Short: "A timeless wiki-like knowledge base",
-	Long: `Tikibase is a human editable and machine-assisted knowledge management solution
-with focus on long-term availability.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Long: `TikiBase is a timeless wiki-like knowledge base with focus on long-term availability.
+It's database is a set of human-editable and readable Markdown files.
+They can be edited with any Markdown front-end.
+TikiBase provides machine-assistance for editing and querying via CLI tools that can also be packaged as bots.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -25,17 +24,4 @@ func Execute() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-}
-
-func init() {
-	// cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tikibase.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
