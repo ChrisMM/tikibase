@@ -1,0 +1,45 @@
+package storage_test
+
+import (
+	"testing"
+
+	"github.com/kevgo/tikibase/storage"
+)
+
+func TestHandle(t *testing.T) {
+	expectedHandle := "handle"
+	td := storage.NewTikiDocument(expectedHandle, "content")
+	actualHandle := td.Handle()
+	if actualHandle != expectedHandle {
+		t.Fatalf("mismatching handle. expected '%s' got '%s'", expectedHandle, actualHandle)
+	}
+}
+
+func TestAllSections(t *testing.T) {
+	td := storage.NewTikiDocument("handle", "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.")
+	sections := td.AllSections()
+	if len(sections) != 3 {
+		t.Fatalf("unexpected sections length: expected 3 got %d", len(sections))
+	}
+
+	// verify title section
+	expected := "# Title\nmy doc\n"
+	actual := sections[0].Content()
+	if actual != expected {
+		t.Fatalf("unexpected title section: expected '%s' got '%s'", expected, actual)
+	}
+
+	// verify content section 1
+	expected = "### One\nThe one.\n"
+	actual = sections[1].Content()
+	if actual != expected {
+		t.Fatalf("unexpected content section 1: expected '%s' got '%s'", expected, actual)
+	}
+
+	// verify content section 2
+	expected = "### Two\nThe other.\n"
+	actual = sections[2].Content()
+	if actual != expected {
+		t.Fatalf("unexpected content section 2: expected '%s' got '%s'", expected, actual)
+	}
+}
