@@ -1,6 +1,6 @@
 package main
 
-import "github.com/kevgo/tikibase/src/cmd"
+import "github.com/kevgo/tikibase/cmd"
 
 func main() {
 	cmd.Execute()

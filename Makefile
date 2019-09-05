@@ -20,4 +20,4 @@ run:  # runs the command
 	@go run main.go
 
 test:  # runs the unit tests
-	@go test
+	@go test ./...

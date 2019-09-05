@@ -3,7 +3,7 @@ package cmd
 import (
 	"log"
 
-	"github.com/kevgo/tikibase/src/mentions"
+	"github.com/kevgo/tikibase/mentions"
 	"github.com/spf13/cobra"
 )
 

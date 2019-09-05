@@ -10,7 +10,7 @@ import (
 
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
-	"github.com/kevgo/tikibase/src/mentions"
+	"github.com/kevgo/tikibase/mentions"
 	"github.com/pkg/errors"
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
