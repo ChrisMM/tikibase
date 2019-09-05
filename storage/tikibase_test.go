@@ -62,7 +62,7 @@ func TestNewTikiBase(t *testing.T) {
 func TestSaveDocument(t *testing.T) {
 	tb := createTestBase(t)
 	expectedContent := "The content."
-	doc := storage.TikiDocument{Handle: "my-handle", Content: expectedContent}
+	doc := storage.NewTikiDocument("my-handle", expectedContent)
 	err := tb.SaveDocument(doc)
 	if err != nil {
 		t.Fatalf("cannot save document: %v", err)

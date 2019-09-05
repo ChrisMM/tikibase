@@ -53,7 +53,7 @@ func (tb TikiBase) Documents() (result []TikiDocument, err error) {
 
 // SaveDocument persists the given TikiDocument into this TikiBase
 func (tb TikiBase) SaveDocument(doc TikiDocument) error {
-	return ioutil.WriteFile(path.Join(tb.dir, doc.Handle+".md"), []byte(doc.Content), 0644)
+	return ioutil.WriteFile(path.Join(tb.dir, doc.handle+".md"), []byte(doc.content), 0644)
 }
 
 // StorageDir provides the full directory path in which this TikiBase is stored.
