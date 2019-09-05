@@ -41,18 +41,19 @@ func (tb TikiBase) Documents() (result []TikiDocument, err error) {
 		return result, errors.Wrap(err, "cannot read TikiBase directory")
 	}
 	for _, fileInfo := range fileInfos {
-		contentData, err := ioutil.ReadFile(fileInfo.Name())
+		path := path.Join(tb.StorageDir(), fileInfo.Name())
+		contentData, err := ioutil.ReadFile(path)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot read file %s", fileInfo.Name())
+			return result, errors.Wrapf(err, "cannot read file '%s'", path)
 		}
-		result = append(result, NewTikiDocument(string(contentData), fileInfo.Name()))
+		result = append(result, NewTikiDocument(string(contentData), path))
 	}
 	return result, nil
 }
 
 // SaveDocument persists the given TikiDocument into this TikiBase
 func (tb TikiBase) SaveDocument(doc TikiDocument) error {
-	return ioutil.WriteFile(path.Join(tb.dir, doc.Handle), []byte(doc.Content), 0644)
+	return ioutil.WriteFile(path.Join(tb.dir, doc.Handle+".md"), []byte(doc.Content), 0644)
 }
 
 // StorageDir provides the full directory path in which this TikiBase is stored.
