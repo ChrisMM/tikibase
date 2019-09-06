@@ -27,3 +27,7 @@ All of them have been limited and/or became unsupported at some point.
 
 - no backlinks
 - no structure
+
+### Development
+
+- run a single unit test: `go test ./storage/foo_test.go`

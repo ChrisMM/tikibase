@@ -11,7 +11,10 @@ import (
 
 func TestCreateDocument(t *testing.T) {
 	tb := createTestBase(t)
-	tb.CreateDocument("one", "The one.")
+	_, err := tb.CreateDocument("one", "The one.")
+	if err != nil {
+		t.Fatalf("cannot create document: %v", err)
+	}
 	filePath := path.Join(tb.StorageDir(), "one.md")
 	fileInfo, err := os.Stat(filePath)
 	if err != nil {
