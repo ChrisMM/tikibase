@@ -17,7 +17,7 @@ type TikiSection struct {
 // including heading tag and body.
 type TikiSectionContent string
 
-// This is a global constant and won't be stubbed in tests.
+// This global variables is a constant and doesn't need to be stubbed in tests.
 //nolint:gochecknoglobals
 var markdownLinkRE = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
 
@@ -26,7 +26,7 @@ func NewTikiSection(content TikiSectionContent) TikiSection {
 	return TikiSection{content: content}
 }
 
-// Content returns the content of the entire section as a block.
+// Content returns the complete content of the entire section.
 func (ts TikiSection) Content() TikiSectionContent {
 	return ts.content
 }
