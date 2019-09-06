@@ -14,7 +14,7 @@ func TestAllSections(t *testing.T) {
 	}
 
 	// verify title section
-	expected := "# Title\nmy doc\n"
+	expected := storage.TikiSectionContent("# Title\nmy doc\n")
 	actual := sections[0].Content()
 	if actual != expected {
 		t.Fatalf("unexpected title section: expected '%s' got '%s'", expected, actual)

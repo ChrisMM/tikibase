@@ -19,5 +19,5 @@ func (tsb *TikiSectionBuilder) AddLine(line string) {
 
 // Section provides the TikiSection that has been built up so far.
 func (tsb *TikiSectionBuilder) Section() TikiSection {
-	return TikiSection{content: strings.Join(tsb.lines, "\n") + "\n"}
+	return TikiSection{content: TikiSectionContent(strings.Join(tsb.lines, "\n") + "\n")}
 }

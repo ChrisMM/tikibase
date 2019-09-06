@@ -7,7 +7,7 @@ import (
 )
 
 func TestTikiSectionContent(t *testing.T) {
-	expectedContent := "the content"
+	expectedContent := storage.TikiSectionContent("### title\nthe content")
 	ts := storage.NewTikiSection(expectedContent)
 	actualContent := ts.Content()
 	if ts.Content() != expectedContent {
