@@ -43,11 +43,6 @@ func (td TikiDocument) Handle() Handle {
 	return td.handle
 }
 
-// HasHandle returns whether this TikiDocument has the given Handle.
-func (td TikiDocument) HasHandle(handle Handle) bool {
-	return td.handle == handle
-}
-
 // NewTikiDocument creates a new TikiDocument instance in memory.
 func NewTikiDocument(handle Handle, content string) TikiDocument {
 	return TikiDocument{handle: handle, content: content}

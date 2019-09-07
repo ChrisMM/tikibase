@@ -26,7 +26,7 @@ func TestWikiDocumentCollectionFind(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !actual.HasHandle("doc2") {
+	if actual.Handle() != storage.Handle("doc2") {
 		t.Fatalf("wrong document found: %s", actual.Handle())
 	}
 }

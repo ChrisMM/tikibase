@@ -20,7 +20,7 @@ func (tdc *TikiDocumentCollection) Add(doc ...TikiDocument) {
 // Find returns the TikiDocument from this collection with the given handle.
 func (tdc *TikiDocumentCollection) Find(handle Handle) (TikiDocument, error) {
 	for _, doc := range tdc.Documents {
-		if doc.HasHandle(handle) {
+		if doc.Handle() == (handle) {
 			return doc, nil
 		}
 	}
