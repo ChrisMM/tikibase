@@ -3,6 +3,7 @@ package storage_test
 import (
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/storage"
 )
 
@@ -25,19 +26,12 @@ func TestTikiSectionLinks(t *testing.T) {
 	if err != nil {
 		t.Fatalf("cannot get links in section: %v", err)
 	}
-	if len(links) != 2 {
-		t.Fatalf("unexpected link count: expected 2, got %d", len(links))
+	expected := []storage.TikiLink{
+		storage.NewTikiLink("title 1", section, doc1),
+		storage.NewTikiLink("title 2", section, doc2),
 	}
-	if links[0].TargetDocument() != doc1 {
-		t.Fatal("unexpected target document")
-	}
-	if links[0].SourceSection() != section {
-		t.Fatal("unexpected source section")
-	}
-	if links[1].TargetDocument() != doc2 {
-		t.Fatal("unexpected target document")
-	}
-	if links[1].SourceSection() != section {
-		t.Fatal("unexpected source section")
+	diff := cmp.Diff(links, expected, cmp.AllowUnexported(expected[0], section, doc1))
+	if diff != "" {
+		t.Fatal(diff)
 	}
 }
