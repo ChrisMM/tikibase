@@ -21,16 +21,17 @@ func TestTikiSectionLinks(t *testing.T) {
 	doc1 := storage.NewTikiDocument("one", "# One")
 	doc2 := storage.NewTikiDocument("two", "# Two")
 	documents.Add(doc1, doc2)
-	section := storage.NewTikiSection("# Title [title 1](one.md) text [title 2](two.md)")
+	section := storage.NewTikiSection(`# Title\ntext [MD link to doc1](one.md)\n text [MD link to doc2](two.md) text\ntext <a href="one.md">HTML link to doc1</a> text <a textrun="dope">not a link</a>`)
 	links, err := section.TikiLinks(documents)
 	if err != nil {
 		t.Fatalf("cannot get links in section: %v", err)
 	}
 	expected := []storage.TikiLink{
-		storage.NewTikiLink("title 1", section, doc1),
-		storage.NewTikiLink("title 2", section, doc2),
+		storage.NewTikiLink("MD link to doc1", section, doc1),
+		storage.NewTikiLink("MD link to doc2", section, doc2),
+		storage.NewTikiLink("HTML link to doc1", section, doc1),
 	}
-	diff := cmp.Diff(links, expected, cmp.AllowUnexported(expected[0], section, doc1))
+	diff := cmp.Diff(expected, links, cmp.AllowUnexported(expected[0], section, doc1))
 	if diff != "" {
 		t.Fatal(diff)
 	}
