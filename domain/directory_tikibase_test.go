@@ -6,6 +6,7 @@ import (
 	"path"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
 )
 
@@ -43,6 +44,30 @@ func TestDirectoryTikiBaseCreateDocument(t *testing.T) {
 	}
 }
 
+func TestDirectoryTikiBaseDocumentFileNames(t *testing.T) {
+	tb := newTempDirectoryTikiBase(t)
+	_, err := tb.CreateDocument("one.md", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = tb.CreateDocument("two.md", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	actual, err := tb.DocumentFileNames()
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected := []domain.TikiDocumentFilename{
+		domain.TikiDocumentFilename("one.md"),
+		domain.TikiDocumentFilename("two.md"),
+	}
+	diff := cmp.Diff(expected, actual)
+	if diff != "" {
+		t.Fatal(diff)
+	}
+}
+
 func TestDirectoryTikiBaseDocuments(t *testing.T) {
 	tb1 := newTempDirectoryTikiBase(t)
 	_, err := tb1.CreateDocument("one", "")
@@ -67,6 +92,26 @@ func TestDirectoryTikiBaseDocuments(t *testing.T) {
 	// verify results
 	if len(actual) != 2 {
 		t.Errorf("expected %d documents but got %d", 2, len(actual))
+	}
+}
+
+func TestDirectoryTikiBaseLoad(t *testing.T) {
+	tb := newTempDirectoryTikiBase(t)
+	expected, err := tb.CreateDocument("one.md", "The one")
+	if err != nil {
+		t.Fatal(err)
+	}
+	tb2, err := domain.NewDirectoryTikiBase(tb.StorageDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	actual, err := tb2.Load("one.md")
+	if err != nil {
+		t.Fatal(err)
+	}
+	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(actual))
+	if diff != "" {
+		t.Fatal(diff)
 	}
 }
 
