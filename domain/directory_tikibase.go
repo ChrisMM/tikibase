@@ -16,7 +16,7 @@ type DirectoryTikiBase struct {
 	dir string
 }
 
-// NewTikiBase creates a new TikiBase instance using the given directory path as its storage directory.
+// NewDirectoryTikiBase creates a new TikiBase instance using the given directory path as its storage directory.
 // The given file path must exist and be a directory.
 func NewDirectoryTikiBase(dir string) (result DirectoryTikiBase, err error) {
 	info, err := os.Stat(dir)
@@ -65,6 +65,7 @@ func (tb DirectoryTikiBase) Documents() (result []TikiDocument, err error) {
 	return result, nil
 }
 
+// Load provides the TikiDocument with the given filename, or an error if one doesn't exist.
 func (tb DirectoryTikiBase) Load(filename TikiDocumentFilename) (result TikiDocument, err error) {
 	path := path.Join(tb.StorageDir(), string(filename))
 	contentData, err := ioutil.ReadFile(path)
@@ -77,4 +78,20 @@ func (tb DirectoryTikiBase) Load(filename TikiDocumentFilename) (result TikiDocu
 // StorageDir provides the full directory path in which this TikiBase is stored.
 func (tb DirectoryTikiBase) StorageDir() string {
 	return tb.dir
+}
+
+// TikiLinks provides all TikiLinks in all TikiDocuments within this TikiBase.
+func (tb DirectoryTikiBase) TikiLinks() (result []TikiLink, err error) {
+	docs, err := tb.Documents()
+	if err != nil {
+		return result, errors.Wrapf(err, "cannot determine the TikiLinks of '%+v'", tb)
+	}
+	for _, doc := range docs {
+		links, err := doc.TikiLinks(tb)
+		if err != nil {
+			return result, errors.Wrapf(err, "cannot determine the TikiLinks of '%+v'", doc)
+		}
+		result = append(result, links...)
+	}
+	return result, nil
 }

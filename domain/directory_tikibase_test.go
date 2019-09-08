@@ -114,6 +114,29 @@ func TestDirectoryTikiBaseLoad(t *testing.T) {
 		t.Fatal(diff)
 	}
 }
+func TestDirectoryTikiBaseTikiLinks(t *testing.T) {
+	tb := newTempDirectoryTikiBase(t)
+	doc1, err := tb.CreateDocument("one.md", "# The one\n[The other](two.md)")
+	if err != nil {
+		t.Fatal(err)
+	}
+	doc2, err := tb.CreateDocument("two.md", "# The other\n[The one](one.md)")
+	if err != nil {
+		t.Fatal(err)
+	}
+	actual, err := tb.TikiLinks()
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected := []domain.TikiLink{
+		domain.NewTikiLink("The other", doc1.TitleSection(), doc2),
+		domain.NewTikiLink("The one", doc2.TitleSection(), doc1),
+	}
+	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(expected[0], expected[0].SourceSection(), expected[0].TargetDocument()))
+	if diff != "" {
+		t.Fatal(diff)
+	}
+}
 
 func TestNewDirectoryTikiBase(t *testing.T) {
 	_, err := domain.NewDirectoryTikiBase(".")

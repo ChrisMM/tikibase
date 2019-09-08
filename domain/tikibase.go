@@ -13,6 +13,9 @@ type TikiBase interface {
 	// Documents provides all TikiDocuments in this collection.
 	Documents() ([]TikiDocument, error)
 
-	// Find provides the TikiDocument with the given filename, or an error if one doesn't exist.
+	// Load provides the TikiDocument with the given filename, or an error if one doesn't exist.
 	Load(filename TikiDocumentFilename) (TikiDocument, error)
+
+	// TikiLinks provides all TikiLinks in all TikiDocuments within this TikiBase.
+	TikiLinks() ([]TikiLink, error)
 }
