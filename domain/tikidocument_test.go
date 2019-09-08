@@ -60,7 +60,7 @@ func TestTikiDocumentFileName(t *testing.T) {
 	}
 }
 
-func TestTikiDocumentLinks(t *testing.T) {
+func TestTikiDocumentTikiLinks(t *testing.T) {
 	tb := newTempDirectoryTikiBase(t)
 	doc1, err := tb.CreateDocument("doc1.md", "### One\n")
 	if err != nil {
@@ -80,5 +80,15 @@ func TestTikiDocumentLinks(t *testing.T) {
 	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(expected[0], doc1, doc2.TitleSection()))
 	if diff != "" {
 		t.Fatal(diff)
+	}
+}
+
+func TestTikiDocumentTitleSection(t *testing.T) {
+	_, doc := newTempTikiDocument(domain.TikiDocumentFilename("one.md"), "# My Title\n\nTitle section content.\n\n### Content Section\n Content section content.\n", t)
+	section := doc.TitleSection()
+	expectedContent := "# My Title\n\nTitle section content.\n"
+	diff := cmp.Diff(string(section.Content()), expectedContent)
+	if diff != "" {
+		t.Fatalf("mismatching section content: %s", diff)
 	}
 }
