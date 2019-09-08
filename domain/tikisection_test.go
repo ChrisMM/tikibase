@@ -12,6 +12,15 @@ func newTestSection(content string, t *testing.T) domain.TikiSection {
 	return doc.TitleSection()
 }
 
+func TestTikiSectionAnchor(t *testing.T) {
+	section := newTestSection("### what is it\n", t)
+	actual := section.Anchor()
+	expected := "what-is-it"
+	if actual != expected {
+		t.Fatalf("mismatching section anchors: expected '%s', got '%s'", expected, actual)
+	}
+}
+
 func TestTikiSectionContent(t *testing.T) {
 	expectedContent := "### title\nthe content\n"
 	section := newTestSection(expectedContent, t)
@@ -21,7 +30,7 @@ func TestTikiSectionContent(t *testing.T) {
 	}
 }
 
-func TestTikiSectionLinks(t *testing.T) {
+func TestTikiSectionTikiLinks(t *testing.T) {
 	tb := newTempDirectoryTikiBase(t)
 	doc1, err := tb.CreateDocument("one.md", "# One")
 	if err != nil {
@@ -44,5 +53,14 @@ func TestTikiSectionLinks(t *testing.T) {
 	diff := cmp.Diff(expected, links, cmp.AllowUnexported(expected[0], section, doc1))
 	if diff != "" {
 		t.Fatal(diff)
+	}
+}
+
+func TestTikiSectionTitle(t *testing.T) {
+	section := newTestSection("### What is it\n", t)
+	actual := section.Title()
+	expected := "What is it"
+	if actual != expected {
+		t.Fatalf("mismatching section title: expected '%s', got '%s'", expected, actual)
 	}
 }

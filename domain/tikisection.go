@@ -21,13 +21,17 @@ type TikiSection struct {
 // including heading tag and body.
 type TikiSectionContent string
 
-// This global variables is a constant and doesn't need to be stubbed in tests.
+// This global variable is a constant and doesn't need to be stubbed in tests.
 //nolint:gochecknoglobals
 var markdownLinkRE = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
 
-// This global variables is a constant and doesn't need to be stubbed in tests.
+// This global variable is a constant and doesn't need to be stubbed in tests.
 //nolint:gochecknoglobals
 var htmlLinkRE = regexp.MustCompile(`<a[^>]* href="(.*?)"[^>]*>(.*?)</a>`)
+
+// This global variable is a constant and doesn't need to be stubbed in tests.
+//nolint:gochecknoglobals
+var stripTitleTagRE = regexp.MustCompile(`#+\s*(.*)`)
 
 // Anchor provides the URL anchor for this TikiSection.
 func (ts TikiSection) Anchor() string {
@@ -70,5 +74,7 @@ func (ts TikiSection) TikiLinks(tb TikiBase) ([]TikiLink, error) {
 // Title returns the human-friendly title of this TikiSection,
 // i.e. its title tag without the "###"" in front
 func (ts TikiSection) Title() string {
-	return strings.SplitN(string(ts.content), "\n", 1)[0]
+	titleLine := strings.SplitN(string(ts.content), "\n", 1)[0]
+	matches := stripTitleTagRE.FindStringSubmatch(titleLine)
+	return matches[1]
 }
