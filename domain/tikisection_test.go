@@ -7,22 +7,32 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
+func newTestSection(content string, t *testing.T) domain.TikiSection {
+	_, doc := newTempTikiDocument("one.md", content, t)
+	return doc.TitleSection()
+}
+
 func TestTikiSectionContent(t *testing.T) {
-	expectedContent := domain.TikiSectionContent("### title\nthe content")
-	ts := domain.NewTikiSection(expectedContent)
-	actualContent := ts.Content()
-	if ts.Content() != expectedContent {
+	expectedContent := "### title\nthe content\n"
+	section := newTestSection(expectedContent, t)
+	actualContent := string(section.Content())
+	if actualContent != expectedContent {
 		t.Fatalf("mismatching content! expected '%s' got '%s'", expectedContent, actualContent)
 	}
 }
 
 func TestTikiSectionLinks(t *testing.T) {
-	documents := domain.NewTikiDocumentCollection()
-	doc1 := domain.NewTikiDocument("one", "# One")
-	doc2 := domain.NewTikiDocument("two", "# Two")
-	documents.Add(doc1, doc2)
-	section := domain.NewTikiSection(`# Title\ntext [MD link to doc1](one.md)\n text [MD link to doc2](two.md) text\ntext <a href="one.md">HTML link to doc1</a> text <a textrun="dope">not a link</a>`)
-	links, err := section.TikiLinks(documents)
+	tb := newTempDirectoryTikiBase(t)
+	doc1, err := tb.CreateDocument("one.md", "# One")
+	if err != nil {
+		t.Fatalf("cannot create one.md: %v", err)
+	}
+	doc2, err := tb.CreateDocument("two.md", `# Title\ntext [MD link to doc1](one.md)\n text [MD link to doc2](two.md) text\ntext <a href="one.md">HTML link to doc1</a> text <a textrun="dope">not a link</a>`)
+	if err != nil {
+		t.Fatalf("cannot create two.md: %v", err)
+	}
+	section := doc2.TitleSection()
+	links, err := section.TikiLinks(tb)
 	if err != nil {
 		t.Fatalf("cannot get links in section: %v", err)
 	}

@@ -3,6 +3,9 @@ package domain
 import (
 	"fmt"
 	"regexp"
+	"strings"
+
+	"github.com/iancoleman/strcase"
 
 	"github.com/pkg/errors"
 )
@@ -26,9 +29,9 @@ var markdownLinkRE = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
 //nolint:gochecknoglobals
 var htmlLinkRE = regexp.MustCompile(`<a[^>]* href="(.*?)"[^>]*>(.*?)</a>`)
 
-// NewTikiSection creates a new TikiSection with the given content.
-func NewTikiSection(content TikiSectionContent) TikiSection {
-	return TikiSection{content: content}
+// Anchor provides the URL anchor for this TikiSection.
+func (ts TikiSection) Anchor() string {
+	return strcase.ToKebab(ts.Title())
 }
 
 // Content returns the complete content of the entire section.
@@ -37,16 +40,15 @@ func (ts TikiSection) Content() TikiSectionContent {
 }
 
 // TikiLinks returns all TikiLinks in this section.
-func (ts TikiSection) TikiLinks(documents *TikiDocumentCollection) ([]TikiLink, error) {
+func (ts TikiSection) TikiLinks(tb TikiBase) ([]TikiLink, error) {
 	result := []TikiLink{}
 	matches := markdownLinkRE.FindAllStringSubmatch(string(ts.content), 9999)
 	for _, match := range matches {
 		linkTitle := match[1]
-		targetFileName := match[2]
-		targetHandle := NewHandleFromFileName(targetFileName)
-		targetDocument, err := documents.Find(targetHandle)
+		targetFileName := TikiDocumentFilename(match[2])
+		targetDocument, err := tb.Load(targetFileName)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s'", targetHandle, linkTitle)
+			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, ts.Anchor())
 		}
 		result = append(result, NewTikiLink(linkTitle, ts, targetDocument))
 	}
@@ -55,12 +57,18 @@ func (ts TikiSection) TikiLinks(documents *TikiDocumentCollection) ([]TikiLink, 
 	for _, match := range matches {
 		fmt.Println(match)
 		linkTitle := match[2]
-		targetHandle := NewHandleFromFileName(match[1])
-		targetDocument, err := documents.Find(targetHandle)
+		targetFilename := TikiDocumentFilename(match[1])
+		targetDocument, err := tb.Load(targetFilename)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s'", targetHandle, linkTitle)
+			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s'", targetFilename, linkTitle)
 		}
 		result = append(result, NewTikiLink(linkTitle, ts, targetDocument))
 	}
 	return result, nil
+}
+
+// Title returns the human-friendly title of this TikiSection,
+// i.e. its title tag without the "###"" in front
+func (ts TikiSection) Title() string {
+	return strings.SplitN(string(ts.content), "\n", 1)[0]
 }

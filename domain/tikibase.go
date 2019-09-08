@@ -1,63 +1,18 @@
 package domain
 
-import (
-	"fmt"
-	"io/ioutil"
-	"os"
-	"path"
+// TikiBase represents a collection of TikiDocuments.
+type TikiBase interface {
 
-	"github.com/pkg/errors"
-)
+	// CreateDocument creates a new TikiDocument with the given data in this DocumentCollection.
+	CreateDocument(filename TikiDocumentFilename, content string) (TikiDocument, error)
 
-// TikiBase represents a collection of TikiDocuments that form a knowledge base together.
-// The TikiBase is persisted using a storage adapter.
-type TikiBase struct {
-	// the full path of the storage directory of this TikiBase
-	dir string
-}
+	// DocumentHandles provides the handles for all documents in this collection,
+	// sorted alphabetically.
+	DocumentFileNames() ([]TikiDocumentFilename, error)
 
-// NewTikiBase creates a new TikiBase instance using the given directory path as its storage directory.
-// The given file path must exist and be a directory.
-func NewTikiBase(dir string) (result TikiBase, err error) {
-	info, err := os.Stat(dir)
-	if err != nil {
-		return result, err
-	}
-	if !info.IsDir() {
-		return result, fmt.Errorf("%s is not a directory", dir)
-	}
-	return TikiBase{dir}, nil
-}
+	// Documents provides all TikiDocuments in this collection.
+	Documents() ([]TikiDocument, error)
 
-// CreateDocument creates a new TikiDocument in this TikiBase and returns it.
-func (tb TikiBase) CreateDocument(handle TikiDocumentHandle, content string) (result TikiDocument, err error) {
-	doc := NewTikiDocument(handle, content)
-	return doc, tb.SaveDocument(doc)
-}
-
-// Documents returns all TikiDocuments in this TikiBase.
-func (tb TikiBase) Documents() (result []TikiDocument, err error) {
-	fileInfos, err := ioutil.ReadDir(tb.dir)
-	if err != nil {
-		return result, errors.Wrap(err, "cannot read TikiBase directory")
-	}
-	for _, fileInfo := range fileInfos {
-		path := path.Join(tb.StorageDir(), fileInfo.Name())
-		contentData, err := ioutil.ReadFile(path)
-		if err != nil {
-			return result, errors.Wrapf(err, "cannot read file '%s'", path)
-		}
-		result = append(result, NewTikiDocument(NewHandleFromFileName(path), string(contentData)))
-	}
-	return result, nil
-}
-
-// SaveDocument persists the given TikiDocument into this TikiBase
-func (tb TikiBase) SaveDocument(doc TikiDocument) error {
-	return ioutil.WriteFile(path.Join(tb.dir, doc.FilePath()), []byte(doc.content), 0644)
-}
-
-// StorageDir provides the full directory path in which this TikiBase is stored.
-func (tb TikiBase) StorageDir() string {
-	return tb.dir
+	// Find provides the TikiDocument with the given filename, or an error if one doesn't exist.
+	Load(filename TikiDocumentFilename) (TikiDocument, error)
 }

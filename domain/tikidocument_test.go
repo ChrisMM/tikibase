@@ -7,59 +7,70 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
+// newTempTikiDocument provides a TikiDocument instance inside a DirectoryTikiBase in a temp directory.
+func newTempTikiDocument(filename domain.TikiDocumentFilename, content string, t *testing.T) (domain.TikiBase, domain.TikiDocument) {
+	tb := newTempDirectoryTikiBase(t)
+	td, err := tb.CreateDocument(filename, content)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return tb, td
+}
+
 func TestTikiDocumentAllSections(t *testing.T) {
-	td := domain.NewTikiDocument("handle", "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.")
+	_, td := newTempTikiDocument("one.md", "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.", t)
+	// TODO: compare against expected datastructure
 	sections := td.AllSections()
 	if len(sections) != 3 {
 		t.Fatalf("unexpected sections length: expected 3 got %d", len(sections))
 	}
 
 	// verify title section
-	expected := domain.TikiSectionContent("# Title\nmy doc\n")
+	expected := domain.TikiSectionContent("# Title\nmy doc")
 	actual := sections[0].Content()
 	if actual != expected {
 		t.Fatalf("unexpected title section: expected '%s' got '%s'", expected, actual)
 	}
 
 	// verify content section 1
-	expected = "### One\nThe one.\n"
+	expected = "### One\nThe one."
 	actual = sections[1].Content()
 	if actual != expected {
 		t.Fatalf("unexpected content section 1: expected '%s' got '%s'", expected, actual)
 	}
 
 	// verify content section 2
-	expected = "### Two\nThe other.\n"
+	expected = "### Two\nThe other."
 	actual = sections[2].Content()
 	if actual != expected {
 		t.Fatalf("unexpected content section 2: expected '%s' got '%s'", expected, actual)
 	}
 }
 
-func TestTikiDocumentFilePath(t *testing.T) {
-	td := domain.NewTikiDocument(domain.TikiDocumentHandle("one"), "")
-	expectedFilePath := "one.md"
-	actualFilePath := td.FilePath()
-	if actualFilePath != expectedFilePath {
-		t.Fatalf("expected '%s' got '%s'", expectedFilePath, actualFilePath)
+func TestTikiDocumentFileName(t *testing.T) {
+	tb := newTempDirectoryTikiBase(t)
+	td, err := tb.CreateDocument("one.md", "")
+	if err != nil {
+		t.Fatalf("cannot create document one.md: %v", err)
 	}
-}
-
-func TestTikiDocumentHandle(t *testing.T) {
-	expectedHandle := domain.TikiDocumentHandle("handle")
-	td := domain.NewTikiDocument(expectedHandle, "content")
-	actualHandle := td.Handle()
-	if actualHandle != expectedHandle {
-		t.Fatalf("mismatching handle. expected '%s' got '%s'", expectedHandle, actualHandle)
+	expectedFileName := "one.md"
+	actualFileName := string(td.FileName())
+	if actualFileName != expectedFileName {
+		t.Fatalf("expected '%s' got '%s'", expectedFileName, actualFileName)
 	}
 }
 
 func TestTikiDocumentLinks(t *testing.T) {
-	docs := domain.NewTikiDocumentCollection()
-	doc1 := domain.NewTikiDocument("doc1", "### One\n")
-	doc2 := domain.NewTikiDocument("doc2", "### Two\n[one](doc1.md)")
-	docs.Add(doc1, doc2)
-	actual, err := doc2.TikiLinks(docs)
+	tb := newTempDirectoryTikiBase(t)
+	doc1, err := tb.CreateDocument("doc1.md", "### One\n")
+	if err != nil {
+		t.Fatalf("cannot created doc1: %v", err)
+	}
+	doc2, err := tb.CreateDocument("doc2.md", "### Two\n[one](doc1.md)")
+	if err != nil {
+		t.Fatalf("cannot created doc2: %v", err)
+	}
+	actual, err := doc2.TikiLinks(tb)
 	if err != nil {
 		t.Fatalf("cannot get TikiLinks for doc2: %v", err)
 	}
