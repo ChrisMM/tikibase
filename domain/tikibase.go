@@ -30,7 +30,7 @@ func NewTikiBase(dir string) (result TikiBase, err error) {
 }
 
 // CreateDocument creates a new TikiDocument in this TikiBase and returns it.
-func (tb TikiBase) CreateDocument(handle Handle, content string) (result TikiDocument, err error) {
+func (tb TikiBase) CreateDocument(handle TikiDocumentHandle, content string) (result TikiDocument, err error) {
 	doc := NewTikiDocument(handle, content)
 	return doc, tb.SaveDocument(doc)
 }

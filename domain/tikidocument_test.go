@@ -37,7 +37,7 @@ func TestTikiDocumentAllSections(t *testing.T) {
 }
 
 func TestTikiDocumentFilePath(t *testing.T) {
-	td := domain.NewTikiDocument(domain.Handle("one"), "")
+	td := domain.NewTikiDocument(domain.TikiDocumentHandle("one"), "")
 	expectedFilePath := "one.md"
 	actualFilePath := td.FilePath()
 	if actualFilePath != expectedFilePath {
@@ -46,7 +46,7 @@ func TestTikiDocumentFilePath(t *testing.T) {
 }
 
 func TestTikiDocumentHandle(t *testing.T) {
-	expectedHandle := domain.Handle("handle")
+	expectedHandle := domain.TikiDocumentHandle("handle")
 	td := domain.NewTikiDocument(expectedHandle, "content")
 	actualHandle := td.Handle()
 	if actualHandle != expectedHandle {

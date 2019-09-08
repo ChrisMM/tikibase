@@ -8,14 +8,14 @@ type TikiDocument struct {
 	// handle is the unique identifier for this document.
 	// It is used to address documents in via links,
 	// and it is the filename without directory and extension.
-	handle Handle
+	handle TikiDocumentHandle
 
 	// the textual content of the document
 	content string
 }
 
 // NewTikiDocument creates a new TikiDocument instance in memory.
-func NewTikiDocument(handle Handle, content string) TikiDocument {
+func NewTikiDocument(handle TikiDocumentHandle, content string) TikiDocument {
 	return TikiDocument{handle: handle, content: content}
 }
 
@@ -44,7 +44,7 @@ func (td TikiDocument) FilePath() string {
 }
 
 // Handle returns the filename without extension of this TikiDocument.
-func (td TikiDocument) Handle() Handle {
+func (td TikiDocument) Handle() TikiDocumentHandle {
 	return td.handle
 }
 

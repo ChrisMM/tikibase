@@ -26,7 +26,7 @@ func TestWikiDocumentCollectionFind(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if actual.Handle() != domain.Handle("doc2") {
+	if actual.Handle() != domain.TikiDocumentHandle("doc2") {
 		t.Fatalf("wrong document found: %s", actual.Handle())
 	}
 }
