@@ -24,7 +24,7 @@ func newTempDirectoryTikiBase(t *testing.T) domain.DirectoryTikiBase {
 	return result
 }
 
-func TestCreateDocument(t *testing.T) {
+func TestDirectoryTikiBaseCreateDocument(t *testing.T) {
 	tb := newTempDirectoryTikiBase(t)
 	_, err := tb.CreateDocument("one.md", "The one.")
 	if err != nil {
@@ -43,7 +43,7 @@ func TestCreateDocument(t *testing.T) {
 	}
 }
 
-func TestDocuments(t *testing.T) {
+func TestDirectoryTikiBaseDocuments(t *testing.T) {
 	tb1 := newTempDirectoryTikiBase(t)
 	_, err := tb1.CreateDocument("one", "")
 	if err != nil {
@@ -70,7 +70,7 @@ func TestDocuments(t *testing.T) {
 	}
 }
 
-func TestNewTikiBase(t *testing.T) {
+func TestNewDirectoryTikiBase(t *testing.T) {
 	_, err := domain.NewDirectoryTikiBase(".")
 	if err != nil {
 		t.Fatal(err)
