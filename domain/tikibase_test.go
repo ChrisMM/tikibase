@@ -1,4 +1,4 @@
-package storage_test
+package domain_test
 
 import (
 	"io/ioutil"
@@ -6,7 +6,7 @@ import (
 	"path"
 	"testing"
 
-	"github.com/kevgo/tikibase/storage"
+	"github.com/kevgo/tikibase/domain"
 )
 
 func TestCreateDocument(t *testing.T) {
@@ -40,7 +40,7 @@ func TestDocuments(t *testing.T) {
 	}
 
 	// get the documents
-	tb2, err := storage.NewTikiBase(tb1.StorageDir())
+	tb2, err := domain.NewTikiBase(tb1.StorageDir())
 	if err != nil {
 		t.Fatalf("cannot instantiate tb2: %v", err)
 	}
@@ -56,7 +56,7 @@ func TestDocuments(t *testing.T) {
 }
 
 func TestNewTikiBase(t *testing.T) {
-	_, err := storage.NewTikiBase(".")
+	_, err := domain.NewTikiBase(".")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -65,7 +65,7 @@ func TestNewTikiBase(t *testing.T) {
 func TestSaveDocument(t *testing.T) {
 	tb := createTestBase(t)
 	expectedContent := "The content."
-	doc := storage.NewTikiDocument("my-handle", expectedContent)
+	doc := domain.NewTikiDocument("my-handle", expectedContent)
 	err := tb.SaveDocument(doc)
 	if err != nil {
 		t.Fatalf("cannot save document: %v", err)
@@ -91,12 +91,12 @@ func TestSaveDocument(t *testing.T) {
 }
 
 // createTestBase creates a test TikiBase in a temp directory
-func createTestBase(t *testing.T) storage.TikiBase {
+func createTestBase(t *testing.T) domain.TikiBase {
 	tmpDir, err := ioutil.TempDir("", "")
 	if err != nil {
 		t.Fatal("cannot create temp dir")
 	}
-	result, err := storage.NewTikiBase(tmpDir)
+	result, err := domain.NewTikiBase(tmpDir)
 	if err != nil {
 		t.Fatalf("cannot create new TikiBase: %v", err)
 	}

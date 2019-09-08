@@ -1,4 +1,4 @@
-package storage
+package domain
 
 import (
 	"fmt"
@@ -9,7 +9,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-// TikiBase represents a collection of Markdown files that form a knowledge base together.
+// TikiBase represents a collection of TikiDocuments that form a knowledge base together.
+// The TikiBase is persisted using a storage adapter.
 type TikiBase struct {
 	// the full path of the storage directory of this TikiBase
 	dir string

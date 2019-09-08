@@ -1,4 +1,4 @@
-package storage
+package domain
 
 // TikiLink represents a hyperlink to another TikiDocument
 type TikiLink struct {

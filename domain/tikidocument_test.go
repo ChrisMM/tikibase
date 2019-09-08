@@ -1,21 +1,21 @@
-package storage_test
+package domain_test
 
 import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/kevgo/tikibase/storage"
+	"github.com/kevgo/tikibase/domain"
 )
 
 func TestTikiDocumentAllSections(t *testing.T) {
-	td := storage.NewTikiDocument("handle", "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.")
+	td := domain.NewTikiDocument("handle", "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.")
 	sections := td.AllSections()
 	if len(sections) != 3 {
 		t.Fatalf("unexpected sections length: expected 3 got %d", len(sections))
 	}
 
 	// verify title section
-	expected := storage.TikiSectionContent("# Title\nmy doc\n")
+	expected := domain.TikiSectionContent("# Title\nmy doc\n")
 	actual := sections[0].Content()
 	if actual != expected {
 		t.Fatalf("unexpected title section: expected '%s' got '%s'", expected, actual)
@@ -37,7 +37,7 @@ func TestTikiDocumentAllSections(t *testing.T) {
 }
 
 func TestTikiDocumentFilePath(t *testing.T) {
-	td := storage.NewTikiDocument(storage.Handle("one"), "")
+	td := domain.NewTikiDocument(domain.Handle("one"), "")
 	expectedFilePath := "one.md"
 	actualFilePath := td.FilePath()
 	if actualFilePath != expectedFilePath {
@@ -46,8 +46,8 @@ func TestTikiDocumentFilePath(t *testing.T) {
 }
 
 func TestTikiDocumentHandle(t *testing.T) {
-	expectedHandle := storage.Handle("handle")
-	td := storage.NewTikiDocument(expectedHandle, "content")
+	expectedHandle := domain.Handle("handle")
+	td := domain.NewTikiDocument(expectedHandle, "content")
 	actualHandle := td.Handle()
 	if actualHandle != expectedHandle {
 		t.Fatalf("mismatching handle. expected '%s' got '%s'", expectedHandle, actualHandle)
@@ -55,16 +55,16 @@ func TestTikiDocumentHandle(t *testing.T) {
 }
 
 func TestTikiDocumentLinks(t *testing.T) {
-	docs := storage.NewTikiDocumentCollection()
-	doc1 := storage.NewTikiDocument("doc1", "### One\n")
-	doc2 := storage.NewTikiDocument("doc2", "### Two\n[one](doc1.md)")
+	docs := domain.NewTikiDocumentCollection()
+	doc1 := domain.NewTikiDocument("doc1", "### One\n")
+	doc2 := domain.NewTikiDocument("doc2", "### Two\n[one](doc1.md)")
 	docs.Add(doc1, doc2)
 	actual, err := doc2.TikiLinks(docs)
 	if err != nil {
 		t.Fatalf("cannot get TikiLinks for doc2: %v", err)
 	}
-	expected := []storage.TikiLink{
-		storage.NewTikiLink("one", doc2.TitleSection(), doc1),
+	expected := []domain.TikiLink{
+		domain.NewTikiLink("one", doc2.TitleSection(), doc1),
 	}
 	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(expected[0], doc1, doc2.TitleSection()))
 	if diff != "" {
