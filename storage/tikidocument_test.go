@@ -3,10 +3,11 @@ package storage_test
 import (
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/storage"
 )
 
-func TestAllSections(t *testing.T) {
+func TestTikiDocumentAllSections(t *testing.T) {
 	td := storage.NewTikiDocument("handle", "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.")
 	sections := td.AllSections()
 	if len(sections) != 3 {
@@ -44,11 +45,29 @@ func TestTikiDocumentFilePath(t *testing.T) {
 	}
 }
 
-func TestHandle(t *testing.T) {
+func TestTikiDocumentHandle(t *testing.T) {
 	expectedHandle := storage.Handle("handle")
 	td := storage.NewTikiDocument(expectedHandle, "content")
 	actualHandle := td.Handle()
 	if actualHandle != expectedHandle {
 		t.Fatalf("mismatching handle. expected '%s' got '%s'", expectedHandle, actualHandle)
+	}
+}
+
+func TestTikiDocumentLinks(t *testing.T) {
+	docs := storage.NewTikiDocumentCollection()
+	doc1 := storage.NewTikiDocument("doc1", "### One\n")
+	doc2 := storage.NewTikiDocument("doc2", "### Two\n[one](doc1.md)")
+	docs.Add(doc1, doc2)
+	actual, err := doc2.TikiLinks(docs)
+	if err != nil {
+		t.Fatalf("cannot get TikiLinks for doc2: %v", err)
+	}
+	expected := []storage.TikiLink{
+		storage.NewTikiLink("one", doc2.TitleSection(), doc1),
+	}
+	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(expected[0], doc1, doc2.TitleSection()))
+	if diff != "" {
+		t.Fatal(diff)
 	}
 }

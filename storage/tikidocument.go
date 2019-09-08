@@ -14,6 +14,11 @@ type TikiDocument struct {
 	content string
 }
 
+// NewTikiDocument creates a new TikiDocument instance in memory.
+func NewTikiDocument(handle Handle, content string) TikiDocument {
+	return TikiDocument{handle: handle, content: content}
+}
+
 // AllSections returns all the TikiSections that make up this document,
 // including the title section.
 func (td TikiDocument) AllSections() []TikiSection {
@@ -43,7 +48,19 @@ func (td TikiDocument) Handle() Handle {
 	return td.handle
 }
 
-// NewTikiDocument creates a new TikiDocument instance in memory.
-func NewTikiDocument(handle Handle, content string) TikiDocument {
-	return TikiDocument{handle: handle, content: content}
+func (td TikiDocument) TikiLinks(docs *TikiDocumentCollection) ([]TikiLink, error) {
+	result := []TikiLink{}
+	for _, section := range td.AllSections() {
+		links, err := section.TikiLinks(docs)
+		if err != nil {
+			return result, err
+		}
+		result = append(result, links...)
+	}
+	return result, nil
+}
+
+// TikiSection provides the section before the content sections start.
+func (td TikiDocument) TitleSection() TikiSection {
+	return td.AllSections()[0]
 }

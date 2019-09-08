@@ -42,7 +42,8 @@ func (ts TikiSection) TikiLinks(documents *TikiDocumentCollection) ([]TikiLink, 
 	matches := markdownLinkRE.FindAllStringSubmatch(string(ts.content), 9999)
 	for _, match := range matches {
 		linkTitle := match[1]
-		targetHandle := NewHandleFromFileName(match[2])
+		targetFileName := match[2]
+		targetHandle := NewHandleFromFileName(targetFileName)
 		targetDocument, err := documents.Find(targetHandle)
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s'", targetHandle, linkTitle)
