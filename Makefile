@@ -19,5 +19,7 @@ mentions:  # runs the 'mentions' command
 run:  # runs the command
 	@go run main.go
 
-test:  # runs the unit tests
+test: unit cuke # runs all tests
+
+unit:  # runs the unit tests
 	@go test ./...
