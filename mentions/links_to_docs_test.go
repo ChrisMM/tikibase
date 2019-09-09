@@ -13,18 +13,12 @@ import (
 
 func TestLinksToDocs(t *testing.T) {
 	// create documents
-	tb := test.NewTempDirectoryTikiBase(t)
-	doc1, err := tb.CreateDocument("one.md", "# The one\n")
-	if err != nil {
-		t.Fatal(err)
-	}
-	doc2, err := tb.CreateDocument("two.md", "# The other\n")
-	if err != nil {
-		t.Fatal(err)
-	}
-	doc3, err := tb.CreateDocument("three.md", "# The third\n")
-	if err != nil {
-		t.Fatal(err)
+	_, dc := test.NewTestDocumentCreator(t)
+	doc1 := dc.CreateDocument("one.md", "# The one\n")
+	doc2 := dc.CreateDocument("two.md", "# The other\n")
+	doc3 := dc.CreateDocument("three.md", "# The third\n")
+	if err := dc.Err(); err != nil {
+		t.Fatalf("error creating documents: %v", err)
 	}
 
 	// convert links

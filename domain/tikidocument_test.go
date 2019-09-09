@@ -62,14 +62,11 @@ func TestTikiDocumentFileName(t *testing.T) {
 }
 
 func TestTikiDocumentTikiLinks(t *testing.T) {
-	tb := test.NewTempDirectoryTikiBase(t)
-	doc1, err := tb.CreateDocument("doc1.md", "### One\n")
-	if err != nil {
-		t.Fatalf("cannot created doc1: %v", err)
-	}
-	doc2, err := tb.CreateDocument("doc2.md", "### Two\n[one](doc1.md)")
-	if err != nil {
-		t.Fatalf("cannot created doc2: %v", err)
+	tb, dc := test.NewTestDocumentCreator(t)
+	doc1 := dc.CreateDocument("doc1.md", "### One\n")
+	doc2 := dc.CreateDocument("doc2.md", "### Two\n[one](doc1.md)")
+	if err := dc.Err(); err != nil {
+		t.Fatalf("error creating docs: %v", err)
 	}
 	actual, err := doc2.TikiLinks(tb)
 	if err != nil {
