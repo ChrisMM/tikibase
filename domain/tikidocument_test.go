@@ -5,11 +5,12 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
+	"github.com/kevgo/tikibase/test"
 )
 
 // newTempTikiDocument provides a TikiDocument instance inside a DirectoryTikiBase in a temp directory.
 func newTempTikiDocument(filename domain.TikiDocumentFilename, content string, t *testing.T) (domain.TikiBase, domain.TikiDocument) {
-	tb := newTempDirectoryTikiBase(t)
+	tb := test.NewTempDirectoryTikiBase(t)
 	td, err := tb.CreateDocument(filename, content)
 	if err != nil {
 		t.Fatal(err)
@@ -48,7 +49,7 @@ func TestTikiDocumentAllSections(t *testing.T) {
 }
 
 func TestTikiDocumentFileName(t *testing.T) {
-	tb := newTempDirectoryTikiBase(t)
+	tb := test.NewTempDirectoryTikiBase(t)
 	td, err := tb.CreateDocument("one.md", "")
 	if err != nil {
 		t.Fatalf("cannot create document one.md: %v", err)
@@ -61,7 +62,7 @@ func TestTikiDocumentFileName(t *testing.T) {
 }
 
 func TestTikiDocumentTikiLinks(t *testing.T) {
-	tb := newTempDirectoryTikiBase(t)
+	tb := test.NewTempDirectoryTikiBase(t)
 	doc1, err := tb.CreateDocument("doc1.md", "### One\n")
 	if err != nil {
 		t.Fatalf("cannot created doc1: %v", err)

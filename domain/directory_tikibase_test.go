@@ -1,32 +1,17 @@
 package domain_test
 
 import (
-	"io/ioutil"
 	"os"
 	"path"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
+	"github.com/kevgo/tikibase/test"
 )
 
-// NewTempDirectoryTikiBase provides an empty DirectoryTikiBase instance
-// in the system's temp directory.
-// Repeated calls to this return unique instances.
-func newTempDirectoryTikiBase(t *testing.T) domain.DirectoryTikiBase {
-	tmpDir, err := ioutil.TempDir("", "")
-	if err != nil {
-		t.Fatal("cannot create temp dir")
-	}
-	result, err := domain.NewDirectoryTikiBase(tmpDir)
-	if err != nil {
-		t.Fatalf("cannot create new TikiBase: %v", err)
-	}
-	return result
-}
-
 func TestDirectoryTikiBaseCreateDocument(t *testing.T) {
-	tb := newTempDirectoryTikiBase(t)
+	tb := test.NewTempDirectoryTikiBase(t)
 	_, err := tb.CreateDocument("one.md", "The one.")
 	if err != nil {
 		t.Fatalf("cannot create document: %v", err)
@@ -45,7 +30,7 @@ func TestDirectoryTikiBaseCreateDocument(t *testing.T) {
 }
 
 func TestDirectoryTikiBaseDocumentFileNames(t *testing.T) {
-	tb := newTempDirectoryTikiBase(t)
+	tb := test.NewTempDirectoryTikiBase(t)
 	_, err := tb.CreateDocument("one.md", "")
 	if err != nil {
 		t.Fatal(err)
@@ -69,7 +54,7 @@ func TestDirectoryTikiBaseDocumentFileNames(t *testing.T) {
 }
 
 func TestDirectoryTikiBaseDocuments(t *testing.T) {
-	tb1 := newTempDirectoryTikiBase(t)
+	tb1 := test.NewTempDirectoryTikiBase(t)
 	_, err := tb1.CreateDocument("one", "")
 	if err != nil {
 		t.Fatalf("cannot create document 1")
@@ -96,7 +81,7 @@ func TestDirectoryTikiBaseDocuments(t *testing.T) {
 }
 
 func TestDirectoryTikiBaseLoad(t *testing.T) {
-	tb := newTempDirectoryTikiBase(t)
+	tb := test.NewTempDirectoryTikiBase(t)
 	expected, err := tb.CreateDocument("one.md", "The one")
 	if err != nil {
 		t.Fatal(err)
@@ -115,7 +100,7 @@ func TestDirectoryTikiBaseLoad(t *testing.T) {
 	}
 }
 func TestDirectoryTikiBaseTikiLinks(t *testing.T) {
-	tb := newTempDirectoryTikiBase(t)
+	tb := test.NewTempDirectoryTikiBase(t)
 	doc1, err := tb.CreateDocument("one.md", "# The one\n[The other](two.md)")
 	if err != nil {
 		t.Fatal(err)

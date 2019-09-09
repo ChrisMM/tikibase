@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
+	"github.com/kevgo/tikibase/test"
 )
 
 func newTestSection(content string, t *testing.T) domain.TikiSection {
@@ -31,7 +32,7 @@ func TestTikiSectionContent(t *testing.T) {
 }
 
 func TestTikiSectionTikiLinks(t *testing.T) {
-	tb := newTempDirectoryTikiBase(t)
+	tb := test.NewTempDirectoryTikiBase(t)
 	doc1, err := tb.CreateDocument("one.md", "# One")
 	if err != nil {
 		t.Fatalf("cannot create one.md: %v", err)
