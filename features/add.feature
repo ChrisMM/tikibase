@@ -9,11 +9,6 @@ Feature: Adding mentions
 
       - foo
       - bar
-
-      ## what does it
-
-      - it foos
-      - it bars
       """
     And the workspace contains file "2.md" with content:
       """
@@ -21,7 +16,7 @@ Feature: Adding mentions
 
       ## what is it
 
-      - an example of [1.md](one)
+      - an example of [one](1.md)
       """
     When running Mentions
     Then the workspace should contain the file "1.md" with content:
@@ -33,12 +28,15 @@ Feature: Adding mentions
       - foo
       - bar
 
-      ## what does it
-
-      - it foos
-      - it bars
-
       ## mentions
 
-      - [2.md](Two)
+      - [Two](2.md)
+      """
+    And the workspace should contain the file "2.md" with content:
+      """
+      # Two
+
+      ## what is it
+
+      - an example of [one](1.md)
       """
