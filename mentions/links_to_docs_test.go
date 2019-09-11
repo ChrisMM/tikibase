@@ -13,13 +13,10 @@ import (
 
 func TestLinksToDocs(t *testing.T) {
 	// create documents
-	_, dc := test.NewTestDocumentCreator(t)
+	_, dc := test.NewDocumentCreator(t)
 	doc1 := dc.CreateDocument("one.md", "# The one\n")
 	doc2 := dc.CreateDocument("two.md", "# The other\n")
 	doc3 := dc.CreateDocument("three.md", "# The third\n")
-	if err := dc.Err(); err != nil {
-		t.Fatalf("error creating documents: %v", err)
-	}
 
 	// convert links
 	links := []domain.TikiLink{

@@ -30,12 +30,9 @@ func TestDirectoryTikiBaseCreateDocument(t *testing.T) {
 }
 
 func TestDirectoryTikiBaseDocumentFileNames(t *testing.T) {
-	tb, dc := test.NewTestDocumentCreator(t)
+	tb, dc := test.NewDocumentCreator(t)
 	_ = dc.CreateDocument("one.md", "")
 	_ = dc.CreateDocument("two.md", "")
-	if err := dc.Err(); err != nil {
-		t.Fatalf("error creating documents: %v", err)
-	}
 	actual, err := tb.DocumentFileNames()
 	if err != nil {
 		t.Fatal(err)
@@ -51,12 +48,9 @@ func TestDirectoryTikiBaseDocumentFileNames(t *testing.T) {
 }
 
 func TestDirectoryTikiBaseDocuments(t *testing.T) {
-	tb1, dc := test.NewTestDocumentCreator(t)
+	tb1, dc := test.NewDocumentCreator(t)
 	_ = dc.CreateDocument("one", "")
 	_ = dc.CreateDocument("two", "")
-	if err := dc.Err(); err != nil {
-		t.Fatalf("cannot create documents: %v", err)
-	}
 
 	// get the documents
 	tb2, err := domain.NewDirectoryTikiBase(tb1.StorageDir())
@@ -94,12 +88,9 @@ func TestDirectoryTikiBaseLoad(t *testing.T) {
 	}
 }
 func TestDirectoryTikiBaseTikiLinks(t *testing.T) {
-	tb, dc := test.NewTestDocumentCreator(t)
+	tb, dc := test.NewDocumentCreator(t)
 	doc1 := dc.CreateDocument("one.md", "# The one\n[The other](two.md)")
 	doc2 := dc.CreateDocument("two.md", "# The other\n[The one](one.md)")
-	if err := dc.Err(); err != nil {
-		t.Fatalf("error creating documents: %v", err)
-	}
 	actual, err := tb.TikiLinks()
 	if err != nil {
 		t.Fatal(err)
