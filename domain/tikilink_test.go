@@ -14,7 +14,7 @@ func TestScaffoldTikiLink(t *testing.T) {
 }
 
 func TestTikiLinkSourceSection(t *testing.T) {
-	section := domain.ScaffoldSection("content")
+	section := domain.ScaffoldSection(domain.SectionScaffold{})
 	link := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{SourceSection: section})
 	if link.SourceSection() != section {
 		t.Fatalf("wrong section returned")

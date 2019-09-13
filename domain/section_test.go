@@ -8,7 +8,7 @@ import (
 )
 
 func TestSectionAnchor(t *testing.T) {
-	section := domain.ScaffoldSection("### what is it\n")
+	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### what is it\n"})
 	actual := section.Anchor()
 	expected := "what-is-it"
 	if actual != expected {
@@ -18,7 +18,7 @@ func TestSectionAnchor(t *testing.T) {
 
 func TestSectionContent(t *testing.T) {
 	expectedContent := "### title\nthe content\n"
-	section := domain.ScaffoldSection(expectedContent)
+	section := domain.ScaffoldSection(domain.SectionScaffold{Content: expectedContent})
 	actualContent := string(section.Content())
 	if actualContent != expectedContent {
 		t.Fatalf("mismatching content! expected '%s' got '%s'", expectedContent, actualContent)
@@ -47,10 +47,20 @@ func TestSectionTikiLinks(t *testing.T) {
 }
 
 func TestSectionTitle(t *testing.T) {
-	section := domain.ScaffoldSection("### What is it\n")
+	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### What is it\n"})
 	actual := section.Title()
 	expected := "What is it"
 	if actual != expected {
 		t.Fatalf("mismatching section title: expected '%s', got '%s'", expected, actual)
+	}
+}
+
+func TestSectionURL(t *testing.T) {
+	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md"})
+	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### What is it\n", Doc: &doc})
+	actual := section.URL()
+	expected := "one.md#what-is-it"
+	if actual != expected {
+		t.Fatalf("mismatching section URL: expected '%s', got '%s'", expected, actual)
 	}
 }

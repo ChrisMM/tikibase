@@ -4,12 +4,13 @@ import "strings"
 
 // SectionBuilder builds TikiSections out of lines.
 type SectionBuilder struct {
-	lines []string
+	lines    []string
+	document *Document
 }
 
 // NewSectionBuilder creates a new TikiSectionBuilder with the given title
-func NewSectionBuilder(title string) SectionBuilder {
-	return SectionBuilder{lines: []string{title}}
+func NewSectionBuilder(title string, doc *Document) SectionBuilder {
+	return SectionBuilder{lines: []string{title}, document: doc}
 }
 
 // AddLine adds a content line to this TikiSectionBuilder.
@@ -19,5 +20,5 @@ func (tsb *SectionBuilder) AddLine(line string) {
 
 // Section provides the TikiSection that has been built up so far.
 func (tsb *SectionBuilder) Section() Section {
-	return Section{content: SectionContent(strings.Join(tsb.lines, "\n"))}
+	return Section{content: SectionContent(strings.Join(tsb.lines, "\n")), document: tsb.document}
 }

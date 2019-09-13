@@ -7,7 +7,8 @@ import (
 )
 
 func TestSectionBuilder(t *testing.T) {
-	tsb := domain.NewSectionBuilder("# Title")
+	doc := domain.ScaffoldDocument(domain.DocumentScaffold{})
+	tsb := domain.NewSectionBuilder("# Title", &doc)
 	tsb.AddLine("content 1")
 	tsb.AddLine("content 2")
 	tsb.AddLine("")
@@ -16,5 +17,8 @@ func TestSectionBuilder(t *testing.T) {
 	actualContent := section.Content()
 	if actualContent != expectedContent {
 		t.Fatalf("TikiSectionBuilder didn't build the right content! expected '%s' got '%s'", expectedContent, actualContent)
+	}
+	if section.Document() != &doc {
+		t.Fatalf("Created section doesn't contain a link to its containing document")
 	}
 }

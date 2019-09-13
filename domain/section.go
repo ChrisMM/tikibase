@@ -14,6 +14,15 @@ type Section struct {
 	// the textual content of this TikiSection
 	// including the title line
 	content SectionContent
+
+	// document links to the Document that contains this Section.
+	document *Document
+}
+
+// SectionScaffold defines the named arguments for ScaffoldSection.
+type SectionScaffold struct {
+	Content string
+	Doc     *Document
 }
 
 // SectionContent represents the full content of a TikiSection,
@@ -33,8 +42,15 @@ var htmlLinkRE = regexp.MustCompile(`<a[^>]* href="(.*?)"[^>]*>(.*?)</a>`)
 var stripTitleTagRE = regexp.MustCompile(`#+\s*(.*)`)
 
 // ScaffoldSection provides new TikiSection instances for testing.
-func ScaffoldSection(content string) Section {
-	return Section{SectionContent(content)}
+func ScaffoldSection(data SectionScaffold) Section {
+	if data.Content == "" {
+		data.Content = "### default\ncontent"
+	}
+	if data.Doc == nil {
+		doc := ScaffoldDocument(DocumentScaffold{})
+		data.Doc = &doc
+	}
+	return Section{content: SectionContent(data.Content), document: data.Doc}
 }
 
 // Anchor provides the URL anchor for this TikiSection.
@@ -45,6 +61,11 @@ func (ts Section) Anchor() string {
 // Content returns the complete content of the entire section.
 func (ts Section) Content() SectionContent {
 	return ts.content
+}
+
+// Document provides a link to the Document containing this section.
+func (ts Section) Document() *Document {
+	return ts.document
 }
 
 // TikiLinks returns all TikiLinks in this section.
@@ -78,4 +99,9 @@ func (ts Section) Title() string {
 	titleLine := strings.SplitN(string(ts.content), "\n", 1)[0]
 	matches := stripTitleTagRE.FindStringSubmatch(titleLine)
 	return matches[1]
+}
+
+// URL provides the full URL to this Section (link to document that contains this section + anchor of the section.
+func (ts Section) URL() string {
+	return ts.document.URL() + "#" + ts.Anchor()
 }

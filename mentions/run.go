@@ -90,8 +90,10 @@ func Run(dir string) error {
 
 	for _, doc := range docs {
 		fileName := doc.FileName()
-		l := linksToDocs[fileName]
-		fmt.Printf("- %s: %d references\n", fileName, len(l))
+		linksToDoc := linksToDocs[fileName]
+		fmt.Printf("- %s: %d references\n", fileName, len(linksToDoc))
+		mentionsSectionContent := RenderMentionsSection(linksToDoc, &doc)
+		fmt.Println(mentionsSectionContent)
 	}
 
 	return nil

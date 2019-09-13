@@ -51,13 +51,18 @@ func (td Document) AllSections() []Section {
 			if i > 0 {
 				result = append(result, tsb.Section())
 			}
-			tsb = NewSectionBuilder(line)
+			tsb = NewSectionBuilder(line, &td)
 		} else {
 			tsb.AddLine(line)
 		}
 	}
 	result = append(result, tsb.Section())
 	return result
+}
+
+// ContentSections provides the content sections of this document.
+func (td Document) ContentSections() []Section {
+	return td.AllSections()[1:]
 }
 
 // FileName returns the file path (handle + extension) of this Document.
@@ -80,4 +85,9 @@ func (td Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection,
 // TitleSection provides the section before the content sections start.
 func (td Document) TitleSection() Section {
 	return td.AllSections()[0]
+}
+
+// URL provides the URL of this Document within its TikiBase.
+func (td Document) URL() string {
+	return string(td.filename)
 }

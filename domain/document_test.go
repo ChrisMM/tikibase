@@ -39,6 +39,31 @@ func TestDocumentAllSections(t *testing.T) {
 	}
 }
 
+func TestDocumentContentSections(t *testing.T) {
+	td := domain.ScaffoldDocument(domain.DocumentScaffold{
+		FileName: "one.md", Content: "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.",
+	})
+	// TODO: compare against expected datastructure
+	sections := td.ContentSections()
+	if len(sections) != 2 {
+		t.Fatalf("unexpected sections length: expected 2 got %d", len(sections))
+	}
+
+	// verify content section 1
+	expected := "### One\nThe one."
+	actual := string(sections[0].Content())
+	if actual != expected {
+		t.Fatalf("unexpected content section 1: expected '%s' got '%s'", expected, actual)
+	}
+
+	// verify content section 2
+	expected = "### Two\nThe other."
+	actual = string(sections[1].Content())
+	if actual != expected {
+		t.Fatalf("unexpected content section 2: expected '%s' got '%s'", expected, actual)
+	}
+}
+
 func TestDocumentFileName(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md"})
 	expectedFileName := "one.md"
