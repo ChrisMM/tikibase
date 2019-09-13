@@ -5,21 +5,12 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
-	"github.com/kevgo/tikibase/test"
 )
 
-// newTempTikiDocument provides a TikiDocument instance inside a TikiBase in a temp directory.
-func newTempTikiDocument(filename domain.TikiDocumentFilename, content string, t *testing.T) (domain.TikiBase, domain.TikiDocument) {
-	tb := test.NewTempTikiBase(t)
-	td, err := tb.CreateDocument(filename, content)
-	if err != nil {
-		t.Fatal(err)
-	}
-	return tb, td
-}
-
 func TestTikiDocumentAllSections(t *testing.T) {
-	_, td := newTempTikiDocument("one.md", "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.", t)
+	td := domain.ScaffoldTikiDocument(domain.TikiDocumentScaffold{
+		FileName: "one.md", Content: "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.",
+	})
 	// TODO: compare against expected datastructure
 	sections := td.AllSections()
 	if len(sections) != 3 {
@@ -49,13 +40,9 @@ func TestTikiDocumentAllSections(t *testing.T) {
 }
 
 func TestTikiDocumentFileName(t *testing.T) {
-	tb := test.NewTempTikiBase(t)
-	td, err := tb.CreateDocument("one.md", "")
-	if err != nil {
-		t.Fatalf("cannot create document one.md: %v", err)
-	}
+	doc := domain.ScaffoldTikiDocument(domain.TikiDocumentScaffold{FileName: "one.md"})
 	expectedFileName := "one.md"
-	actualFileName := string(td.FileName())
+	actualFileName := string(doc.FileName())
 	if actualFileName != expectedFileName {
 		t.Fatalf("expected '%s' got '%s'", expectedFileName, actualFileName)
 	}
@@ -80,7 +67,7 @@ func TestTikiDocumentTikiLinks(t *testing.T) {
 }
 
 func TestTikiDocumentTitleSection(t *testing.T) {
-	_, doc := newTempTikiDocument(domain.TikiDocumentFilename("one.md"), "# My Title\n\nTitle section content.\n\n### Content Section\n Content section content.\n", t)
+	doc := domain.ScaffoldTikiDocument(domain.TikiDocumentScaffold{Content: "# My Title\n\nTitle section content.\n\n### Content Section\n Content section content.\n"})
 	section := doc.TitleSection()
 	expectedContent := "# My Title\n\nTitle section content.\n"
 	diff := cmp.Diff(string(section.Content()), expectedContent)
