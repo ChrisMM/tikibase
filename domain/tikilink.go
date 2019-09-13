@@ -13,9 +13,21 @@ type TikiLink struct {
 	title string
 }
 
-// NewTikiLink creates a new TikiLink instance.
-func NewTikiLink(title string, sourceSection TikiSection, targetDocument TikiDocument) TikiLink {
+// TikiLinkScaffold defines arguments for ScaffoldTikiLink.
+type TikiLinkScaffold struct {
+	SourceSection  TikiSection
+	TargetDocument TikiDocument
+	Title          string
+}
+
+// newTikiLink creates a new TikiLink instance.
+func newTikiLink(title string, sourceSection TikiSection, targetDocument TikiDocument) TikiLink {
 	return TikiLink{title: title, sourceSection: sourceSection, targetDocument: targetDocument}
+}
+
+// ScaffoldTikiLink provides TikiLink instances for testing.
+func ScaffoldTikiLink(data TikiLinkScaffold) TikiLink {
+	return newTikiLink(data.Title, data.SourceSection, data.TargetDocument)
 }
 
 // SourceSection provides the TikiSection in which this link is located.

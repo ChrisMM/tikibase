@@ -33,6 +33,11 @@ var htmlLinkRE = regexp.MustCompile(`<a[^>]* href="(.*?)"[^>]*>(.*?)</a>`)
 //nolint:gochecknoglobals
 var stripTitleTagRE = regexp.MustCompile(`#+\s*(.*)`)
 
+// ScaffoldTikiSection provides new TikiSection instances for testing.
+func ScaffoldTikiSection(content string) TikiSection {
+	return TikiSection{TikiSectionContent(content)}
+}
+
 // Anchor provides the URL anchor for this TikiSection.
 func (ts TikiSection) Anchor() string {
 	return strcase.ToKebab(ts.Title())
@@ -44,8 +49,7 @@ func (ts TikiSection) Content() TikiSectionContent {
 }
 
 // TikiLinks returns all TikiLinks in this section.
-func (ts TikiSection) TikiLinks(tdc TikiDocumentCollection) ([]TikiLink, error) {
-	result := []TikiLink{}
+func (ts TikiSection) TikiLinks(tdc TikiDocumentCollection) (result TikiLinkCollection, err error) {
 	matches := markdownLinkRE.FindAllStringSubmatch(string(ts.content), 9999)
 	for _, match := range matches {
 		linkTitle := match[1]
@@ -54,7 +58,7 @@ func (ts TikiSection) TikiLinks(tdc TikiDocumentCollection) ([]TikiLink, error) 
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, ts.Anchor())
 		}
-		result = append(result, NewTikiLink(linkTitle, ts, targetDocument))
+		result = append(result, newTikiLink(linkTitle, ts, targetDocument))
 	}
 	matches = htmlLinkRE.FindAllStringSubmatch(string(ts.content), 9999)
 	fmt.Println(matches)
@@ -66,7 +70,7 @@ func (ts TikiSection) TikiLinks(tdc TikiDocumentCollection) ([]TikiLink, error) 
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s'", targetFilename, linkTitle)
 		}
-		result = append(result, NewTikiLink(linkTitle, ts, targetDocument))
+		result = append(result, newTikiLink(linkTitle, ts, targetDocument))
 	}
 	return result, nil
 }

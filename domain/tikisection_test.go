@@ -5,16 +5,10 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
-	"github.com/kevgo/tikibase/test"
 )
 
-func newTestSection(content string, t *testing.T) domain.TikiSection {
-	_, doc := newTempTikiDocument("one.md", content, t)
-	return doc.TitleSection()
-}
-
 func TestTikiSectionAnchor(t *testing.T) {
-	section := newTestSection("### what is it\n", t)
+	section := domain.ScaffoldTikiSection("### what is it\n")
 	actual := section.Anchor()
 	expected := "what-is-it"
 	if actual != expected {
@@ -24,7 +18,7 @@ func TestTikiSectionAnchor(t *testing.T) {
 
 func TestTikiSectionContent(t *testing.T) {
 	expectedContent := "### title\nthe content\n"
-	section := newTestSection(expectedContent, t)
+	section := domain.ScaffoldTikiSection(expectedContent)
 	actualContent := string(section.Content())
 	if actualContent != expectedContent {
 		t.Fatalf("mismatching content! expected '%s' got '%s'", expectedContent, actualContent)
@@ -32,37 +26,28 @@ func TestTikiSectionContent(t *testing.T) {
 }
 
 func TestTikiSectionTikiLinks(t *testing.T) {
-	tb := test.NewTempDirectoryTikiBase(t)
-	doc1, err := tb.CreateDocument("one.md", "# One")
-	if err != nil {
-		t.Fatalf("cannot create one.md: %v", err)
-	}
-	doc2, err := tb.CreateDocument("two.md", `# Title\ntext [MD link to doc1](one.md)\n text [MD link to doc2](two.md) text\ntext <a href="one.md">HTML link to doc1</a> text <a textrun="dope">not a link</a>`)
-	if err != nil {
-		t.Fatalf("cannot create two.md: %v", err)
-	}
-	docs, err := tb.Documents()
-	if err != nil {
-		t.Fatal(err)
-	}
-	section := doc2.TitleSection()
-	links, err := section.TikiLinks(docs)
+	docs := domain.ScaffoldTikiDocumentCollection([]domain.TikiDocumentScaffold{
+		{FileName: "one.md", Content: "# One"},
+		{FileName: "two.md", Content: `# Title\ntext [MD link to doc1](one.md)\n text [MD link to doc2](two.md) text\ntext <a href="one.md">HTML link to doc1</a> text <a textrun="dope">not a link</a>`},
+	})
+	section := docs[1].TitleSection()
+	actual, err := section.TikiLinks(docs)
 	if err != nil {
 		t.Fatalf("cannot get links in section: %v", err)
 	}
-	expected := []domain.TikiLink{
-		domain.NewTikiLink("MD link to doc1", section, doc1),
-		domain.NewTikiLink("MD link to doc2", section, doc2),
-		domain.NewTikiLink("HTML link to doc1", section, doc1),
-	}
-	diff := cmp.Diff(expected, links, cmp.AllowUnexported(expected[0], section, doc1))
+	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "MD link to doc1", SourceSection: section, TargetDocument: docs[0]},
+		{Title: "MD link to doc2", SourceSection: section, TargetDocument: docs[1]},
+		{Title: "HTML link to doc1", SourceSection: section, TargetDocument: docs[0]},
+	})
+	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(expected[0], section, docs[0]))
 	if diff != "" {
 		t.Fatal(diff)
 	}
 }
 
 func TestTikiSectionTitle(t *testing.T) {
-	section := newTestSection("### What is it\n", t)
+	section := domain.ScaffoldTikiSection("### What is it\n")
 	actual := section.Title()
 	expected := "What is it"
 	if actual != expected {

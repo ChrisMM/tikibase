@@ -30,14 +30,13 @@ func newTikiDocument(filename TikiDocumentFilename, content string) TikiDocument
 	return TikiDocument{filename: filename, content: content}
 }
 
-// ScaffoldTikiDocument scaffolds a new TikiDocument.
-// This method is just for testing, don't use it in production code.
+// ScaffoldTikiDocument provides new TikiDocuments for testing.
 func ScaffoldTikiDocument(data TikiDocumentScaffold) TikiDocument {
 	if data.FileName == "" {
 		data.FileName = "default.md"
 	}
 	if data.Content == "" {
-		data.Content = "default content"
+		data.Content = "# Title\ndefault content"
 	}
 	return newTikiDocument(TikiDocumentFilename(data.FileName), data.Content)
 }
@@ -67,8 +66,7 @@ func (td TikiDocument) FileName() TikiDocumentFilename {
 }
 
 // TikiLinks returns the TikiLinks in this TikiDocument.
-func (td TikiDocument) TikiLinks(tdc TikiDocumentCollection) ([]TikiLink, error) {
-	result := []TikiLink{}
+func (td TikiDocument) TikiLinks(tdc TikiDocumentCollection) (result TikiLinkCollection, err error) {
 	for _, section := range td.AllSections() {
 		links, err := section.TikiLinks(tdc)
 		if err != nil {

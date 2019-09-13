@@ -9,8 +9,7 @@ import (
 // TikiDocumentCollection is a collection of TikiDocuments.
 type TikiDocumentCollection []TikiDocument
 
-// ScaffoldTikiDocumentCollection creates a new TikiDocumentCollection with the given data.
-// This is only for tests, don't use this in production code.
+// ScaffoldTikiDocumentCollection provides new TikiDocumentCollections for testing.
 func ScaffoldTikiDocumentCollection(data []TikiDocumentScaffold) (result TikiDocumentCollection) {
 	for _, docData := range data {
 		result = append(result, ScaffoldTikiDocument(docData))

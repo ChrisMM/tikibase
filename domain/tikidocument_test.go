@@ -62,21 +62,18 @@ func TestTikiDocumentFileName(t *testing.T) {
 }
 
 func TestTikiDocumentTikiLinks(t *testing.T) {
-	tb, dc := test.NewDocumentCreator(t)
-	doc1 := dc.CreateDocument("doc1.md", "### One\n")
-	doc2 := dc.CreateDocument("doc2.md", "### Two\n[one](doc1.md)")
-	docs, err := tb.Documents()
+	docs := domain.ScaffoldTikiDocumentCollection([]domain.TikiDocumentScaffold{
+		{FileName: "doc1.md", Content: "### One\n"},
+		{FileName: "doc2.md", Content: "### Two\n[one](doc1.md)"},
+	})
+	actual, err := docs[1].TikiLinks(docs)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("error getting TikiLinks for doc2: %v", err)
 	}
-	actual, err := doc2.TikiLinks(docs)
-	if err != nil {
-		t.Fatalf("cannot get TikiLinks for doc2: %v", err)
-	}
-	expected := []domain.TikiLink{
-		domain.NewTikiLink("one", doc2.TitleSection(), doc1),
-	}
-	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(expected[0], doc1, doc2.TitleSection()))
+	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "one", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
+	})
+	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(expected[0], docs[0], docs[1].TitleSection()))
 	if diff != "" {
 		t.Fatal(diff)
 	}

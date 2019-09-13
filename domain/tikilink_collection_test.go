@@ -5,25 +5,25 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
-	"github.com/kevgo/tikibase/test"
 )
 
 func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
 	// create documents
-	_, dc := test.NewDocumentCreator(t)
-	doc1 := dc.CreateDocument("one.md", "# The one\n")
-	doc2 := dc.CreateDocument("two.md", "# The other\n")
-	doc3 := dc.CreateDocument("three.md", "# The third\n")
+	docs := domain.ScaffoldTikiDocumentCollection([]domain.TikiDocumentScaffold{
+		{FileName: "one.md"},
+		{FileName: "two.md"},
+		{FileName: "three.md"},
+	})
 
 	// convert links
-	links := domain.TikiLinkCollection{
-		domain.NewTikiLink("1-2", doc1.TitleSection(), doc2),
-		domain.NewTikiLink("1-3", doc1.TitleSection(), doc3),
-		domain.NewTikiLink("2-1", doc2.TitleSection(), doc1),
-		domain.NewTikiLink("2-3", doc2.TitleSection(), doc3),
-		domain.NewTikiLink("3-1", doc3.TitleSection(), doc1),
-		domain.NewTikiLink("3-2", doc3.TitleSection(), doc2),
-	}
+	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
+		{Title: "1-3", SourceSection: docs[0].TitleSection(), TargetDocument: docs[2]},
+		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
+		{Title: "2-3", SourceSection: docs[1].TitleSection(), TargetDocument: docs[2]},
+		{Title: "3-1", SourceSection: docs[2].TitleSection(), TargetDocument: docs[0]},
+		{Title: "3-2", SourceSection: docs[2].TitleSection(), TargetDocument: docs[1]},
+	})
 	actual := links.GroupByTarget()
 
 	// verify
@@ -32,7 +32,7 @@ func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
 		domain.TikiDocumentFilename("two.md"):   {links[0], links[5]},
 		domain.TikiDocumentFilename("three.md"): {links[1], links[3]},
 	}
-	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(links[0], doc1.TitleSection(), doc1))
+	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(links[0], docs[0].TitleSection(), docs[0]))
 	if diff != "" {
 		t.Fatal(diff)
 	}
