@@ -26,6 +26,20 @@ func TestDocumentCollectionFileNames(t *testing.T) {
 	}
 }
 
+func TestDocumentCollectionFind(t *testing.T) {
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+		{FileName: "one.md", Content: "# The one\n[The other](two.md)"},
+		{FileName: "two.md", Content: "# The other\n[The one](one.md)"},
+	})
+	actual, err := docs.Find("two.md")
+	if err != nil {
+		t.Fatalf("cannot find document 'two.md': %v", err)
+	}
+	if actual.FileName() != "two.md" {
+		t.Fatalf("found the wrong document: %s", actual.FileName())
+	}
+}
+
 func TestDocumentCollectionTikiLinks(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "one.md", Content: "# The one\n[The other](two.md)"},

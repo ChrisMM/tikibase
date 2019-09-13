@@ -75,3 +75,13 @@ func TestDocumentTitleSection(t *testing.T) {
 		t.Fatalf("mismatching section content: %s", diff)
 	}
 }
+
+func TestScaffoldDocument(t *testing.T) {
+	actual := domain.ScaffoldDocument(domain.DocumentScaffold{})
+	if actual.FileName() == "" {
+		t.Fatal("no default FileName")
+	}
+	if actual.TitleSection().Title() == "" {
+		t.Fatal("no default section")
+	}
+}
