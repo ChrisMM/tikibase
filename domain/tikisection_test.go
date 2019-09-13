@@ -26,7 +26,7 @@ func TestTikiSectionContent(t *testing.T) {
 }
 
 func TestTikiSectionTikiLinks(t *testing.T) {
-	docs := domain.ScaffoldTikiDocumentCollection([]domain.TikiDocumentScaffold{
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "one.md", Content: "# One"},
 		{FileName: "two.md", Content: `# Title\ntext [MD link to doc1](one.md)\n text [MD link to doc2](two.md) text\ntext <a href="one.md">HTML link to doc1</a> text <a textrun="dope">not a link</a>`},
 	})

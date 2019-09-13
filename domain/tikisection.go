@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// TikiSection represents a section in a TikiDocument.
+// TikiSection represents a section in a Document.
 type TikiSection struct {
 	// the textual content of this TikiSection
 	// including the title line
@@ -49,11 +49,11 @@ func (ts TikiSection) Content() TikiSectionContent {
 }
 
 // TikiLinks returns all TikiLinks in this section.
-func (ts TikiSection) TikiLinks(tdc TikiDocumentCollection) (result TikiLinkCollection, err error) {
+func (ts TikiSection) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
 	matches := markdownLinkRE.FindAllStringSubmatch(string(ts.content), 9999)
 	for _, match := range matches {
 		linkTitle := match[1]
-		targetFileName := TikiDocumentFilename(match[2])
+		targetFileName := DocumentFilename(match[2])
 		targetDocument, err := tdc.Find(targetFileName)
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, ts.Anchor())
@@ -65,7 +65,7 @@ func (ts TikiSection) TikiLinks(tdc TikiDocumentCollection) (result TikiLinkColl
 	for _, match := range matches {
 		fmt.Println(match)
 		linkTitle := match[2]
-		targetFilename := TikiDocumentFilename(match[1])
+		targetFilename := DocumentFilename(match[1])
 		targetDocument, err := tdc.Find(targetFilename)
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s'", targetFilename, linkTitle)

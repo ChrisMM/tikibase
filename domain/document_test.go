@@ -7,8 +7,8 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
-func TestTikiDocumentAllSections(t *testing.T) {
-	td := domain.ScaffoldTikiDocument(domain.TikiDocumentScaffold{
+func TestDocumentAllSections(t *testing.T) {
+	td := domain.ScaffoldDocument(domain.DocumentScaffold{
 		FileName: "one.md", Content: "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.",
 	})
 	// TODO: compare against expected datastructure
@@ -39,8 +39,8 @@ func TestTikiDocumentAllSections(t *testing.T) {
 	}
 }
 
-func TestTikiDocumentFileName(t *testing.T) {
-	doc := domain.ScaffoldTikiDocument(domain.TikiDocumentScaffold{FileName: "one.md"})
+func TestDocumentFileName(t *testing.T) {
+	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md"})
 	expectedFileName := "one.md"
 	actualFileName := string(doc.FileName())
 	if actualFileName != expectedFileName {
@@ -48,8 +48,8 @@ func TestTikiDocumentFileName(t *testing.T) {
 	}
 }
 
-func TestTikiDocumentTikiLinks(t *testing.T) {
-	docs := domain.ScaffoldTikiDocumentCollection([]domain.TikiDocumentScaffold{
+func TestDocumentTikiLinks(t *testing.T) {
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "doc1.md", Content: "### One\n"},
 		{FileName: "doc2.md", Content: "### Two\n[one](doc1.md)"},
 	})
@@ -66,8 +66,8 @@ func TestTikiDocumentTikiLinks(t *testing.T) {
 	}
 }
 
-func TestTikiDocumentTitleSection(t *testing.T) {
-	doc := domain.ScaffoldTikiDocument(domain.TikiDocumentScaffold{Content: "# My Title\n\nTitle section content.\n\n### Content Section\n Content section content.\n"})
+func TestDocumentTitleSection(t *testing.T) {
+	doc := domain.ScaffoldDocument(domain.DocumentScaffold{Content: "# My Title\n\nTitle section content.\n\n### Content Section\n Content section content.\n"})
 	section := doc.TitleSection()
 	expectedContent := "# My Title\n\nTitle section content.\n"
 	diff := cmp.Diff(string(section.Content()), expectedContent)

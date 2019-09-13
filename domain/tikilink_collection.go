@@ -11,9 +11,9 @@ func ScaffoldTikiLinkCollection(data []TikiLinkScaffold) (result TikiLinkCollect
 	return result
 }
 
-// GroupByTarget determines which links in the given TikiLink list point to which TikiDocument.
-func (tlc TikiLinkCollection) GroupByTarget() map[TikiDocumentFilename]TikiLinkCollection {
-	result := make(map[TikiDocumentFilename]TikiLinkCollection)
+// GroupByTarget determines which links in the given TikiLink list point to which Document.
+func (tlc TikiLinkCollection) GroupByTarget() map[DocumentFilename]TikiLinkCollection {
+	result := make(map[DocumentFilename]TikiLinkCollection)
 	for _, link := range tlc {
 		doc := link.TargetDocument()
 		targetFileName := doc.FileName()

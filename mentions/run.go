@@ -9,9 +9,9 @@ import (
 
 // Run executes the "mentions" command in the given directory.
 // Channel-based data flow processing setup:
-// Goroutine 1: reads all TikiDocuments and sends out one filename at a time via  the "TikiDocs" channel.
+// Goroutine 1: reads all Documents and sends out one filename at a time via  the "TikiDocs" channel.
 //              when it is done, it closes the channel.
-// Workerpool 2: reads one TikiDocument filename at a time from the "TikiDocs" channel
+// Workerpool 2: reads one Document filename at a time from the "TikiDocs" channel
 //               and finds all the TikiLinks in that document.
 //               It sends each link out via the "TikiLinks" channel.
 //               When it sees the "TikiDocs" channel closing, it closes the "TikiLinks" channel.
@@ -20,7 +20,7 @@ import (
 //              When the "TikiLinks" channel closes, it sends out the map via the "IncomingLinks" channel.
 // Goroutine 4: reads the map from the "IncomingLinks" channel.
 //              Once it has that, it reads one TikiDoc path at a time from a copy of the "TikiDocs" channel
-//              and sends an "UpdateTikiDoc" command containing a TikiDocument path and list of incomings links to a channel.
+//              and sends an "UpdateTikiDoc" command containing a Document path and list of incomings links to a channel.
 // Workerpool 5: receives one "UpdateTikiDoc" command at a time, compiles the "mentions" section,
 //               and sends that out as a "UpdateMentionsSectionInDoc" command via a channel
 // Workerpool 6: receives one "UpdateMentionsSectionInDoc" command at a time, updates the file on disk,
@@ -43,7 +43,7 @@ import (
 // A higher-level abstraction might be a MapReduce setup:
 // Step 1: expand a directory name to a list of filenames
 // Step 2: in parallel, map over all filenames to get their TikiLinks.
-// Step 3: reduce all found TikiLinks to the LinkMap of TikiDocumentsn and incoming TikiLinks.
+// Step 3: reduce all found TikiLinks to the LinkMap of Documentsn and incoming TikiLinks.
 //
 // Step 4: expand the directory name to a list of filenames again
 // Step 5: in parallel, map over all filenames, render the "mentions" section, and update the file

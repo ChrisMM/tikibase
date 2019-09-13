@@ -1,13 +1,13 @@
 package domain
 
-// TikiLink represents a hyperlink to another TikiDocument
+// TikiLink represents a hyperlink from one Document to another Document
 type TikiLink struct {
 
 	// the section in which this link is located
 	sourceSection TikiSection
 
 	// the document that this link points to
-	targetDocument TikiDocument
+	targetDocument Document
 
 	// the link title
 	title string
@@ -16,12 +16,12 @@ type TikiLink struct {
 // TikiLinkScaffold defines arguments for ScaffoldTikiLink.
 type TikiLinkScaffold struct {
 	SourceSection  TikiSection
-	TargetDocument TikiDocument
+	TargetDocument Document
 	Title          string
 }
 
 // newTikiLink creates a new TikiLink instance.
-func newTikiLink(title string, sourceSection TikiSection, targetDocument TikiDocument) TikiLink {
+func newTikiLink(title string, sourceSection TikiSection, targetDocument Document) TikiLink {
 	return TikiLink{title: title, sourceSection: sourceSection, targetDocument: targetDocument}
 }
 
@@ -35,8 +35,8 @@ func (tl TikiLink) SourceSection() TikiSection {
 	return tl.sourceSection
 }
 
-// TargetDocument provides the TikiDocument that this link points to.
-func (tl TikiLink) TargetDocument() TikiDocument {
+// TargetDocument provides the Document that this link points to.
+func (tl TikiLink) TargetDocument() Document {
 	return tl.targetDocument
 }
 

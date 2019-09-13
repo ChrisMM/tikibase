@@ -7,8 +7,8 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
-func TestTikiDocumentCollectionFileNames(t *testing.T) {
-	docs := domain.ScaffoldTikiDocumentCollection([]domain.TikiDocumentScaffold{
+func TestDocumentCollectionFileNames(t *testing.T) {
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "one.md"},
 		{FileName: "two.md"},
 	})
@@ -16,9 +16,9 @@ func TestTikiDocumentCollectionFileNames(t *testing.T) {
 	if err != nil {
 		t.Fatalf("cannot get filenames of docs: %v", err)
 	}
-	expected := []domain.TikiDocumentFilename{
-		domain.TikiDocumentFilename("one.md"),
-		domain.TikiDocumentFilename("two.md"),
+	expected := []domain.DocumentFilename{
+		domain.DocumentFilename("one.md"),
+		domain.DocumentFilename("two.md"),
 	}
 	diff := cmp.Diff(expected, actual)
 	if diff != "" {
@@ -26,8 +26,8 @@ func TestTikiDocumentCollectionFileNames(t *testing.T) {
 	}
 }
 
-func TestTikiDocumentCollectionTikiLinks(t *testing.T) {
-	docs := domain.ScaffoldTikiDocumentCollection([]domain.TikiDocumentScaffold{
+func TestDocumentCollectionTikiLinks(t *testing.T) {
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "one.md", Content: "# The one\n[The other](two.md)"},
 		{FileName: "two.md", Content: "# The other\n[The one](one.md)"},
 	})

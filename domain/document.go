@@ -2,48 +2,48 @@ package domain
 
 import "strings"
 
-// TikiDocument represents a MarkDown file in the document base.
-// Create new instances via TikiDocumentCollection.CreateDocument
-type TikiDocument struct {
+// Document represents a MarkDown file in the document base.
+// Create new instances via DocumentCollection.CreateDocument
+type Document struct {
 
 	// fileame is the unique identifier for this document.
-	filename TikiDocumentFilename
+	filename DocumentFilename
 
 	// the textual content of the document
 	content string
 }
 
-// TikiDocumentFilename is the filename of a TikiDocument.
-type TikiDocumentFilename string
+// DocumentFilename is the filename of a Document.
+type DocumentFilename string
 
-// TikiDocumentScaffold is for easy scaffolding of TikiDocuments in tests.
+// DocumentScaffold is for easy scaffolding of Documents in tests.
 // Don't use this in production code.
-type TikiDocumentScaffold struct {
+type DocumentScaffold struct {
 	FileName string
 	Content  string
 }
 
-// newTikiDocument creates a new TikiDocument instance.
+// newDocument creates a new Document instance.
 // This constructor is internal to this module,
 // call (TikiBase).CreateDocument() to create new documents in production.
-func newTikiDocument(filename TikiDocumentFilename, content string) TikiDocument {
-	return TikiDocument{filename: filename, content: content}
+func newDocument(filename DocumentFilename, content string) Document {
+	return Document{filename: filename, content: content}
 }
 
-// ScaffoldTikiDocument provides new TikiDocuments for testing.
-func ScaffoldTikiDocument(data TikiDocumentScaffold) TikiDocument {
+// ScaffoldDocument provides new Documents for testing.
+func ScaffoldDocument(data DocumentScaffold) Document {
 	if data.FileName == "" {
 		data.FileName = "default.md"
 	}
 	if data.Content == "" {
 		data.Content = "# Title\ndefault content"
 	}
-	return newTikiDocument(TikiDocumentFilename(data.FileName), data.Content)
+	return newDocument(DocumentFilename(data.FileName), data.Content)
 }
 
 // AllSections returns all the TikiSections that make up this document,
 // including the title section.
-func (td TikiDocument) AllSections() []TikiSection {
+func (td Document) AllSections() []TikiSection {
 	result := []TikiSection{}
 	var tsb TikiSectionBuilder
 	for i, line := range strings.Split(td.content, "\n") {
@@ -60,13 +60,13 @@ func (td TikiDocument) AllSections() []TikiSection {
 	return result
 }
 
-// FileName returns the file path (handle + extension) of this TikiDocument.
-func (td TikiDocument) FileName() TikiDocumentFilename {
+// FileName returns the file path (handle + extension) of this Document.
+func (td Document) FileName() DocumentFilename {
 	return td.filename
 }
 
-// TikiLinks returns the TikiLinks in this TikiDocument.
-func (td TikiDocument) TikiLinks(tdc TikiDocumentCollection) (result TikiLinkCollection, err error) {
+// TikiLinks returns the TikiLinks in this Document.
+func (td Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
 	for _, section := range td.AllSections() {
 		links, err := section.TikiLinks(tdc)
 		if err != nil {
@@ -78,6 +78,6 @@ func (td TikiDocument) TikiLinks(tdc TikiDocumentCollection) (result TikiLinkCol
 }
 
 // TitleSection provides the section before the content sections start.
-func (td TikiDocument) TitleSection() TikiSection {
+func (td Document) TitleSection() TikiSection {
 	return td.AllSections()[0]
 }

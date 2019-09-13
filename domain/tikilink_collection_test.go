@@ -9,7 +9,7 @@ import (
 
 func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
 	// create documents
-	docs := domain.ScaffoldTikiDocumentCollection([]domain.TikiDocumentScaffold{
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "one.md"},
 		{FileName: "two.md"},
 		{FileName: "three.md"},
@@ -27,10 +27,10 @@ func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
 	actual := links.GroupByTarget()
 
 	// verify
-	expected := map[domain.TikiDocumentFilename]domain.TikiLinkCollection{
-		domain.TikiDocumentFilename("one.md"):   {links[2], links[4]},
-		domain.TikiDocumentFilename("two.md"):   {links[0], links[5]},
-		domain.TikiDocumentFilename("three.md"): {links[1], links[3]},
+	expected := map[domain.DocumentFilename]domain.TikiLinkCollection{
+		domain.DocumentFilename("one.md"):   {links[2], links[4]},
+		domain.DocumentFilename("two.md"):   {links[0], links[5]},
+		domain.DocumentFilename("three.md"): {links[1], links[3]},
 	}
 	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(links[0], docs[0].TitleSection(), docs[0]))
 	if diff != "" {
