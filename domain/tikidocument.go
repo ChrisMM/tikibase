@@ -13,9 +13,30 @@ type TikiDocument struct {
 	content string
 }
 
+// TikiDocumentScaffold is for easy scaffolding of TikiDocuments in tests.
+// Don't use this in production code.
+type TikiDocumentScaffold struct {
+	FileName string
+	Content  string
+}
+
 // newTikiDocument creates a new TikiDocument instance.
+// This constructor is internal to this module,
+// call (TikiBase).CreateDocument() to create new documents in production.
 func newTikiDocument(filename TikiDocumentFilename, content string) TikiDocument {
 	return TikiDocument{filename: filename, content: content}
+}
+
+// ScaffoldTikiDocument scaffolds a new TikiDocument.
+// This method is just for testing, don't use it in production code.
+func ScaffoldTikiDocument(data TikiDocumentScaffold) TikiDocument {
+	if data.FileName == "" {
+		data.FileName = "default.md"
+	}
+	if data.Content == "" {
+		data.Content = "default content"
+	}
+	return newTikiDocument(TikiDocumentFilename(data.FileName), data.Content)
 }
 
 // AllSections returns all the TikiSections that make up this document,
@@ -55,7 +76,7 @@ func (td TikiDocument) TikiLinks(tdc TikiDocumentCollection) ([]TikiLink, error)
 	return result, nil
 }
 
-// TikiSection provides the section before the content sections start.
+// TitleSection provides the section before the content sections start.
 func (td TikiDocument) TitleSection() TikiSection {
 	return td.AllSections()[0]
 }
