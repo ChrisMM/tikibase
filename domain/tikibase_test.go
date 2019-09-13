@@ -10,8 +10,8 @@ import (
 	"github.com/kevgo/tikibase/test"
 )
 
-func TestDirectoryTikiBaseCreateDocument(t *testing.T) {
-	tb := test.NewTempDirectoryTikiBase(t)
+func TestTikiBaseCreateDocument(t *testing.T) {
+	tb := test.NewTempTikiBase(t)
 	_, err := tb.CreateDocument("one.md", "The one.")
 	if err != nil {
 		t.Fatalf("cannot create document: %v", err)
@@ -29,13 +29,13 @@ func TestDirectoryTikiBaseCreateDocument(t *testing.T) {
 	}
 }
 
-func TestDirectoryTikiBaseDocuments(t *testing.T) {
+func TestTikiBaseDocuments(t *testing.T) {
 	tb1, dc := test.NewDocumentCreator(t)
 	_ = dc.CreateDocument("one", "")
 	_ = dc.CreateDocument("two", "")
 
 	// get the documents
-	tb2, err := domain.NewDirectoryTikiBase(tb1.StorageDir())
+	tb2, err := domain.NewTikiBase(tb1.StorageDir())
 	if err != nil {
 		t.Fatalf("cannot instantiate tb2: %v", err)
 	}
@@ -50,13 +50,13 @@ func TestDirectoryTikiBaseDocuments(t *testing.T) {
 	}
 }
 
-func TestDirectoryTikiBaseLoad(t *testing.T) {
-	tb := test.NewTempDirectoryTikiBase(t)
+func TestTikiBaseLoad(t *testing.T) {
+	tb := test.NewTempTikiBase(t)
 	expected, err := tb.CreateDocument("one.md", "The one")
 	if err != nil {
 		t.Fatal(err)
 	}
-	tb2, err := domain.NewDirectoryTikiBase(tb.StorageDir())
+	tb2, err := domain.NewTikiBase(tb.StorageDir())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -70,8 +70,8 @@ func TestDirectoryTikiBaseLoad(t *testing.T) {
 	}
 }
 
-func TestNewDirectoryTikiBase(t *testing.T) {
-	_, err := domain.NewDirectoryTikiBase(".")
+func TestNewTikiBase(t *testing.T) {
+	_, err := domain.NewTikiBase(".")
 	if err != nil {
 		t.Fatal(err)
 	}

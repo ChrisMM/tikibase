@@ -68,7 +68,7 @@ import (
 // For timelessness it's probably better to keep it as simple as possible, i.e. single-threaded.
 func Run(dir string) error {
 
-	tb, err := domain.NewDirectoryTikiBase(dir)
+	tb, err := domain.NewTikiBase(dir)
 	if err != nil {
 		return err
 	}

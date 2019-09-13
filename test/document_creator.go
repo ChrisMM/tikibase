@@ -15,8 +15,8 @@ type DocumentCreator struct {
 }
 
 // NewDocumentCreator provides a DocumentCreator instance operating in the system's temp directory.
-func NewDocumentCreator(t *testing.T) (domain.DirectoryTikiBase, DocumentCreator) {
-	tb := NewTempDirectoryTikiBase(t)
+func NewDocumentCreator(t *testing.T) (domain.TikiBase, DocumentCreator) {
+	tb := NewTempTikiBase(t)
 	return tb, DocumentCreator{t, tb, nil}
 }
 

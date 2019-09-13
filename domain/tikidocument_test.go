@@ -8,9 +8,9 @@ import (
 	"github.com/kevgo/tikibase/test"
 )
 
-// newTempTikiDocument provides a TikiDocument instance inside a DirectoryTikiBase in a temp directory.
+// newTempTikiDocument provides a TikiDocument instance inside a TikiBase in a temp directory.
 func newTempTikiDocument(filename domain.TikiDocumentFilename, content string, t *testing.T) (domain.TikiBase, domain.TikiDocument) {
-	tb := test.NewTempDirectoryTikiBase(t)
+	tb := test.NewTempTikiBase(t)
 	td, err := tb.CreateDocument(filename, content)
 	if err != nil {
 		t.Fatal(err)
@@ -49,7 +49,7 @@ func TestTikiDocumentAllSections(t *testing.T) {
 }
 
 func TestTikiDocumentFileName(t *testing.T) {
-	tb := test.NewTempDirectoryTikiBase(t)
+	tb := test.NewTempTikiBase(t)
 	td, err := tb.CreateDocument("one.md", "")
 	if err != nil {
 		t.Fatalf("cannot create document one.md: %v", err)
