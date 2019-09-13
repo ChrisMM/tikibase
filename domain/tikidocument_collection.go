@@ -33,7 +33,7 @@ func (tdc TikiDocumentCollection) Find(filename TikiDocumentFilename) (result Ti
 			return doc, nil
 		}
 	}
-	return result, fmt.Errorf("Cannot find document '%s'", filename)
+	return result, fmt.Errorf("cannot find document '%s'", filename)
 }
 
 // TikiLinks provides all TikiLinks in all TikiDocuments within this TikiBase.

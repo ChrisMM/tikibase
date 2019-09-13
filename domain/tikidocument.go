@@ -13,6 +13,9 @@ type TikiDocument struct {
 	content string
 }
 
+// TikiDocumentFilename is the filename of a TikiDocument.
+type TikiDocumentFilename string
+
 // TikiDocumentScaffold is for easy scaffolding of TikiDocuments in tests.
 // Don't use this in production code.
 type TikiDocumentScaffold struct {
