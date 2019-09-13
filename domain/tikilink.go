@@ -27,6 +27,9 @@ func newTikiLink(title string, sourceSection Section, targetDocument Document) T
 
 // ScaffoldTikiLink provides TikiLink instances for testing.
 func ScaffoldTikiLink(data TikiLinkScaffold) TikiLink {
+	if data.Title == "" {
+		data.Title = "default title"
+	}
 	return newTikiLink(data.Title, data.SourceSection, data.TargetDocument)
 }
 

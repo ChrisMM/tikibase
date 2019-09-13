@@ -37,3 +37,12 @@ func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
 		t.Fatal(diff)
 	}
 }
+
+func TestTikiLinkCollectionScaffold(t *testing.T) {
+	actual := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "foo"},
+	})
+	if actual[0].Title() != "foo" {
+		t.Fatal("didn't scaffold a TikiLink")
+	}
+}
