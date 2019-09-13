@@ -42,10 +42,11 @@ func (td TikiDocument) FileName() TikiDocumentFilename {
 	return td.filename
 }
 
-func (td TikiDocument) TikiLinks(tb TikiBase) ([]TikiLink, error) {
+// TikiLinks returns the TikiLinks in this TikiDocument.
+func (td TikiDocument) TikiLinks(tdc TikiDocumentCollection) ([]TikiLink, error) {
 	result := []TikiLink{}
 	for _, section := range td.AllSections() {
-		links, err := section.TikiLinks(tb)
+		links, err := section.TikiLinks(tdc)
 		if err != nil {
 			return result, err
 		}

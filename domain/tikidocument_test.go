@@ -65,7 +65,11 @@ func TestTikiDocumentTikiLinks(t *testing.T) {
 	tb, dc := test.NewDocumentCreator(t)
 	doc1 := dc.CreateDocument("doc1.md", "### One\n")
 	doc2 := dc.CreateDocument("doc2.md", "### Two\n[one](doc1.md)")
-	actual, err := doc2.TikiLinks(tb)
+	docs, err := tb.Documents()
+	if err != nil {
+		t.Fatal(err)
+	}
+	actual, err := doc2.TikiLinks(docs)
 	if err != nil {
 		t.Fatalf("cannot get TikiLinks for doc2: %v", err)
 	}

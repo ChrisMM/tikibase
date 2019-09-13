@@ -41,8 +41,12 @@ func TestTikiSectionTikiLinks(t *testing.T) {
 	if err != nil {
 		t.Fatalf("cannot create two.md: %v", err)
 	}
+	docs, err := tb.Documents()
+	if err != nil {
+		t.Fatal(err)
+	}
 	section := doc2.TitleSection()
-	links, err := section.TikiLinks(tb)
+	links, err := section.TikiLinks(docs)
 	if err != nil {
 		t.Fatalf("cannot get links in section: %v", err)
 	}

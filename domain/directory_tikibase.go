@@ -37,20 +37,8 @@ func (dtb DirectoryTikiBase) CreateDocument(filename TikiDocumentFilename, conte
 	return doc, err
 }
 
-// DocumentFileNames returns the filenames of all documents in this DirectoryTikiBase.
-func (dtb DirectoryTikiBase) DocumentFileNames() (result []TikiDocumentFilename, err error) {
-	docs, err := dtb.Documents()
-	if err != nil {
-		return result, err
-	}
-	for _, doc := range docs {
-		result = append(result, doc.FileName())
-	}
-	return result, nil
-}
-
 // Documents returns all TikiDocuments in this TikiBase.
-func (dtb DirectoryTikiBase) Documents() (result []TikiDocument, err error) {
+func (dtb DirectoryTikiBase) Documents() (result TikiDocumentCollection, err error) {
 	fileInfos, err := ioutil.ReadDir(dtb.dir)
 	if err != nil {
 		return result, errors.Wrap(err, "cannot read TikiBase directory")
@@ -78,20 +66,4 @@ func (dtb DirectoryTikiBase) Load(filename TikiDocumentFilename) (result TikiDoc
 // StorageDir provides the full directory path in which this TikiBase is stored.
 func (dtb DirectoryTikiBase) StorageDir() string {
 	return dtb.dir
-}
-
-// TikiLinks provides all TikiLinks in all TikiDocuments within this TikiBase.
-func (dtb DirectoryTikiBase) TikiLinks() (result []TikiLink, err error) {
-	docs, err := dtb.Documents()
-	if err != nil {
-		return result, errors.Wrapf(err, "cannot determine the TikiLinks of '%+v'", dtb)
-	}
-	for _, doc := range docs {
-		links, err := doc.TikiLinks(dtb)
-		if err != nil {
-			return result, errors.Wrapf(err, "cannot determine the TikiLinks of '%+v'", doc)
-		}
-		result = append(result, links...)
-	}
-	return result, nil
 }

@@ -44,13 +44,13 @@ func (ts TikiSection) Content() TikiSectionContent {
 }
 
 // TikiLinks returns all TikiLinks in this section.
-func (ts TikiSection) TikiLinks(tb TikiBase) ([]TikiLink, error) {
+func (ts TikiSection) TikiLinks(tdc TikiDocumentCollection) ([]TikiLink, error) {
 	result := []TikiLink{}
 	matches := markdownLinkRE.FindAllStringSubmatch(string(ts.content), 9999)
 	for _, match := range matches {
 		linkTitle := match[1]
 		targetFileName := TikiDocumentFilename(match[2])
-		targetDocument, err := tb.Load(targetFileName)
+		targetDocument, err := tdc.Find(targetFileName)
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, ts.Anchor())
 		}
@@ -62,7 +62,7 @@ func (ts TikiSection) TikiLinks(tb TikiBase) ([]TikiLink, error) {
 		fmt.Println(match)
 		linkTitle := match[2]
 		targetFilename := TikiDocumentFilename(match[1])
-		targetDocument, err := tb.Load(targetFilename)
+		targetDocument, err := tdc.Find(targetFilename)
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s'", targetFilename, linkTitle)
 		}

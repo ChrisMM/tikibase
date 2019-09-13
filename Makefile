@@ -5,6 +5,9 @@ clean:   # Removes all build artifacts
 	@go clean -i
 
 cuke:  # runs the feature specs
+	@godog --format=progress
+
+cuke-parallel:  # runs the feature specs
 	godog --concurrency=$(shell nproc --all) --format=progress
 
 help:   # prints all make targets
