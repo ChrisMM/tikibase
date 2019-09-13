@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -61,9 +60,7 @@ func (ts Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 		result = append(result, newTikiLink(linkTitle, ts, targetDocument))
 	}
 	matches = htmlLinkRE.FindAllStringSubmatch(string(ts.content), 9999)
-	fmt.Println(matches)
 	for _, match := range matches {
-		fmt.Println(match)
 		linkTitle := match[2]
 		targetFilename := DocumentFilename(match[1])
 		targetDocument, err := tdc.Find(targetFilename)
