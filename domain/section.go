@@ -10,16 +10,16 @@ import (
 	"github.com/pkg/errors"
 )
 
-// TikiSection represents a section in a Document.
-type TikiSection struct {
+// Section represents a section in a Document.
+type Section struct {
 	// the textual content of this TikiSection
 	// including the title line
-	content TikiSectionContent
+	content SectionContent
 }
 
-// TikiSectionContent represents the full content of a TikiSection,
+// SectionContent represents the full content of a TikiSection,
 // including heading tag and body.
-type TikiSectionContent string
+type SectionContent string
 
 // This global variable is a constant and doesn't need to be stubbed in tests.
 //nolint:gochecknoglobals
@@ -33,23 +33,23 @@ var htmlLinkRE = regexp.MustCompile(`<a[^>]* href="(.*?)"[^>]*>(.*?)</a>`)
 //nolint:gochecknoglobals
 var stripTitleTagRE = regexp.MustCompile(`#+\s*(.*)`)
 
-// ScaffoldTikiSection provides new TikiSection instances for testing.
-func ScaffoldTikiSection(content string) TikiSection {
-	return TikiSection{TikiSectionContent(content)}
+// ScaffoldSection provides new TikiSection instances for testing.
+func ScaffoldSection(content string) Section {
+	return Section{SectionContent(content)}
 }
 
 // Anchor provides the URL anchor for this TikiSection.
-func (ts TikiSection) Anchor() string {
+func (ts Section) Anchor() string {
 	return strcase.ToKebab(ts.Title())
 }
 
 // Content returns the complete content of the entire section.
-func (ts TikiSection) Content() TikiSectionContent {
+func (ts Section) Content() SectionContent {
 	return ts.content
 }
 
 // TikiLinks returns all TikiLinks in this section.
-func (ts TikiSection) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
+func (ts Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
 	matches := markdownLinkRE.FindAllStringSubmatch(string(ts.content), 9999)
 	for _, match := range matches {
 		linkTitle := match[1]
@@ -77,7 +77,7 @@ func (ts TikiSection) TikiLinks(tdc DocumentCollection) (result TikiLinkCollecti
 
 // Title returns the human-friendly title of this TikiSection,
 // i.e. its title tag without the "###"" in front
-func (ts TikiSection) Title() string {
+func (ts Section) Title() string {
 	titleLine := strings.SplitN(string(ts.content), "\n", 1)[0]
 	matches := stripTitleTagRE.FindStringSubmatch(titleLine)
 	return matches[1]

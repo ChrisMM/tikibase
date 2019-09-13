@@ -7,8 +7,8 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
-func TestTikiSectionAnchor(t *testing.T) {
-	section := domain.ScaffoldTikiSection("### what is it\n")
+func TestSectionAnchor(t *testing.T) {
+	section := domain.ScaffoldSection("### what is it\n")
 	actual := section.Anchor()
 	expected := "what-is-it"
 	if actual != expected {
@@ -16,16 +16,16 @@ func TestTikiSectionAnchor(t *testing.T) {
 	}
 }
 
-func TestTikiSectionContent(t *testing.T) {
+func TestSectionContent(t *testing.T) {
 	expectedContent := "### title\nthe content\n"
-	section := domain.ScaffoldTikiSection(expectedContent)
+	section := domain.ScaffoldSection(expectedContent)
 	actualContent := string(section.Content())
 	if actualContent != expectedContent {
 		t.Fatalf("mismatching content! expected '%s' got '%s'", expectedContent, actualContent)
 	}
 }
 
-func TestTikiSectionTikiLinks(t *testing.T) {
+func TestSectionTikiLinks(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "one.md", Content: "# One"},
 		{FileName: "two.md", Content: `# Title\ntext [MD link to doc1](one.md)\n text [MD link to doc2](two.md) text\ntext <a href="one.md">HTML link to doc1</a> text <a textrun="dope">not a link</a>`},
@@ -46,8 +46,8 @@ func TestTikiSectionTikiLinks(t *testing.T) {
 	}
 }
 
-func TestTikiSectionTitle(t *testing.T) {
-	section := domain.ScaffoldTikiSection("### What is it\n")
+func TestSectionTitle(t *testing.T) {
+	section := domain.ScaffoldSection("### What is it\n")
 	actual := section.Title()
 	expected := "What is it"
 	if actual != expected {

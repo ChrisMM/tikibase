@@ -43,15 +43,15 @@ func ScaffoldDocument(data DocumentScaffold) Document {
 
 // AllSections returns all the TikiSections that make up this document,
 // including the title section.
-func (td Document) AllSections() []TikiSection {
-	result := []TikiSection{}
-	var tsb TikiSectionBuilder
+func (td Document) AllSections() []Section {
+	result := []Section{}
+	var tsb SectionBuilder
 	for i, line := range strings.Split(td.content, "\n") {
 		if strings.HasPrefix(line, "#") {
 			if i > 0 {
 				result = append(result, tsb.Section())
 			}
-			tsb = NewTikiSectionBuilder(line)
+			tsb = NewSectionBuilder(line)
 		} else {
 			tsb.AddLine(line)
 		}
@@ -78,6 +78,6 @@ func (td Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection,
 }
 
 // TitleSection provides the section before the content sections start.
-func (td Document) TitleSection() TikiSection {
+func (td Document) TitleSection() Section {
 	return td.AllSections()[0]
 }

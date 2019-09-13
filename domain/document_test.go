@@ -18,7 +18,7 @@ func TestDocumentAllSections(t *testing.T) {
 	}
 
 	// verify title section
-	expected := domain.TikiSectionContent("# Title\nmy doc")
+	expected := domain.SectionContent("# Title\nmy doc")
 	actual := sections[0].Content()
 	if actual != expected {
 		t.Fatalf("unexpected title section: expected '%s' got '%s'", expected, actual)

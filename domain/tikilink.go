@@ -4,7 +4,7 @@ package domain
 type TikiLink struct {
 
 	// the section in which this link is located
-	sourceSection TikiSection
+	sourceSection Section
 
 	// the document that this link points to
 	targetDocument Document
@@ -15,13 +15,13 @@ type TikiLink struct {
 
 // TikiLinkScaffold defines arguments for ScaffoldTikiLink.
 type TikiLinkScaffold struct {
-	SourceSection  TikiSection
+	SourceSection  Section
 	TargetDocument Document
 	Title          string
 }
 
 // newTikiLink creates a new TikiLink instance.
-func newTikiLink(title string, sourceSection TikiSection, targetDocument Document) TikiLink {
+func newTikiLink(title string, sourceSection Section, targetDocument Document) TikiLink {
 	return TikiLink{title: title, sourceSection: sourceSection, targetDocument: targetDocument}
 }
 
@@ -31,7 +31,7 @@ func ScaffoldTikiLink(data TikiLinkScaffold) TikiLink {
 }
 
 // SourceSection provides the TikiSection in which this link is located.
-func (tl TikiLink) SourceSection() TikiSection {
+func (tl TikiLink) SourceSection() Section {
 	return tl.sourceSection
 }
 
