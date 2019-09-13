@@ -82,3 +82,18 @@ func TestNewTikiBase(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestTikiBaseStorageDir(t *testing.T) {
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("cannot determine current working directory: %v", err)
+	}
+	tb, err := domain.NewTikiBase(currentDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	actual := tb.StorageDir()
+	if actual != currentDir {
+		t.Fatalf("wrong StorageDir provided: expected '%s', got '%s'", currentDir, actual)
+	}
+}
