@@ -30,9 +30,15 @@ func TestTikiBaseCreateDocument(t *testing.T) {
 }
 
 func TestTikiBaseDocuments(t *testing.T) {
-	tb1, dc := test.NewDocumentCreator(t)
-	_ = dc.CreateDocument("one", "")
-	_ = dc.CreateDocument("two", "")
+	tb1 := test.NewTempTikiBase(t)
+	_, err := tb1.CreateDocument("one", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = tb1.CreateDocument("two", "")
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	// get the documents
 	tb2, err := domain.NewTikiBase(tb1.StorageDir())
