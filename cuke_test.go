@@ -36,7 +36,7 @@ func (w *workspaceFeature) createWorkspace(arg interface{}) {
 }
 
 func (w *workspaceFeature) containsFileWithContent(filename string, content *gherkin.DocString) error {
-	return ioutil.WriteFile(path.Join(w.root, filename), []byte(content.Content), 0644)
+	return ioutil.WriteFile(path.Join(w.root, filename), []byte(content.Content+"\n"), 0644)
 }
 
 func (w *workspaceFeature) runMentions() error {
@@ -49,7 +49,7 @@ func (w *workspaceFeature) shouldContainFileWithContent(filename string, content
 		return errors.Wrapf(err, "Cannot find file '%s' in workspace", filename)
 	}
 	actual := string(data)
-	expected := content.Content
+	expected := content.Content + "\n"
 	if strings.Compare(actual, expected) != 0 {
 		diff := cmp.Diff(expected, actual)
 		if diff != "" {

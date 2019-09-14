@@ -21,7 +21,8 @@ func TestRenderMentionsSection(t *testing.T) {
 	expected := `### mentions
 
 - [Go](go.md#what-is-it)
-- [TypeScript](typescript.md#what-is-it)`
+- [TypeScript](typescript.md#what-is-it)
+`
 	actual := string(renderedSection.Content())
 	diff := cmp.Diff(expected, actual)
 	if diff != "" {

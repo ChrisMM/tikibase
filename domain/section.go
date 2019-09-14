@@ -44,7 +44,7 @@ var stripTitleTagRE = regexp.MustCompile(`#+\s*(.*)`)
 // ScaffoldSection provides new TikiSection instances for testing.
 func ScaffoldSection(data SectionScaffold) Section {
 	if data.Content == "" {
-		data.Content = "### default\ncontent"
+		data.Content = "### default section\ncontent\n"
 	}
 	if data.Doc == nil {
 		doc := ScaffoldDocument(DocumentScaffold{})
@@ -56,6 +56,11 @@ func ScaffoldSection(data SectionScaffold) Section {
 // Anchor provides the URL anchor for this TikiSection.
 func (ts Section) Anchor() string {
 	return strcase.ToKebab(ts.Title())
+}
+
+// AppendLine provides a new Section that is this Section with the given line appended.
+func (ts Section) AppendLine(line string) Section {
+	return Section{content: ts.content + SectionContent(line), document: ts.document}
 }
 
 // Content returns the complete content of the entire section.

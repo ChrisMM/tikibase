@@ -2,6 +2,7 @@ package mentions
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/kevgo/tikibase/domain"
 	"github.com/pkg/errors"
@@ -67,7 +68,6 @@ import (
 //
 // For timelessness it's probably better to keep it as simple as possible, i.e. single-threaded.
 func Run(dir string) error {
-
 	tb, err := domain.NewTikiBase(dir)
 	if err != nil {
 		return err
@@ -89,11 +89,16 @@ func Run(dir string) error {
 	fmt.Printf("%d linked documents found\n", len(linksToDocs))
 
 	for _, doc := range docs {
+		doc := doc // need to pin the loop variable so that we can use it in functions
 		fileName := doc.FileName()
 		linksToDoc := linksToDocs[fileName]
 		fmt.Printf("- %s: %d references\n", fileName, len(linksToDoc))
-		mentionsSectionContent := RenderMentionsSection(linksToDoc, &doc)
-		fmt.Println(mentionsSectionContent)
+		mentionsSection := RenderMentionsSection(linksToDoc, &doc)
+		doc2 := doc.AppendSection(mentionsSection)
+		err := tb.SaveDocument(doc2)
+		if err != nil {
+			log.Fatalf("cannot update document %s: %v", fileName, err)
+		}
 	}
 
 	return nil

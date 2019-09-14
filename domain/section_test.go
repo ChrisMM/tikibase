@@ -16,6 +16,16 @@ func TestSectionAnchor(t *testing.T) {
 	}
 }
 
+func TestSectionAppendLine(t *testing.T) {
+	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "existing content\n"})
+	newSection := section.AppendLine("new line\n")
+	actual := newSection.Content()
+	expected := domain.SectionContent("existing content\nnew line\n")
+	if actual != expected {
+		t.Fatalf("did not append line correctly: expected '%s', got '%s'", expected, actual)
+	}
+}
+
 func TestSectionContent(t *testing.T) {
 	expectedContent := "### title\nthe content\n"
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: expectedContent})

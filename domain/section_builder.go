@@ -3,22 +3,30 @@ package domain
 import "strings"
 
 // SectionBuilder builds TikiSections out of lines.
+// Lines must be provided as-is, i.e. contain the ending newlines.
 type SectionBuilder struct {
-	lines    []string
+	content  *strings.Builder
 	document *Document
 }
 
 // NewSectionBuilder creates a new TikiSectionBuilder with the given title
 func NewSectionBuilder(title string, doc *Document) SectionBuilder {
-	return SectionBuilder{lines: []string{title}, document: doc}
+	builder := SectionBuilder{content: &strings.Builder{}, document: doc}
+	builder.content.WriteString(title)
+	return builder
 }
 
 // AddLine adds a content line to this TikiSectionBuilder.
 func (tsb *SectionBuilder) AddLine(line string) {
-	tsb.lines = append(tsb.lines, line)
+	tsb.content.WriteString(line)
+}
+
+// Len provides the length of the section content accumulated so far.
+func (tsb *SectionBuilder) Len() int {
+	return tsb.content.Len()
 }
 
 // Section provides the TikiSection that has been built up so far.
 func (tsb *SectionBuilder) Section() Section {
-	return Section{content: SectionContent(strings.Join(tsb.lines, "\n")), document: tsb.document}
+	return Section{content: SectionContent(tsb.content.String()), document: tsb.document}
 }

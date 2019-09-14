@@ -63,6 +63,12 @@ func (dtb TikiBase) Load(filename DocumentFilename) (result Document, err error)
 	return Document{filename, string(contentData)}, nil
 }
 
+// SaveDocument stores the given Document in this TikiBase.
+func (dtb TikiBase) SaveDocument(doc Document) error {
+	filePath := path.Join(dtb.dir, string(doc.FileName()))
+	return ioutil.WriteFile(filePath, []byte(doc.content), 0644)
+}
+
 // StorageDir provides the full directory path in which this TikiBase is stored.
 func (dtb TikiBase) StorageDir() string {
 	return dtb.dir

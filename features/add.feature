@@ -5,7 +5,7 @@ Feature: Adding mentions
       """
       # One
 
-      ## what is it
+      ### what is it
 
       - foo
       - bar
@@ -14,7 +14,7 @@ Feature: Adding mentions
       """
       # Two
 
-      ## what is it
+      ### what is it
 
       - an example of [one](1.md)
       """
@@ -23,20 +23,20 @@ Feature: Adding mentions
       """
       # One
 
-      ## what is it
+      ### what is it
 
       - foo
       - bar
 
-      ## mentions
+      ### mentions
 
-      - [Two](2.md)
+      - [Two](2.md#what-is-it)
       """
     And the workspace should contain the file "2.md" with content:
       """
       # Two
 
-      ## what is it
+      ### what is it
 
       - an example of [one](1.md)
       """

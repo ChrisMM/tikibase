@@ -10,6 +10,13 @@ import (
 	"github.com/kevgo/tikibase/test"
 )
 
+func TestNewTikiBase(t *testing.T) {
+	_, err := domain.NewTikiBase(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestTikiBaseCreateDocument(t *testing.T) {
 	tb := test.NewTempTikiBase(t)
 	_, err := tb.CreateDocument("one.md", "The one.")
@@ -76,10 +83,23 @@ func TestTikiBaseLoad(t *testing.T) {
 	}
 }
 
-func TestNewTikiBase(t *testing.T) {
-	_, err := domain.NewTikiBase(".")
+func TestTikiBaseSaveDocument(t *testing.T) {
+	tb := test.NewTempTikiBase(t)
+	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md", Content: "document content"})
+	err := tb.SaveDocument(doc)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("cannot save document: %v", err)
+	}
+	filePath := path.Join(tb.StorageDir(), "one.md")
+	fileInfo, err := os.Stat(filePath)
+	if err != nil {
+		t.Fatalf("file %s not found: %v", filePath, err)
+	}
+	if fileInfo.IsDir() {
+		t.Fatalf("file %s should not be a directory", filePath)
+	}
+	if fileInfo.Mode() != 0644 {
+		t.Fatalf("file %s should have access 0644 but has %#o", filePath, fileInfo.Mode())
 	}
 }
 
