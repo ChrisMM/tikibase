@@ -8,11 +8,12 @@ import (
 	"path"
 	"strings"
 
+	"github.com/google/go-cmp/cmp"
+
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
 	"github.com/kevgo/tikibase/mentions"
 	"github.com/pkg/errors"
-	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 //nolint:unused
@@ -47,12 +48,13 @@ func (w *workspaceFeature) shouldContainFileWithContent(filename string, content
 	if err != nil {
 		return errors.Wrapf(err, "Cannot find file '%s' in workspace", filename)
 	}
-	text := string(data)
-	if strings.Compare(text, content.Content) != 0 {
-		dmp := diffmatchpatch.New()
-		diffs := dmp.DiffMain(text, content.Content, false)
-		fmt.Println(dmp.DiffPrettyText(diffs))
-		return fmt.Errorf("mismatching content for file %s", filename)
+	actual := string(data)
+	expected := content.Content
+	if strings.Compare(actual, expected) != 0 {
+		diff := cmp.Diff(expected, actual)
+		if diff != "" {
+			return fmt.Errorf("mismatching content for file %s: \n%s", filename, diff)
+		}
 	}
 	return nil
 }
