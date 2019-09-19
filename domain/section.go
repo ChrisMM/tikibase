@@ -54,31 +54,31 @@ func ScaffoldSection(data SectionScaffold) Section {
 }
 
 // Anchor provides the URL anchor for this TikiSection.
-func (ts Section) Anchor() string {
+func (ts *Section) Anchor() string {
 	return strcase.ToKebab(ts.Title())
 }
 
 // AppendLine provides a new Section that is this Section with the given line appended.
-func (ts Section) AppendLine(line string) Section {
+func (ts *Section) AppendLine(line string) Section {
 	return Section{content: ts.content + SectionContent(line), document: ts.document}
 }
 
 // Content returns the complete content of the entire section.
-func (ts Section) Content() SectionContent {
+func (ts *Section) Content() SectionContent {
 	return ts.content
 }
 
 // Document provides a link to the Document containing this section.
-func (ts Section) Document() *Document {
+func (ts *Section) Document() *Document {
 	return ts.document
 }
 
 // TikiLinks returns all TikiLinks in this section.
-func (ts Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
+func (ts *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
 	matches := markdownLinkRE.FindAllStringSubmatch(string(ts.content), 9999)
-	for _, match := range matches {
-		linkTitle := match[1]
-		targetFileName := DocumentFilename(match[2])
+	for i := range matches {
+		linkTitle := matches[i][1]
+		targetFileName := DocumentFilename(matches[i][2])
 		targetDocument, err := tdc.Find(targetFileName)
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, ts.Anchor())
@@ -100,13 +100,13 @@ func (ts Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 
 // Title returns the human-friendly title of this TikiSection,
 // i.e. its title tag without the "###"" in front
-func (ts Section) Title() string {
+func (ts *Section) Title() string {
 	titleLine := strings.SplitN(string(ts.content), "\n", 1)[0]
 	matches := stripTitleTagRE.FindStringSubmatch(titleLine)
 	return matches[1]
 }
 
 // URL provides the full URL to this Section (link to document that contains this section + anchor of the section.
-func (ts Section) URL() string {
+func (ts *Section) URL() string {
 	return ts.document.URL() + "#" + ts.Anchor()
 }

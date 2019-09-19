@@ -30,21 +30,21 @@ func NewTikiBase(dir string) (result TikiBase, err error) {
 }
 
 // CreateDocument creates a new Document with the given content.
-func (dtb TikiBase) CreateDocument(filename DocumentFilename, content string) (result Document, err error) {
+func (dtb *TikiBase) CreateDocument(filename DocumentFilename, content string) (result Document, err error) {
 	doc := newDocument(filename, content)
 	filePath := path.Join(dtb.dir, string(doc.FileName()))
-	err = ioutil.WriteFile(filePath, []byte(doc.content), 0644)
+	err = ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
 	return doc, err
 }
 
 // Documents returns all Documents in this TikiBase.
-func (dtb TikiBase) Documents() (result DocumentCollection, err error) {
+func (dtb *TikiBase) Documents() (result DocumentCollection, err error) {
 	fileInfos, err := ioutil.ReadDir(dtb.dir)
 	if err != nil {
 		return result, errors.Wrap(err, "cannot read TikiBase directory")
 	}
-	for _, fileInfo := range fileInfos {
-		doc, err := dtb.Load(DocumentFilename(fileInfo.Name()))
+	for i := range fileInfos {
+		doc, err := dtb.Load(DocumentFilename(fileInfos[i].Name()))
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot get all documents")
 		}
@@ -54,22 +54,22 @@ func (dtb TikiBase) Documents() (result DocumentCollection, err error) {
 }
 
 // Load provides the Document with the given filename, or an error if one doesn't exist.
-func (dtb TikiBase) Load(filename DocumentFilename) (result Document, err error) {
+func (dtb *TikiBase) Load(filename DocumentFilename) (result Document, err error) {
 	path := path.Join(dtb.StorageDir(), string(filename))
 	contentData, err := ioutil.ReadFile(path)
 	if err != nil {
 		return result, errors.Wrapf(err, "cannot read file '%s'", path)
 	}
-	return Document{filename, string(contentData)}, nil
+	return newDocument(filename, string(contentData)), nil
 }
 
 // SaveDocument stores the given Document in this TikiBase.
-func (dtb TikiBase) SaveDocument(doc Document) error {
+func (dtb *TikiBase) SaveDocument(doc Document) error {
 	filePath := path.Join(dtb.dir, string(doc.FileName()))
-	return ioutil.WriteFile(filePath, []byte(doc.content), 0644)
+	return ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
 }
 
 // StorageDir provides the full directory path in which this TikiBase is stored.
-func (dtb TikiBase) StorageDir() string {
+func (dtb *TikiBase) StorageDir() string {
 	return dtb.dir
 }

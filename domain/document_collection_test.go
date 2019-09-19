@@ -50,10 +50,10 @@ func TestDocumentCollectionTikiLinks(t *testing.T) {
 		t.Fatalf("cannot get TikiLinks of docs: %v", err)
 	}
 	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "The other", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
-		{Title: "The one", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
+		{Title: "The other", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+		{Title: "The one", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]},
 	})
-	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(expected[0], expected[0].SourceSection(), expected[0].TargetDocument()))
+	diff := cmp.Diff(expected, actual)
 	if diff != "" {
 		t.Fatal(diff)
 	}

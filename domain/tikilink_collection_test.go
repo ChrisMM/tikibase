@@ -7,6 +7,64 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
+func TestTikiLinkCollectionEqual(t *testing.T) {
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{{}, {}})
+	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]},
+	})
+
+	// compare against a TikiLinkCollection with similar contents
+	equal := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]},
+	})
+	diff := cmp.Diff(expected, equal)
+	if diff != "" {
+		t.Fatalf("equal: didn't match: %s", diff)
+	}
+
+	// compare against a longer TikiLinkCollection
+	longer := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]},
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+	})
+	diff = cmp.Diff(expected, longer)
+	if diff == "" {
+		t.Fatalf("longer: unexpected match: %v", diff)
+	}
+
+	// compare against a shorter TikiLinkCollection
+	shorter := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+	})
+	diff = cmp.Diff(expected, shorter)
+	if diff == "" {
+		t.Fatalf("shorter: unexpected match: %v", diff)
+	}
+
+	// compare against a TikiLinkCollection with a different section
+	differentSection := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+		{Title: "2-1", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[0]},
+	})
+	diff = cmp.Diff(expected, differentSection)
+	if diff == "" {
+		t.Fatalf("differentSection: unexpected match: %s", diff)
+	}
+
+	// compare against a TikiLinkCollection with a different target document
+	differentDoc := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[1]},
+	})
+	diff = cmp.Diff(expected, differentDoc)
+	if diff == "" {
+		t.Fatalf("differentDoc: unexpected match: %s", diff)
+	}
+}
+
 func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
 	// create documents
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
@@ -17,12 +75,12 @@ func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
 
 	// convert links
 	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
-		{Title: "1-3", SourceSection: docs[0].TitleSection(), TargetDocument: docs[2]},
-		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
-		{Title: "2-3", SourceSection: docs[1].TitleSection(), TargetDocument: docs[2]},
-		{Title: "3-1", SourceSection: docs[2].TitleSection(), TargetDocument: docs[0]},
-		{Title: "3-2", SourceSection: docs[2].TitleSection(), TargetDocument: docs[1]},
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+		{Title: "1-3", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[2]},
+		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]},
+		{Title: "2-3", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[2]},
+		{Title: "3-1", SourceSection: docs[2].TitleSection(), TargetDocument: &docs[0]},
+		{Title: "3-2", SourceSection: docs[2].TitleSection(), TargetDocument: &docs[1]},
 	})
 	actual := links.GroupByTarget()
 
@@ -32,7 +90,7 @@ func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
 		domain.DocumentFilename("two.md"):   {links[0], links[5]},
 		domain.DocumentFilename("three.md"): {links[1], links[3]},
 	}
-	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(links[0], docs[0].TitleSection(), docs[0]))
+	diff := cmp.Diff(expected, actual)
 	if diff != "" {
 		t.Fatal(diff)
 	}

@@ -11,25 +11,25 @@ type DocumentCollection []Document
 
 // ScaffoldDocumentCollection provides new DocumentCollections for testing.
 func ScaffoldDocumentCollection(data []DocumentScaffold) (result DocumentCollection) {
-	for _, docData := range data {
-		result = append(result, ScaffoldDocument(docData))
+	for i := range data {
+		result = append(result, ScaffoldDocument(data[i]))
 	}
 	return result
 }
 
 // FileNames returns the filenames of all documents in this DocumentCollection.
 func (tdc DocumentCollection) FileNames() (result []DocumentFilename, err error) {
-	for _, doc := range tdc {
-		result = append(result, doc.FileName())
+	for i := range tdc {
+		result = append(result, tdc[i].FileName())
 	}
 	return result, nil
 }
 
 // Find returns the Document with the given filename.
-func (tdc DocumentCollection) Find(filename DocumentFilename) (result Document, err error) {
-	for _, doc := range tdc {
-		if doc.FileName() == filename {
-			return doc, nil
+func (tdc DocumentCollection) Find(filename DocumentFilename) (result *Document, err error) {
+	for i := range tdc {
+		if tdc[i].FileName() == filename {
+			return &tdc[i], nil
 		}
 	}
 	return result, fmt.Errorf("cannot find document '%s'", filename)
@@ -37,10 +37,11 @@ func (tdc DocumentCollection) Find(filename DocumentFilename) (result Document, 
 
 // TikiLinks provides all TikiLinks in all Documents within this TikiBase.
 func (tdc DocumentCollection) TikiLinks() (result TikiLinkCollection, err error) {
-	for _, doc := range tdc {
-		links, err := doc.TikiLinks(tdc)
+	for i := range tdc {
+		fmt.Printf("tdc.TikiLinks(): doc = %p, %s\n", &tdc[i], tdc[i].TitleSection().Anchor())
+		links, err := tdc[i].TikiLinks(tdc)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot determine the TikiLinks of '%+v'", doc)
+			return result, errors.Wrapf(err, "cannot determine the TikiLinks of '%+v'", tdc[i])
 		}
 		result = append(result, links...)
 	}

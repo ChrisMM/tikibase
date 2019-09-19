@@ -46,11 +46,11 @@ func TestSectionTikiLinks(t *testing.T) {
 		t.Fatalf("cannot get links in section: %v", err)
 	}
 	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "MD link to doc1", SourceSection: section, TargetDocument: docs[0]},
-		{Title: "MD link to doc2", SourceSection: section, TargetDocument: docs[1]},
-		{Title: "HTML link to doc1", SourceSection: section, TargetDocument: docs[0]},
+		{Title: "MD link to doc1", SourceSection: section, TargetDocument: &docs[0]},
+		{Title: "MD link to doc2", SourceSection: section, TargetDocument: &docs[1]},
+		{Title: "HTML link to doc1", SourceSection: section, TargetDocument: &docs[0]},
 	})
-	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(expected[0], section, docs[0]))
+	diff := cmp.Diff(expected, actual)
 	if diff != "" {
 		t.Fatal(diff)
 	}

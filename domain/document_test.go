@@ -89,11 +89,11 @@ func TestDocumentFileName(t *testing.T) {
 
 func TestDocumentReplaceSection(t *testing.T) {
 	td := domain.ScaffoldDocument(domain.DocumentScaffold{
-		FileName: "one.md", Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nThe other.\n",
+		FileName: "one.md", Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nOld section 2.\n",
 	})
 	sections := td.AllSections()
 	twoSection := sections[2]
-	newSection := domain.ScaffoldSection(domain.SectionScaffold{Content: "### Two\n\nThe second.\n", Doc: &td})
+	newSection := domain.ScaffoldSection(domain.SectionScaffold{Content: "### Two\n\nNew section 2.\n", Doc: &td})
 	newdoc := td.ReplaceSection(twoSection, newSection)
 
 	newSections := newdoc.AllSections()
@@ -116,12 +116,11 @@ func TestDocumentReplaceSection(t *testing.T) {
 	}
 
 	// verify content section 2
-	expected = domain.SectionContent("### Two\n\nThe second.\n")
+	expected = domain.SectionContent("### Two\n\nNew section 2.\n")
 	actual = newSections[2].Content()
 	if actual != expected {
 		t.Fatalf("unexpected content section 2: expected '%s' got '%s'", expected, actual)
 	}
-
 }
 
 func TestDocumentTikiLinks(t *testing.T) {
@@ -134,9 +133,9 @@ func TestDocumentTikiLinks(t *testing.T) {
 		t.Fatalf("error getting TikiLinks for doc2: %v", err)
 	}
 	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "one", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
+		{Title: "one", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]},
 	})
-	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(expected[0], docs[0], docs[1].TitleSection()))
+	diff := cmp.Diff(expected, actual)
 	if diff != "" {
 		t.Fatal(diff)
 	}

@@ -5,7 +5,6 @@ import (
 	"path"
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
 	"github.com/kevgo/tikibase/test"
 )
@@ -77,9 +76,8 @@ func TestTikiBaseLoad(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	diff := cmp.Diff(expected, actual, cmp.AllowUnexported(actual))
-	if diff != "" {
-		t.Fatal(diff)
+	if actual.Content() != expected.Content() {
+		t.Fatalf("mismatching content: expected '%s', got '%s", expected.Content(), actual.Content())
 	}
 }
 
