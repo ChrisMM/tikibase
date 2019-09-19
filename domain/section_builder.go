@@ -17,16 +17,16 @@ func NewSectionBuilder(title string, doc *Document) SectionBuilder {
 }
 
 // AddLine adds a content line to this TikiSectionBuilder.
-func (tsb *SectionBuilder) AddLine(line string) {
-	tsb.content.WriteString(line)
+func (sb *SectionBuilder) AddLine(line string) {
+	sb.content.WriteString(line)
 }
 
 // Len provides the length of the section content accumulated so far.
-func (tsb *SectionBuilder) Len() int {
-	return tsb.content.Len()
+func (sb *SectionBuilder) Len() int {
+	return sb.content.Len()
 }
 
 // Section provides the TikiSection that has been built up so far.
-func (tsb *SectionBuilder) Section() Section {
-	return Section{content: SectionContent(tsb.content.String()), document: tsb.document}
+func (sb *SectionBuilder) Section() Section {
+	return Section{content: SectionContent(sb.content.String()), document: sb.document}
 }

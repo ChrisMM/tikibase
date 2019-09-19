@@ -43,49 +43,49 @@ func ScaffoldDocument(data DocumentScaffold) Document {
 
 // AllSections returns all the TikiSections that make up this document,
 // including the title section.
-func (td *Document) AllSections() (result SectionCollection) {
-	return td.sections
+func (d *Document) AllSections() (result SectionCollection) {
+	return d.sections
 }
 
 // AppendSection provides a new Document with the given Section appended.
-func (td *Document) AppendSection(section Section) Document {
+func (d *Document) AppendSection(section Section) Document {
 	// add an empty line to the last section
-	sections := td.AllSections()
+	sections := d.AllSections()
 	lastSection := sections[len(sections)-1]
 	newLastSection := lastSection.AppendLine("\n")
 	sections = sections.Replace(lastSection, newLastSection)
 
 	// add the new section
 	newSections := append(sections, section)
-	return newDocument(td.filename, newSections.Text())
+	return newDocument(d.filename, newSections.Text())
 }
 
 // Content returns the content of this document.
-func (td *Document) Content() string {
-	return td.sections.Text()
+func (d *Document) Content() string {
+	return d.sections.Text()
 }
 
 // ContentSections provides the content sections of this document.
-func (td *Document) ContentSections() SectionCollection {
-	return td.AllSections()[1:]
+func (d *Document) ContentSections() SectionCollection {
+	return d.AllSections()[1:]
 }
 
 // FileName returns the file path (handle + extension) of this Document.
-func (td *Document) FileName() DocumentFilename {
-	return td.filename
+func (d *Document) FileName() DocumentFilename {
+	return d.filename
 }
 
 // ReplaceSection provides a new Document that is like this one
 // and has the given old section replaced with the given new section.
-func (td *Document) ReplaceSection(oldSection, newSection Section) Document {
-	newSections := td.AllSections().Replace(oldSection, newSection)
-	return newDocument(td.filename, newSections.Text())
+func (d *Document) ReplaceSection(oldSection, newSection Section) Document {
+	newSections := d.AllSections().Replace(oldSection, newSection)
+	return newDocument(d.filename, newSections.Text())
 }
 
 // TikiLinks returns the TikiLinks in this Document.
-func (td *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
-	for i := range td.sections {
-		links, err := td.sections[i].TikiLinks(tdc)
+func (d *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
+	for i := range d.sections {
+		links, err := d.sections[i].TikiLinks(tdc)
 		if err != nil {
 			return result, err
 		}
@@ -95,11 +95,11 @@ func (td *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection
 }
 
 // TitleSection provides the section before the content sections start.
-func (td *Document) TitleSection() *Section {
-	return &td.sections[0]
+func (d *Document) TitleSection() *Section {
+	return &d.sections[0]
 }
 
 // URL provides the URL of this Document within its TikiBase.
-func (td *Document) URL() string {
-	return string(td.filename)
+func (d *Document) URL() string {
+	return string(d.filename)
 }

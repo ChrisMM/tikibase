@@ -54,38 +54,38 @@ func ScaffoldSection(data SectionScaffold) Section {
 }
 
 // Anchor provides the URL anchor for this TikiSection.
-func (ts *Section) Anchor() string {
-	return strcase.ToKebab(ts.Title())
+func (s *Section) Anchor() string {
+	return strcase.ToKebab(s.Title())
 }
 
 // AppendLine provides a new Section that is this Section with the given line appended.
-func (ts *Section) AppendLine(line string) Section {
-	return Section{content: ts.content + SectionContent(line), document: ts.document}
+func (s *Section) AppendLine(line string) Section {
+	return Section{content: s.content + SectionContent(line), document: s.document}
 }
 
 // Content returns the complete content of the entire section.
-func (ts *Section) Content() SectionContent {
-	return ts.content
+func (s *Section) Content() SectionContent {
+	return s.content
 }
 
 // Document provides a link to the Document containing this section.
-func (ts *Section) Document() *Document {
-	return ts.document
+func (s *Section) Document() *Document {
+	return s.document
 }
 
 // TikiLinks returns all TikiLinks in this section.
-func (ts *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
-	matches := markdownLinkRE.FindAllStringSubmatch(string(ts.content), 9999)
+func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
+	matches := markdownLinkRE.FindAllStringSubmatch(string(s.content), 9999)
 	for i := range matches {
 		linkTitle := matches[i][1]
 		targetFileName := DocumentFilename(matches[i][2])
 		targetDocument, err := tdc.Find(targetFileName)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, ts.Anchor())
+			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, s.Anchor())
 		}
-		result = append(result, newTikiLink(linkTitle, ts, targetDocument))
+		result = append(result, newTikiLink(linkTitle, s, targetDocument))
 	}
-	matches = htmlLinkRE.FindAllStringSubmatch(string(ts.content), 9999)
+	matches = htmlLinkRE.FindAllStringSubmatch(string(s.content), 9999)
 	for _, match := range matches {
 		linkTitle := match[2]
 		targetFilename := DocumentFilename(match[1])
@@ -93,20 +93,20 @@ func (ts *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection,
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s'", targetFilename, linkTitle)
 		}
-		result = append(result, newTikiLink(linkTitle, ts, targetDocument))
+		result = append(result, newTikiLink(linkTitle, s, targetDocument))
 	}
 	return result, nil
 }
 
 // Title returns the human-friendly title of this TikiSection,
 // i.e. its title tag without the "###"" in front
-func (ts *Section) Title() string {
-	titleLine := strings.SplitN(string(ts.content), "\n", 1)[0]
+func (s *Section) Title() string {
+	titleLine := strings.SplitN(string(s.content), "\n", 1)[0]
 	matches := stripTitleTagRE.FindStringSubmatch(titleLine)
 	return matches[1]
 }
 
 // URL provides the full URL to this Section (link to document that contains this section + anchor of the section.
-func (ts *Section) URL() string {
-	return ts.document.URL() + "#" + ts.Anchor()
+func (s *Section) URL() string {
+	return s.document.URL() + "#" + s.Anchor()
 }
