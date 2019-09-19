@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 	"path"
 	"strings"
 
@@ -22,14 +21,8 @@ type workspaceFeature struct {
 }
 
 func (w *workspaceFeature) createWorkspace(arg interface{}) {
-	_, err := os.Stat("tmp")
-	if os.IsNotExist(err) {
-		err = os.Mkdir("tmp", os.ModeDir|0777)
-		if err != nil {
-			log.Fatalf("cannot create root tmp directory: %s", err.Error())
-		}
-	}
-	w.root, err = ioutil.TempDir("tmp", "")
+	var err error
+	w.root, err = ioutil.TempDir("", "")
 	if err != nil {
 		log.Fatalf("cannot create workspace: %s", err.Error())
 	}
