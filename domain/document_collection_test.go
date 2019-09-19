@@ -20,8 +20,7 @@ func TestDocumentCollectionFileNames(t *testing.T) {
 		domain.DocumentFilename("one.md"),
 		domain.DocumentFilename("two.md"),
 	}
-	diff := cmp.Diff(expected, actual)
-	if diff != "" {
+	if diff := cmp.Diff(expected, actual); diff != "" {
 		t.Fatal(diff)
 	}
 }
@@ -53,8 +52,7 @@ func TestDocumentCollectionTikiLinks(t *testing.T) {
 		{Title: "The other", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
 		{Title: "The one", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]},
 	})
-	diff := cmp.Diff(expected, actual)
-	if diff != "" {
+	if diff := cmp.Diff(expected, actual); diff != "" {
 		t.Fatal(diff)
 	}
 }

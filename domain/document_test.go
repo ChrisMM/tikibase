@@ -135,8 +135,7 @@ func TestDocumentTikiLinks(t *testing.T) {
 	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
 		{Title: "one", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]},
 	})
-	diff := cmp.Diff(expected, actual)
-	if diff != "" {
+	if diff := cmp.Diff(expected, actual); diff != "" {
 		t.Fatal(diff)
 	}
 }
@@ -145,8 +144,7 @@ func TestDocumentTitleSection(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{Content: "# My Title\n\nTitle section content.\n\n### Content Section\n Content section content.\n"})
 	section := doc.TitleSection()
 	expectedContent := "# My Title\n\nTitle section content.\n\n"
-	diff := cmp.Diff(string(section.Content()), expectedContent)
-	if diff != "" {
+	if diff := cmp.Diff(string(section.Content()), expectedContent); diff != "" {
 		t.Fatalf("mismatching section content: %s", diff)
 	}
 }

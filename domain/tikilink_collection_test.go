@@ -19,8 +19,7 @@ func TestTikiLinkCollectionEqual(t *testing.T) {
 		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
 		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]},
 	})
-	diff := cmp.Diff(expected, equal)
-	if diff != "" {
+	if diff := cmp.Diff(expected, equal); diff != "" {
 		t.Fatalf("equal: didn't match: %s", diff)
 	}
 
@@ -30,8 +29,7 @@ func TestTikiLinkCollectionEqual(t *testing.T) {
 		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]},
 		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
 	})
-	diff = cmp.Diff(expected, longer)
-	if diff == "" {
+	if diff := cmp.Diff(expected, longer); diff == "" {
 		t.Fatalf("longer: unexpected match: %v", diff)
 	}
 
@@ -39,8 +37,7 @@ func TestTikiLinkCollectionEqual(t *testing.T) {
 	shorter := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
 		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
 	})
-	diff = cmp.Diff(expected, shorter)
-	if diff == "" {
+	if diff := cmp.Diff(expected, shorter); diff == "" {
 		t.Fatalf("shorter: unexpected match: %v", diff)
 	}
 
@@ -49,8 +46,7 @@ func TestTikiLinkCollectionEqual(t *testing.T) {
 		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
 		{Title: "2-1", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[0]},
 	})
-	diff = cmp.Diff(expected, differentSection)
-	if diff == "" {
+	if diff := cmp.Diff(expected, differentSection); diff == "" {
 		t.Fatalf("differentSection: unexpected match: %s", diff)
 	}
 
@@ -59,8 +55,7 @@ func TestTikiLinkCollectionEqual(t *testing.T) {
 		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
 		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[1]},
 	})
-	diff = cmp.Diff(expected, differentDoc)
-	if diff == "" {
+	if diff := cmp.Diff(expected, differentDoc); diff == "" {
 		t.Fatalf("differentDoc: unexpected match: %s", diff)
 	}
 }
@@ -90,8 +85,7 @@ func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
 		domain.DocumentFilename("two.md"):   {links[0], links[5]},
 		domain.DocumentFilename("three.md"): {links[1], links[3]},
 	}
-	diff := cmp.Diff(expected, actual)
-	if diff != "" {
+	if diff := cmp.Diff(expected, actual); diff != "" {
 		t.Fatal(diff)
 	}
 }

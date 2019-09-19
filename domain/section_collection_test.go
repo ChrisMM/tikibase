@@ -21,8 +21,7 @@ func TestSectionCollectionEqual(t *testing.T) {
 		{Content: "section 1\n", Doc: &doc1},
 		{Content: "section 2\n", Doc: &doc2},
 	})
-	diff := cmp.Diff(expected, match)
-	if diff != "" {
+	if diff := cmp.Diff(expected, match); diff != "" {
 		t.Fatalf("match: unexpected mismatch: %s", diff)
 	}
 
@@ -30,8 +29,7 @@ func TestSectionCollectionEqual(t *testing.T) {
 	shorter := domain.ScaffoldSectionCollection([]domain.SectionScaffold{
 		{Content: "section 1\n", Doc: &doc1},
 	})
-	diff = cmp.Diff(expected, shorter)
-	if diff == "" {
+	if diff := cmp.Diff(expected, shorter); diff == "" {
 		t.Fatalf("shorter: unexpected match: %s", diff)
 	}
 
@@ -41,8 +39,7 @@ func TestSectionCollectionEqual(t *testing.T) {
 		{Content: "section 2\n", Doc: &doc2},
 		{Content: "section 1\n", Doc: &doc1},
 	})
-	diff = cmp.Diff(expected, longer)
-	if diff == "" {
+	if diff := cmp.Diff(expected, longer); diff == "" {
 		t.Fatalf("longer: unexpected match: %s", diff)
 	}
 
@@ -51,8 +48,7 @@ func TestSectionCollectionEqual(t *testing.T) {
 		{Content: "section A\n", Doc: &doc1},
 		{Content: "section 2\n", Doc: &doc2},
 	})
-	diff = cmp.Diff(expected, differentContent)
-	if diff == "" {
+	if diff := cmp.Diff(expected, differentContent); diff == "" {
 		t.Fatalf("differentContent: unexpected match: %s", diff)
 	}
 
@@ -61,8 +57,7 @@ func TestSectionCollectionEqual(t *testing.T) {
 		{Content: "section 1\n", Doc: &doc1},
 		{Content: "section 2\n", Doc: &doc1},
 	})
-	diff = cmp.Diff(expected, differentDoc)
-	if diff == "" {
+	if diff := cmp.Diff(expected, differentDoc); diff == "" {
 		t.Fatalf("differentDoc: unexpected match: %s", diff)
 	}
 }
@@ -75,8 +70,7 @@ func TestSectionCollectionReplace(t *testing.T) {
 	newSection2 := domain.ScaffoldSection(domain.SectionScaffold{Content: "new section 2\n"})
 	actual := sections.Replace(sections[1], newSection2)
 	expected := domain.SectionCollection([]domain.Section{sections[0], newSection2})
-	diff := cmp.Diff(expected, actual)
-	if diff != "" {
+	if diff := cmp.Diff(expected, actual); diff != "" {
 		t.Fatal(diff)
 	}
 }
