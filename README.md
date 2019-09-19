@@ -2,12 +2,15 @@
 
 _timeless wiki-like knowledge database_
 
-Tikibase is an extremely robust knowledge base that will be usable for decades.
+Tikibase is an extremely robust knowledge base designed to be usable for
+decades.
 
-- semi-structured data to answer complex questions
+- semi-structured text storage to model knowledge
 - links and backlinks
-- storage format is human and machine editable Markdown organized in files
+- storage format is human and machine readable and editable Markdown organized
+  in files
 - history is stored in Git
+- offline availability via Git checkout
 - simple CLI tools and bots to automate maintenance
 
 ### Why
@@ -21,12 +24,17 @@ things that I want to remember:
 - Apple Notes
 - Dynalist
 - Notational Velocity
-- custom-built web and desktop applications
+- various custom-built web and desktop applications
 
-All of them have been limited and/or became unsupported at some point.
+All of them have been limited and/or became unsupported at some point. Or I
+changed platforms and couldn't use them anymore.
 
-- no backlinks
-- no structure
+- off-the-shelf tools lack structure for knowledge management and backlinks.
+
+### Limitations
+
+- it would be nice to reference other files via `#shortname` rather than
+  creating a Markdown link to the file
 
 ### Development
 
