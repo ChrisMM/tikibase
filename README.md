@@ -1,5 +1,7 @@
 # Tikibase
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/kevgo/tikibase)](https://goreportcard.com/report/github.com/kevgo/tikibase)
+
 _timeless wiki-like knowledge database_
 
 Tikibase is an extremely robust knowledge base designed to be usable for
