@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"path"
-	"strings"
 
 	"github.com/google/go-cmp/cmp"
 
@@ -43,11 +42,8 @@ func (w *workspaceFeature) shouldContainFileWithContent(filename string, content
 	}
 	actual := string(data)
 	expected := content.Content + "\n"
-	if strings.Compare(actual, expected) != 0 {
-		diff := cmp.Diff(expected, actual)
-		if diff != "" {
-			return fmt.Errorf("mismatching content for file %s: \n%s", filename, diff)
-		}
+	if diff := cmp.Diff(expected, actual); diff != "" {
+		return fmt.Errorf("mismatching content for file %s: \n%s", filename, diff)
 	}
 	return nil
 }
