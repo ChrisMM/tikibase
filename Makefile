@@ -22,7 +22,11 @@ mentions:  # runs the 'mentions' command
 run:  # runs the command
 	@go run main.go
 
-test: unit lint cuke # runs all tests
+test:  # runs all tests
+	@go test ./... &
+	@golangci-lint run --enable-all -D lll -D godox &
+	@godog --concurrency=$(shell nproc --all) --format=progress
+.PHONY: test
 
 unit:  # runs the unit tests
 	@go test ./...
