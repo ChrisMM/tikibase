@@ -13,27 +13,27 @@ func TestDocumentAllSections(t *testing.T) {
 	})
 	// TODO: compare against expected datastructure
 	sections := doc.AllSections()
-	if len(sections) != 3 {
-		t.Fatalf("unexpected sections length: expected 3 got %d", len(sections))
+	if len(*sections) != 3 {
+		t.Fatalf("unexpected sections length: expected 3 got %d", len(*sections))
 	}
 
 	// verify title section
 	expected := domain.SectionContent("# Title\n\nmy doc\n\n")
-	actual := sections[0].Content()
+	actual := (*sections)[0].Content()
 	if actual != expected {
 		t.Fatalf("unexpected title section: expected '%s' got '%s'", expected, actual)
 	}
 
 	// verify content section 1
 	expected = "### One\n\nThe one.\n\n"
-	actual = sections[1].Content()
+	actual = (*sections)[1].Content()
 	if actual != expected {
 		t.Fatalf("unexpected content section 1: expected '%s' got '%s'", expected, actual)
 	}
 
 	// verify content section 2
 	expected = "### Two\n\nThe other.\n"
-	actual = sections[2].Content()
+	actual = (*sections)[2].Content()
 	if actual != expected {
 		t.Fatalf("unexpected content section 2: expected '%s' got '%s'", expected, actual)
 	}
@@ -59,20 +59,20 @@ func TestDocumentContentSections(t *testing.T) {
 	})
 	// TODO: compare against expected datastructure
 	sections := td.ContentSections()
-	if len(sections) != 2 {
-		t.Fatalf("unexpected sections length: expected 2 got %d", len(sections))
+	if len(*sections) != 2 {
+		t.Fatalf("unexpected sections length: expected 2 got %d", len(*sections))
 	}
 
 	// verify content section 1
 	expected := domain.SectionContent("### One\nThe one.\n")
-	actual := sections[0].Content()
+	actual := (*sections)[0].Content()
 	if actual != expected {
 		t.Fatalf("unexpected content section 1: expected '%s' got '%s'", expected, actual)
 	}
 
 	// verify content section 2
 	expected = domain.SectionContent("### Two\nThe other.\n")
-	actual = sections[1].Content()
+	actual = (*sections)[1].Content()
 	if actual != expected {
 		t.Fatalf("unexpected content section 2: expected '%s' got '%s'", expected, actual)
 	}
@@ -92,32 +92,32 @@ func TestDocumentReplaceSection(t *testing.T) {
 		FileName: "one.md", Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nOld section 2.\n",
 	})
 	sections := td.AllSections()
-	twoSection := sections[2]
+	twoSection := (*sections)[2]
 	newSection := domain.ScaffoldSection(domain.SectionScaffold{Content: "### Two\n\nNew section 2.\n", Doc: &td})
 	newdoc := td.ReplaceSection(twoSection, newSection)
 
 	newSections := newdoc.AllSections()
-	if len(newSections) != 3 {
-		t.Fatalf("unexpected newSections length: expected 3 got %d", len(newSections))
+	if len(*newSections) != 3 {
+		t.Fatalf("unexpected newSections length: expected 3 got %d", len(*newSections))
 	}
 
 	// verify title section
 	expected := domain.SectionContent("# Title\n\nmy doc\n\n")
-	actual := newSections[0].Content()
+	actual := (*newSections)[0].Content()
 	if actual != expected {
 		t.Fatalf("unexpected title section: expected '%s' got '%s'", expected, actual)
 	}
 
 	// verify content section 1
 	expected = domain.SectionContent("### One\n\nThe one.\n\n")
-	actual = newSections[1].Content()
+	actual = (*newSections)[1].Content()
 	if actual != expected {
 		t.Fatalf("unexpected content section 1: expected '%s' got '%s'", expected, actual)
 	}
 
 	// verify content section 2
 	expected = domain.SectionContent("### Two\n\nNew section 2.\n")
-	actual = newSections[2].Content()
+	actual = (*newSections)[2].Content()
 	if actual != expected {
 		t.Fatalf("unexpected content section 2: expected '%s' got '%s'", expected, actual)
 	}

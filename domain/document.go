@@ -43,20 +43,19 @@ func ScaffoldDocument(data DocumentScaffold) Document {
 
 // AllSections returns all the TikiSections that make up this document,
 // including the title section.
-func (d *Document) AllSections() (result SectionCollection) {
-	return d.sections
+func (d *Document) AllSections() (result *SectionCollection) {
+	return &d.sections
 }
 
 // AppendSection provides a new Document with the given Section appended.
 func (d *Document) AppendSection(section Section) Document {
 	// add an empty line to the last section
-	sections := d.AllSections()
-	lastSection := sections[len(sections)-1]
+	lastSection := d.sections[len(d.sections)-1]
 	newLastSection := lastSection.AppendLine("\n")
-	sections = sections.Replace(lastSection, newLastSection)
+	replacedSections := d.sections.Replace(lastSection, newLastSection)
 
 	// add the new section
-	newSections := append(sections, section)
+	newSections := append(replacedSections, section)
 	return newDocument(d.filename, newSections.Text())
 }
 
@@ -66,8 +65,9 @@ func (d *Document) Content() string {
 }
 
 // ContentSections provides the content sections of this document.
-func (d *Document) ContentSections() SectionCollection {
-	return d.AllSections()[1:]
+func (d *Document) ContentSections() *SectionCollection {
+	result := d.sections[1:]
+	return &result
 }
 
 // FileName returns the file path (handle + extension) of this Document.
