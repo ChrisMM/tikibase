@@ -12,7 +12,7 @@ Feature: Updating existing "mentions" sections
 
       ### mentions
 
-      Old content.
+      - [two](2.md)
       """
     And the workspace contains file "2.md" with content:
       """
