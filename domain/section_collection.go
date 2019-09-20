@@ -44,7 +44,6 @@ func (sc SectionCollection) Equal(other SectionCollection) bool {
 			return false
 		}
 	}
-
 	return true
 }
 
