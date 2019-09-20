@@ -1,4 +1,4 @@
-Feature: Adding mentions
+Feature: Adding new "mentions" sections to existing files
 
   Scenario: a file contains no "mentions" section
     Given the workspace contains file "1.md" with content:

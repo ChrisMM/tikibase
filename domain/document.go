@@ -83,6 +83,12 @@ func (d *Document) FileName() DocumentFilename {
 	return d.filename
 }
 
+// RemoveSection provides a copy of this Document that contains all its sections except the given one.
+func (d *Document) RemoveSection(section *Section) Document {
+	newSections := d.AllSections().Remove(section)
+	return newDocument(d.filename, newSections.Text())
+}
+
 // ReplaceSection provides a new Document that is like this one
 // and has the given old section replaced with the given new section.
 func (d *Document) ReplaceSection(oldSection *Section, newSection Section) Document {
@@ -93,6 +99,11 @@ func (d *Document) ReplaceSection(oldSection *Section, newSection Section) Docum
 // TikiLinks returns the TikiLinks in this Document.
 func (d *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
 	for i := range d.sections {
+		section := d.sections[i]
+		if section.Title() == "mentions" {
+			// links inside existing "mentions" sections don't count
+			continue
+		}
 		links, err := d.sections[i].TikiLinks(tdc)
 		if err != nil {
 			return result, errors.Wrapf(err, "Cannot determine the TikiLinks of document '%s'", d.filename)

@@ -32,15 +32,21 @@ func Run(dir string) error {
 		fileName := docs[i].FileName()
 		linksToDoc := linksToDocs[fileName]
 		fmt.Printf("- %s: %d references\n", fileName, len(linksToDoc))
-		if len(linksToDoc) == 0 {
-			continue
-		}
-		newMentionsSection := RenderMentionsSection(linksToDoc, &docs[i])
 		oldMentionsSection := docs[i].FindSectionWithTitle("mentions")
+		newMentionsSection := RenderMentionsSection(linksToDoc, &docs[i])
 		var doc2 domain.Document
-		if oldMentionsSection != nil {
+		switch {
+		case len(linksToDoc) == 0 && oldMentionsSection == nil:
+			// no links to this doc and no existing mentions section --> ignore this file
+			continue
+		case len(linksToDoc) == 0 && oldMentionsSection != nil:
+			// no links to this doc but existing mentions section --> delete the existing "mentions" section
+			doc2 = docs[i].RemoveSection(oldMentionsSection)
+		case len(linksToDoc) > 0 && oldMentionsSection != nil:
+			// links to this doc and existing "mentions" section --> replace the existing "mentions" section
 			doc2 = docs[i].ReplaceSection(oldMentionsSection, newMentionsSection)
-		} else {
+		case len(linksToDoc) > 0 && oldMentionsSection == nil:
+			// links to this doc and no existing "mentions" section --> append a new "mentions" section
 			doc2 = docs[i].AppendSection(newMentionsSection)
 		}
 		err := tb.SaveDocument(doc2)

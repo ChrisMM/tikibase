@@ -75,6 +75,18 @@ func TestSectionCollectionFindByTitle(t *testing.T) {
 	}
 }
 
+func TestSectionCollectionRemove(t *testing.T) {
+	sections := domain.ScaffoldSectionCollection([]domain.SectionScaffold{
+		{Content: "section 1\n"},
+		{Content: "section 2\n"},
+	})
+	actual := sections.Remove(&sections[1])
+	expected := domain.SectionCollection([]domain.Section{sections[0]})
+	if diff := cmp.Diff(expected, actual); diff != "" {
+		t.Fatal(diff)
+	}
+}
+
 func TestSectionCollectionReplace(t *testing.T) {
 	sections := domain.ScaffoldSectionCollection([]domain.SectionScaffold{
 		{Content: "section 1\n"},

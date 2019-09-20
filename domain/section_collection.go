@@ -59,6 +59,16 @@ func (sc SectionCollection) FindByTitle(title string) *Section {
 	return nil
 }
 
+// Remove provides a copy of this SectionCollection that contains all its sections except the given one.
+func (sc SectionCollection) Remove(section *Section) (result SectionCollection) {
+	for i := range sc {
+		if sc[i] != *section {
+			result = append(result, sc[i])
+		}
+	}
+	return result
+}
+
 // Replace provides a new SectionCollection where the given old section is replaced with the given new section.
 func (sc SectionCollection) Replace(oldSection *Section, newSection Section) (result SectionCollection) {
 	for i := range sc {
