@@ -36,11 +36,4 @@ Feature: Updating existing "mentions" sections
 
       - [Two](2.md#what-is-it)
       """
-    And the workspace should contain the file "2.md" with content:
-      """
-      # Two
-
-      ### what is it
-
-      - an example of [one](1.md)
-      """
+    And file "2.md" is unchanged
