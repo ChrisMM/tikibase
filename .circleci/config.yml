@@ -1,0 +1,13 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.13
+    working_directory: /go/src/github.com/kevgo/tikibase
+
+    steps:
+      - checkout
+      - run: make unit
+      - run: go get github.com/DATA-DOG/godog/cmd/godog
+      - run: make cuke
