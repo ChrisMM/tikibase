@@ -14,7 +14,7 @@ help:   # prints all make targets
 	@cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
 lint:  # runs all linters
-	@golangci-lint run --enable-all -D lll
+	@golangci-lint run --enable-all -D lll -D godox
 
 mentions:  # runs the 'mentions' command
 	@go run main.go mentions
@@ -22,7 +22,7 @@ mentions:  # runs the 'mentions' command
 run:  # runs the command
 	@go run main.go
 
-test: unit cuke # runs all tests
+test: unit lint cuke # runs all tests
 
 unit:  # runs the unit tests
 	@go test ./...
