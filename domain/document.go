@@ -1,5 +1,7 @@
 package domain
 
+import "github.com/pkg/errors"
+
 // Document represents a MarkDown file in the document base.
 // Create new instances via DocumentCollection.CreateDocument
 type Document struct {
@@ -93,7 +95,7 @@ func (d *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection,
 	for i := range d.sections {
 		links, err := d.sections[i].TikiLinks(tdc)
 		if err != nil {
-			return result, err
+			return result, errors.Wrapf(err, "Cannot determine the TikiLinks of document '%s'", d.filename)
 		}
 		result = append(result, links...)
 	}
