@@ -8,11 +8,11 @@ import (
 )
 
 func TestDocumentAllSections(t *testing.T) {
-	td := domain.ScaffoldDocument(domain.DocumentScaffold{
+	doc := domain.ScaffoldDocument(domain.DocumentScaffold{
 		FileName: "one.md", Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nThe other.\n",
 	})
 	// TODO: compare against expected datastructure
-	sections := td.AllSections()
+	sections := doc.AllSections()
 	if len(sections) != 3 {
 		t.Fatalf("unexpected sections length: expected 3 got %d", len(sections))
 	}
