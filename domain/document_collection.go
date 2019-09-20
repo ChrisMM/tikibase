@@ -38,7 +38,6 @@ func (dc DocumentCollection) Find(filename DocumentFilename) (result *Document, 
 // TikiLinks provides all TikiLinks in all Documents within this TikiBase.
 func (dc DocumentCollection) TikiLinks() (result TikiLinkCollection, err error) {
 	for i := range dc {
-		fmt.Printf("tdc.TikiLinks(): doc = %p, %s\n", &dc[i], dc[i].TitleSection().Anchor())
 		links, err := dc[i].TikiLinks(dc)
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot determine the TikiLinks of '%+v'", dc[i])

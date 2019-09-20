@@ -19,16 +19,14 @@ func Run(dir string) error {
 	if err != nil {
 		return errors.Wrapf(err, "cannot get documents of TikiBase")
 	}
-	fmt.Printf("%d documents found\n", len(docs))
 
 	allLinks, err := docs.TikiLinks()
 	if err != nil {
 		return errors.Wrapf(err, "cannot get links of TikiBase")
 	}
-	fmt.Printf("%d total links found\n", len(allLinks))
+	fmt.Printf("processing %d links in %d documents...\n", len(allLinks), len(docs))
 
 	linksToDocs := allLinks.GroupByTarget()
-	fmt.Printf("%d linked documents found\n", len(linksToDocs))
 
 	for i := range docs {
 		fileName := docs[i].FileName()
