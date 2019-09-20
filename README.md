@@ -5,8 +5,7 @@
 
 _timeless wiki-like knowledge database_
 
-Tikibase is an extremely robust knowledge base designed to be usable for
-decades.
+Tikibase is a robust knowledge base designed to be usable for decades.
 
 - semi-structured text storage to model knowledge
 - links and backlinks
@@ -18,8 +17,8 @@ decades.
 
 ### Why
 
-Over the last couple of decades, I have used many types of software to store
-things that I want to remember:
+Over the last couple of decades, I have used many types of software products to
+store information that I want to remember:
 
 - various outliners on Windows, MacOS, and the web
 - Evernote
