@@ -35,8 +35,8 @@ changed platforms and couldn't use them anymore.
 
 ### Limitations
 
-- it would be nice to reference other files via `#shortname` rather than
-  creating a Markdown link to the file
+- it would be nice to reference other files via **#shortname** rather than
+  having to create a Markdown link to the file
 
 ### Development
 
