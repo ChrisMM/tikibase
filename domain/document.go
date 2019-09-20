@@ -52,7 +52,7 @@ func (d *Document) AppendSection(section Section) Document {
 	// add an empty line to the last section
 	lastSection := d.sections[len(d.sections)-1]
 	newLastSection := lastSection.AppendLine("\n")
-	replacedSections := d.sections.Replace(lastSection, newLastSection)
+	replacedSections := d.sections.Replace(&lastSection, newLastSection)
 
 	// add the new section
 	newSections := append(replacedSections, section)
@@ -70,6 +70,12 @@ func (d *Document) ContentSections() *SectionCollection {
 	return &result
 }
 
+// FindSectionWithTitle provides the section with the given title,
+// or nil in this document doesn't contain such a section.
+func (d *Document) FindSectionWithTitle(title string) *Section {
+	return d.sections.FindByTitle(title)
+}
+
 // FileName returns the file path (handle + extension) of this Document.
 func (d *Document) FileName() DocumentFilename {
 	return d.filename
@@ -77,7 +83,7 @@ func (d *Document) FileName() DocumentFilename {
 
 // ReplaceSection provides a new Document that is like this one
 // and has the given old section replaced with the given new section.
-func (d *Document) ReplaceSection(oldSection, newSection Section) Document {
+func (d *Document) ReplaceSection(oldSection *Section, newSection Section) Document {
 	newSections := d.AllSections().Replace(oldSection, newSection)
 	return newDocument(d.filename, newSections.Text())
 }

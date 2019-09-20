@@ -35,8 +35,14 @@ func Run(dir string) error {
 		if len(linksToDoc) == 0 {
 			continue
 		}
-		mentionsSection := RenderMentionsSection(linksToDoc, &docs[i])
-		doc2 := docs[i].AppendSection(mentionsSection)
+		newMentionsSection := RenderMentionsSection(linksToDoc, &docs[i])
+		oldMentionsSection := docs[i].FindSectionWithTitle("mentions")
+		var doc2 domain.Document
+		if oldMentionsSection != nil {
+			doc2 = docs[i].ReplaceSection(oldMentionsSection, newMentionsSection)
+		} else {
+			doc2 = docs[i].AppendSection(newMentionsSection)
+		}
 		err := tb.SaveDocument(doc2)
 		if err != nil {
 			log.Fatalf("cannot update document %s: %v", fileName, err)

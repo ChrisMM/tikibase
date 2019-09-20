@@ -62,13 +62,26 @@ func TestSectionCollectionEqual(t *testing.T) {
 	}
 }
 
+func TestSectionCollectionFindByTitle(t *testing.T) {
+	sections := domain.ScaffoldSectionCollection([]domain.SectionScaffold{
+		{Content: "# Title\ntext 1\n"},
+		{Content: "### what is it\ntext 2\n"},
+		{Content: "### what does it\ntext 3\n"},
+	})
+	expected := sections[1]
+	actual := sections.FindByTitle("what is it")
+	if expected != *actual {
+		t.Fatalf("found wrong document! expected '%v', got '%v'", expected, *actual)
+	}
+}
+
 func TestSectionCollectionReplace(t *testing.T) {
 	sections := domain.ScaffoldSectionCollection([]domain.SectionScaffold{
 		{Content: "section 1\n"},
 		{Content: "section 2\n"},
 	})
 	newSection2 := domain.ScaffoldSection(domain.SectionScaffold{Content: "new section 2\n"})
-	actual := sections.Replace(sections[1], newSection2)
+	actual := sections.Replace(&sections[1], newSection2)
 	expected := domain.SectionCollection([]domain.Section{sections[0], newSection2})
 	if diff := cmp.Diff(expected, actual); diff != "" {
 		t.Fatal(diff)

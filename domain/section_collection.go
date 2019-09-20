@@ -47,10 +47,22 @@ func (sc SectionCollection) Equal(other SectionCollection) bool {
 	return true
 }
 
-// Replace provides a new SectionCollection where the given old section is replaced with the given new section.
-func (sc SectionCollection) Replace(oldSection, newSection Section) (result SectionCollection) {
+// FindByTitle provides the section with the given title
+// or nil if none was found
+func (sc SectionCollection) FindByTitle(title string) *Section {
 	for i := range sc {
-		if sc[i] == oldSection {
+		section := sc[i]
+		if section.Title() == title {
+			return &section
+		}
+	}
+	return nil
+}
+
+// Replace provides a new SectionCollection where the given old section is replaced with the given new section.
+func (sc SectionCollection) Replace(oldSection *Section, newSection Section) (result SectionCollection) {
+	for i := range sc {
+		if sc[i] == *oldSection {
 			result = append(result, newSection)
 		} else {
 			result = append(result, sc[i])
