@@ -18,7 +18,7 @@ func TestNewTikiBase(t *testing.T) {
 
 func TestTikiBaseCreateDocument(t *testing.T) {
 	tb := test.NewTempTikiBase(t)
-	_, err := tb.CreateDocument("one.md", "The one.")
+	_, err := tb.CreateDocument("one", "The one.")
 	if err != nil {
 		t.Fatalf("cannot create document: %v", err)
 	}
@@ -32,6 +32,34 @@ func TestTikiBaseCreateDocument(t *testing.T) {
 	}
 	if fileInfo.Mode() != 0644 {
 		t.Fatalf("file %s should have access 0644 but has %#o", filePath, fileInfo.Mode())
+	}
+}
+
+func TestTikiBaseDocumentsIgnoresNonMarkdown(t *testing.T) {
+	tb1 := test.NewTempTikiBase(t)
+	_, err := tb1.CreateDocument("one", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = test.CreateBinaryFile(path.Join(tb1.StorageDir(), "foo.png"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// get the documents
+	tb2, err := domain.NewTikiBase(tb1.StorageDir())
+	if err != nil {
+		t.Fatalf("cannot instantiate tb2: %v", err)
+	}
+	actual, err := tb2.Documents()
+	if err != nil {
+		t.Fatalf("cannot call tb.Documents(): %v", err)
+	}
+
+	// verify results
+	expected := 1
+	if len(actual) != expected {
+		t.Errorf("expected %d documents but got %d", expected, len(actual))
 	}
 }
 

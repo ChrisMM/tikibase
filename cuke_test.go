@@ -11,6 +11,7 @@ import (
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
 	"github.com/kevgo/tikibase/mentions"
+	"github.com/kevgo/tikibase/test"
 	"github.com/pkg/errors"
 )
 
@@ -70,6 +71,10 @@ func (w *workspaceFeature) shouldContainFileWithContent(filename string, content
 	return nil
 }
 
+func (w *workspaceFeature) containsBinaryFile(filename string) error {
+	return test.CreateBinaryFile(path.Join(w.root, filename))
+}
+
 //nolint:deadcode,unused
 func FeatureContext(s *godog.Suite) {
 	workspace := &workspaceFeature{fileContents: make(map[string]string)}
@@ -77,5 +82,6 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^file "([^"]*)" is unchanged$`, workspace.fileIsUnchanged)
 	s.Step(`^the workspace contains file "([^"]*)" with content:$`, workspace.containsFileWithContent)
 	s.Step(`^running Mentions$`, workspace.runMentions)
+	s.Step(`^the workspace contains a binary file "([^"]*)"$`, workspace.containsBinaryFile)
 	s.Step(`^the workspace should contain the file "([^"]*)" with content:$`, workspace.shouldContainFileWithContent)
 }

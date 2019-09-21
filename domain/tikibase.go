@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -31,6 +32,9 @@ func NewTikiBase(dir string) (result TikiBase, err error) {
 
 // CreateDocument creates a new Document with the given content.
 func (tb *TikiBase) CreateDocument(filename DocumentFilename, content string) (result Document, err error) {
+	if !strings.HasSuffix(string(filename), ".md") {
+		filename += ".md"
+	}
 	doc := newDocument(filename, content)
 	filePath := path.Join(tb.dir, string(doc.FileName()))
 	err = ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
@@ -44,6 +48,9 @@ func (tb *TikiBase) Documents() (result DocumentCollection, err error) {
 		return result, errors.Wrap(err, "cannot read TikiBase directory")
 	}
 	for i := range fileInfos {
+		if !strings.HasSuffix(fileInfos[i].Name(), ".md") {
+			continue
+		}
 		doc, err := tb.Load(DocumentFilename(fileInfos[i].Name()))
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot get all documents")
@@ -55,6 +62,9 @@ func (tb *TikiBase) Documents() (result DocumentCollection, err error) {
 
 // Load provides the Document with the given filename, or an error if one doesn't exist.
 func (tb *TikiBase) Load(filename DocumentFilename) (result Document, err error) {
+	if !strings.HasSuffix(string(filename), ".md") {
+		filename += ".md"
+	}
 	path := path.Join(tb.StorageDir(), string(filename))
 	contentData, err := ioutil.ReadFile(path)
 	if err != nil {
