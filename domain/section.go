@@ -4,6 +4,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/kevgo/tikibase/helpers"
+
 	"github.com/iancoleman/strcase"
 
 	"github.com/pkg/errors"
@@ -78,10 +80,14 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 	matches := markdownLinkRE.FindAllStringSubmatch(string(s.content), 9999)
 	for i := range matches {
 		linkTitle := matches[i][1]
-		targetFileName := DocumentFilename(matches[i][2])
+		linkTarget := matches[i][2]
+		if helpers.IsURL(linkTarget) {
+			continue
+		}
+		targetFileName := DocumentFilename(linkTarget)
 		targetDocument, err := tdc.Find(targetFileName)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, s.Anchor())
+			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, s.Title())
 		}
 		result = append(result, newTikiLink(linkTitle, s, targetDocument))
 	}

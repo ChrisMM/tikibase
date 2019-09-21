@@ -56,6 +56,20 @@ func TestSectionTikiLinks(t *testing.T) {
 	}
 }
 
+func TestSectionTikiLinksIgnoresHtmlLinks(t *testing.T) {
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+		{FileName: "one.md", Content: "# Title\ntext [HTML link](http://google.com)"},
+	})
+	section := docs[0].TitleSection()
+	actual, err := section.TikiLinks(docs)
+	if err != nil {
+		t.Fatalf("cannot get links in section: %v", err)
+	}
+	if len(actual) != 0 {
+		t.Fatalf("shouldn't have found any links here")
+	}
+}
+
 func TestSectionTitle(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### What is it\n"})
 	actual := section.Title()
