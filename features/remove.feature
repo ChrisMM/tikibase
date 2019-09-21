@@ -12,7 +12,7 @@ Feature: Removing obsolete "mentions" sections
 
       ### mentions
 
-      - [Two](2.md#what-is-it)
+      - [Two (what is it)](2.md#what-is-it)
       """
     And the workspace contains file "2.md" with content:
       """

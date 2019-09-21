@@ -20,8 +20,8 @@ func TestRenderMentionsSection(t *testing.T) {
 	renderedSection := mentions.RenderMentionsSection(linksToDoc, &targetDoc)
 	expected := `### mentions
 
-- [Go](go.md#what-is-it)
-- [TypeScript](typescript.md#what-is-it)
+- [Go (what is it)](go.md#what-is-it)
+- [TypeScript (what is it)](typescript.md#what-is-it)
 `
 	actual := string(renderedSection.Content())
 	diff := cmp.Diff(expected, actual)

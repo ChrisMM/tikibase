@@ -34,6 +34,6 @@ Feature: Updating existing "mentions" sections
 
       ### mentions
 
-      - [Two](2.md#what-is-it)
+      - [Two (what is it)](2.md#what-is-it)
       """
     And file "2.md" is unchanged

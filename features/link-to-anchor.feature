@@ -21,5 +21,5 @@ Feature: Link to anchor
 
       ### mentions
 
-      - [One](1.md#related)
+      - [One (related)](1.md#related)
       """

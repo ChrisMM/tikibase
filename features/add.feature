@@ -30,7 +30,7 @@ Feature: Adding new "mentions" sections to existing files
 
       ### mentions
 
-      - [Two](2.md#what-is-it)
+      - [Two (what is it)](2.md#what-is-it)
       """
     And file "2.md" is unchanged
 
@@ -68,7 +68,7 @@ Feature: Adding new "mentions" sections to existing files
 
       ### mentions
 
-      - [Two](2.md#what-is-it)
+      - [Two (what is it)](2.md#what-is-it)
       """
     And the workspace should contain the file "2.md" with content:
       """

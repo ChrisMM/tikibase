@@ -10,8 +10,9 @@ import (
 func RenderMentionsSection(links domain.TikiLinkCollection, doc *domain.Document) domain.Section {
 	builder := domain.NewSectionBuilder("### mentions\n\n", doc)
 	for i := range links {
-		sourceDoc := links[i].SourceSection().Document()
-		builder.AddLine(fmt.Sprintf("- [%s](%s)\n", sourceDoc.TitleSection().Title(), links[i].SourceSection().URL()))
+		sourceSection := links[i].SourceSection()
+		sourceDoc := sourceSection.Document()
+		builder.AddLine(fmt.Sprintf("- [%s (%s)](%s)\n", sourceDoc.TitleSection().Title(), sourceSection.Title(), links[i].SourceSection().URL()))
 	}
 	return builder.Section()
 }
