@@ -13,8 +13,8 @@ type result struct {
 
 func TestSplitURL(t *testing.T) {
 	testData := map[string]result{
-		"one.md":            result{"one.md", ""},
-		"one.md#what-is-it": result{"one.md", "what-is-it"},
+		"one.md":            {"one.md", ""},
+		"one.md#what-is-it": {"one.md", "what-is-it"},
 	}
 	for input, expected := range testData {
 		filename, anchor := helpers.SplitURL(input)

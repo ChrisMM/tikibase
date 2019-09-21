@@ -10,6 +10,9 @@ cuke:  # runs the feature specs
 cuke-parallel:  # runs the feature specs
 	godog --concurrency=$(shell nproc --all) --format=progress
 
+fix:   # fixes all auto-correctable issues
+	find . -name '*.go' | grep -v vendor | xargs gofmt -l -s -w
+
 help:   # prints all make targets
 	@cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
