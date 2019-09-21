@@ -25,17 +25,21 @@ type workspaceFeature struct {
 	fileContents map[string]string
 }
 
+func (w *workspaceFeature) containsBinaryFile(filename string) error {
+	return test.CreateBinaryFile(path.Join(w.root, filename))
+}
+
+func (w *workspaceFeature) containsFileWithContent(filename string, content *gherkin.DocString) error {
+	w.fileContents[filename] = content.Content + "\n"
+	return ioutil.WriteFile(path.Join(w.root, filename), []byte(content.Content+"\n"), 0644)
+}
+
 func (w *workspaceFeature) createWorkspace(arg interface{}) {
 	var err error
 	w.root, err = ioutil.TempDir("", "")
 	if err != nil {
 		log.Fatalf("cannot create workspace: %s", err.Error())
 	}
-}
-
-func (w *workspaceFeature) containsFileWithContent(filename string, content *gherkin.DocString) error {
-	w.fileContents[filename] = content.Content + "\n"
-	return ioutil.WriteFile(path.Join(w.root, filename), []byte(content.Content+"\n"), 0644)
 }
 
 func (w *workspaceFeature) fileIsUnchanged(filename string) error {
@@ -71,17 +75,13 @@ func (w *workspaceFeature) shouldContainFileWithContent(filename string, content
 	return nil
 }
 
-func (w *workspaceFeature) containsBinaryFile(filename string) error {
-	return test.CreateBinaryFile(path.Join(w.root, filename))
-}
-
 //nolint:deadcode,unused
 func FeatureContext(s *godog.Suite) {
 	workspace := &workspaceFeature{fileContents: make(map[string]string)}
 	s.BeforeScenario(workspace.createWorkspace)
 	s.Step(`^file "([^"]*)" is unchanged$`, workspace.fileIsUnchanged)
-	s.Step(`^the workspace contains file "([^"]*)" with content:$`, workspace.containsFileWithContent)
 	s.Step(`^running Mentions$`, workspace.runMentions)
 	s.Step(`^the workspace contains a binary file "([^"]*)"$`, workspace.containsBinaryFile)
+	s.Step(`^the workspace contains file "([^"]*)" with content:$`, workspace.containsFileWithContent)
 	s.Step(`^the workspace should contain the file "([^"]*)" with content:$`, workspace.shouldContainFileWithContent)
 }
