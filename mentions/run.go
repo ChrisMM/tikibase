@@ -17,12 +17,12 @@ func Run(dir string) error {
 
 	docs, err := tb.Documents()
 	if err != nil {
-		return errors.Wrapf(err, "cannot get documents of TikiBase")
+		return errors.Wrap(err, "cannot get documents of TikiBase")
 	}
 
 	allLinks, err := docs.TikiLinks()
 	if err != nil {
-		return errors.Wrapf(err, "cannot get links of TikiBase")
+		return errors.Wrap(err, "cannot get links of TikiBase")
 	}
 	fmt.Printf("processing %d links in %d documents...\n", len(allLinks), len(docs))
 

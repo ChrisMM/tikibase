@@ -53,7 +53,7 @@ func (tb *TikiBase) Documents() (result DocumentCollection, err error) {
 		}
 		doc, err := tb.Load(DocumentFilename(fileInfos[i].Name()))
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot get all documents")
+			return result, errors.Wrap(err, "cannot get all documents")
 		}
 		result = append(result, doc)
 	}
