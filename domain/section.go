@@ -84,7 +84,8 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 		if helpers.IsURL(linkTarget) {
 			continue
 		}
-		targetFileName := DocumentFilename(linkTarget)
+		filename, _ := helpers.SplitURL(linkTarget)
+		targetFileName := DocumentFilename(filename)
 		targetDocument, err := tdc.Find(targetFileName)
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, s.Title())
