@@ -106,7 +106,7 @@ func (d *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection,
 		}
 		links, err := d.sections[i].TikiLinks(tdc)
 		if err != nil {
-			return result, errors.Wrapf(err, "Cannot determine the TikiLinks of document '%s'", d.filename)
+			return result, errors.Wrapf(err, "cannot determine the TikiLinks of document '%s'", d.filename)
 		}
 		result = append(result, links...)
 	}

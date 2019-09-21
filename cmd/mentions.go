@@ -1,7 +1,9 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
+	"strings"
 
 	"github.com/kevgo/tikibase/mentions"
 	"github.com/spf13/cobra"
@@ -17,7 +19,12 @@ which contains backlinks to the current documents.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := mentions.Run(".")
 		if err != nil {
-			log.Fatal(err)
+			errors := strings.Split(err.Error(), ":")
+			fmt.Printf("Error: %s:\n", errors[0])
+			for _, error := range errors[1:] {
+				fmt.Printf("- %s\n", error)
+			}
+			os.Exit(1)
 		}
 	},
 }

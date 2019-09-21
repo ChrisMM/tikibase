@@ -2,8 +2,6 @@ package domain
 
 import (
 	"fmt"
-
-	"github.com/pkg/errors"
 )
 
 // DocumentCollection is a collection of Documents.
@@ -40,7 +38,7 @@ func (dc DocumentCollection) TikiLinks() (result TikiLinkCollection, err error) 
 	for i := range dc {
 		links, err := dc[i].TikiLinks(dc)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot determine the TikiLinks of '%+v'", dc[i])
+			return result, err
 		}
 		result = append(result, links...)
 	}
