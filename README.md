@@ -3,17 +3,25 @@
 [![CircleCI](https://circleci.com/gh/kevgo/tikibase.svg?style=shield)](https://circleci.com/gh/kevgo/tikibase)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kevgo/tikibase)](https://goreportcard.com/report/github.com/kevgo/tikibase)
 
-_timeless wiki-like knowledge database_
+### what is it
 
-TikiBase is a robust knowledge base designed to be usable for decades.
+- a timeless wiki-like knowledge database
+- a robust knowledge base designed 
 
-- semi-structured text storage to model knowledge
-- links and backlinks
-- storage format is human and machine readable and editable Markdown organized
-  in files
-- history is stored in Git
-- offline availability via Git checkout
-- simple CLI tools and bots to automate maintenance
+### what does it
+
+- makes various forms of information usable for decades, on all current and future compute platforms
+
+### how it works
+
+- since all compute is specific to platforms or at least computing paradigms, TikiBase is pure data
+- TikiBase is completely manually usable, with some optional tooling for lightweight automation
+
+data store:
+
+- human and machine-editable information store: a folder containing Markdown files
+- semi-structured document format: documents contain semantically meaningful sections
+- logical connection between documents via links and backlinks
 
 ### Why
 
