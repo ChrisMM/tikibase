@@ -6,21 +6,26 @@
 ### what is it
 
 - a timeless wiki-like knowledge database
-- a robust knowledge base designed 
+- a robust knowledge base designed
 
 ### what does it
 
-- makes various forms of information usable for decades, on all current and future compute platforms
+- makes various forms of information usable for decades, on all current and
+  future compute platforms
 
 ### how it works
 
-- since all compute is specific to platforms or at least computing paradigms, TikiBase is pure data
-- TikiBase is completely manually usable, with some optional tooling for lightweight automation
+- since all compute is specific to platforms or at least computing paradigms,
+  TikiBase is pure data
+- TikiBase is completely manually usable, with some optional tooling for
+  lightweight automation
 
 data store:
 
-- human and machine-editable information store: a folder containing Markdown files
-- semi-structured document format: documents contain semantically meaningful sections
+- human and machine-editable information store: a folder containing Markdown
+  files
+- semi-structured document format: documents contain semantically meaningful
+  sections
 - logical connection between documents via links and backlinks
 
 ### Why
