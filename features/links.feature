@@ -47,3 +47,14 @@ Feature: Links
       """
     When running Mentions
     Then file "1.md" is unchanged
+
+  Scenario: a link points to an image file
+    Given the workspace contains file "1.md" with content:
+      """
+      # One
+
+      ### advantages
+      ![benefits](benefits.jpg)
+      """
+    When running Mentions
+    Then file "1.md" is unchanged

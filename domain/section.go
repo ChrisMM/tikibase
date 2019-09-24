@@ -99,6 +99,10 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 			continue
 		}
 		filename, _ := helpers.SplitURL(linkTarget)
+		if !strings.HasSuffix(filename, ".md") {
+			// we can ignore links to non-Markdown files here
+			continue
+		}
 		targetFileName := DocumentFilename(filename)
 		targetDocument, err := tdc.Find(targetFileName)
 		if err != nil {
@@ -116,6 +120,10 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 		}
 		if strings.HasPrefix(targetFilename, "#") {
 			// we can ignore links within the same file here
+			continue
+		}
+		if !strings.HasSuffix(targetFilename, ".md") {
+			// we can ignore links to non-Markdown files here
 			continue
 		}
 		targetDocument, err := tdc.Find(DocumentFilename(targetFilename))
