@@ -109,8 +109,16 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 	matches = htmlLinkRE.FindAllStringSubmatch(string(s.content), 9999)
 	for _, match := range matches {
 		linkTitle := match[2]
-		targetFilename := DocumentFilename(match[1])
-		targetDocument, err := tdc.Find(targetFilename)
+		targetFilename := match[1]
+		if helpers.IsURL(targetFilename) {
+			// we can ignore links to external files here
+			continue
+		}
+		if strings.HasPrefix(targetFilename, "#") {
+			// we can ignore links within the same file here
+			continue
+		}
+		targetDocument, err := tdc.Find(DocumentFilename(targetFilename))
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s'", targetFilename, linkTitle)
 		}

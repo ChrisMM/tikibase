@@ -42,6 +42,8 @@ Feature: Links
       """
       # One
       [Google](http://google.com)
+
+      <a href="http://google.com">Google again</a>
       """
     When running Mentions
     Then file "1.md" is unchanged
