@@ -23,3 +23,16 @@ Feature: Link to anchor
 
       - [One (related)](1.md#related)
       """
+
+  Scenario: a link points to an anchor within the same file
+    Given the workspace contains file "1.md" with content:
+      """
+      # One
+
+      ### advantages
+      See also the many [benefits](#benefits)
+
+      ### benefits
+      """
+    When running Mentions
+    Then file "1.md" is unchanged

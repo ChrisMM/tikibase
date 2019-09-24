@@ -91,6 +91,11 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 		linkTitle := matches[i][1]
 		linkTarget := matches[i][2]
 		if helpers.IsURL(linkTarget) {
+			// we can ignore links to external files here
+			continue
+		}
+		if strings.HasPrefix(linkTarget, "#") {
+			// we can ignore links within the same file here
 			continue
 		}
 		filename, _ := helpers.SplitURL(linkTarget)
