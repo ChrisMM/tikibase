@@ -24,14 +24,12 @@ func Run(dir string) error {
 	if err != nil {
 		return errors.Wrap(err, "cannot get links of TikiBase")
 	}
-	fmt.Printf("processing %d links in %d documents...\n", len(allLinks), len(docs))
 
 	linksToDocs := allLinks.GroupByTarget()
 
 	for i := range docs {
 		fileName := docs[i].FileName()
 		linksToDoc := linksToDocs[fileName]
-		fmt.Printf("- %s: %d references\n", fileName, len(linksToDoc))
 		oldMentionsSection, err := docs[i].FindSectionWithTitle("mentions")
 		if err != nil {
 			return errors.Wrapf(err, "error finding existing mentions sections in document '%s'", fileName)
@@ -55,11 +53,13 @@ func Run(dir string) error {
 			// links to this doc and no existing "mentions" section --> append a new "mentions" section
 			doc2 = docs[i].AppendSection(newMentionsSection)
 		}
+		fmt.Print(".")
 		err = tb.SaveDocument(doc2)
 		if err != nil {
 			log.Fatalf("cannot update document %s: %v", fileName, err)
 		}
 	}
 
+	fmt.Printf("\n\nprocessed %d TikiLinks in %d documents...\n", len(allLinks), len(docs))
 	return nil
 }
