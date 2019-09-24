@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -56,8 +57,12 @@ func ScaffoldSection(data SectionScaffold) Section {
 }
 
 // Anchor provides the URL anchor for this TikiSection.
-func (s *Section) Anchor() string {
-	return strcase.ToKebab(s.Title())
+func (s *Section) Anchor() (string, error) {
+	sectionTitle, err := s.Title()
+	if err != nil {
+		return "", errors.Wrap(err, "cannot determine the section anchor")
+	}
+	return strcase.ToKebab(sectionTitle), nil
 }
 
 // AppendLine provides a new Section that is this Section with the given line appended.
@@ -77,6 +82,10 @@ func (s *Section) Document() *Document {
 
 // TikiLinks returns all TikiLinks in this section.
 func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
+	sectionTitle, err := s.Title()
+	if err != nil {
+		return result, err
+	}
 	matches := markdownLinkRE.FindAllStringSubmatch(string(s.content), 9999)
 	for i := range matches {
 		linkTitle := matches[i][1]
@@ -88,7 +97,7 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 		targetFileName := DocumentFilename(filename)
 		targetDocument, err := tdc.Find(targetFileName)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, s.Title())
+			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, sectionTitle)
 		}
 		result = append(result, newTikiLink(linkTitle, s, targetDocument))
 	}
@@ -107,13 +116,20 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 
 // Title returns the human-friendly title of this TikiSection,
 // i.e. its title tag without the "###"" in front
-func (s *Section) Title() string {
+func (s *Section) Title() (string, error) {
 	titleLine := strings.SplitN(string(s.content), "\n", 1)[0]
 	matches := stripTitleTagRE.FindStringSubmatch(titleLine)
-	return matches[1]
+	if len(matches) == 0 {
+		return "", fmt.Errorf("malformatted section title: '%s'", titleLine)
+	}
+	return matches[1], nil
 }
 
 // URL provides the full URL to this Section (link to document that contains this section + anchor of the section.
-func (s *Section) URL() string {
-	return s.document.URL() + "#" + s.Anchor()
+func (s *Section) URL() (string, error) {
+	sectionAnchor, err := s.Anchor()
+	if err != nil {
+		return "", errors.Wrap(err, "cannot determine the URL for section")
+	}
+	return s.document.URL() + "#" + sectionAnchor, nil
 }

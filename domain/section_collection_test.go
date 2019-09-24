@@ -69,7 +69,10 @@ func TestSectionCollectionFindByTitle(t *testing.T) {
 		{Content: "### what does it\ntext 3\n"},
 	})
 	expected := sections[1]
-	actual := sections.FindByTitle("what is it")
+	actual, err := sections.FindByTitle("what is it")
+	if err != nil {
+		t.Fatal(err)
+	}
 	if expected != *actual {
 		t.Fatalf("found wrong document! expected '%v', got '%v'", expected, *actual)
 	}

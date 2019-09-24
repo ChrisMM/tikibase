@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/kevgo/tikibase/helpers"
+	"github.com/pkg/errors"
 )
 
 // SectionCollection is a collection of Sections.
@@ -49,14 +50,18 @@ func (sc SectionCollection) Equal(other SectionCollection) bool {
 
 // FindByTitle provides the section with the given title
 // or nil if none was found
-func (sc SectionCollection) FindByTitle(title string) *Section {
+func (sc SectionCollection) FindByTitle(title string) (*Section, error) {
 	for i := range sc {
 		section := sc[i]
-		if section.Title() == title {
-			return &section
+		sectionTitle, err := section.Title()
+		if err != nil {
+			return nil, errors.Wrapf(err, "cannot find section with title '%s'", title)
+		}
+		if sectionTitle == title {
+			return &section, nil
 		}
 	}
-	return nil
+	return nil, nil
 }
 
 // Remove provides a copy of this SectionCollection that contains all its sections except the given one.

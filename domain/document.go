@@ -74,7 +74,7 @@ func (d *Document) ContentSections() *SectionCollection {
 
 // FindSectionWithTitle provides the section with the given title,
 // or nil in this document doesn't contain such a section.
-func (d *Document) FindSectionWithTitle(title string) *Section {
+func (d *Document) FindSectionWithTitle(title string) (*Section, error) {
 	return d.sections.FindByTitle(title)
 }
 
@@ -100,7 +100,11 @@ func (d *Document) ReplaceSection(oldSection *Section, newSection Section) Docum
 func (d *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
 	for i := range d.sections {
 		section := d.sections[i]
-		if section.Title() == "mentions" {
+		sectionTitle, err := section.Title()
+		if err != nil {
+			return result, errors.Wrapf(err, "Cannot determine the TikiLinks of document '%s'", d.filename)
+		}
+		if sectionTitle == "mentions" {
 			// links inside existing "mentions" sections don't count
 			continue
 		}

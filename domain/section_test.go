@@ -9,7 +9,10 @@ import (
 
 func TestSectionAnchor(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### what is it\n"})
-	actual := section.Anchor()
+	actual, err := section.Anchor()
+	if err != nil {
+		t.Fatal(err)
+	}
 	expected := "what-is-it"
 	if actual != expected {
 		t.Fatalf("mismatching section anchors: expected '%s', got '%s'", expected, actual)
@@ -72,7 +75,10 @@ func TestSectionTikiLinksIgnoresHtmlLinks(t *testing.T) {
 
 func TestSectionTitle(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### What is it\n"})
-	actual := section.Title()
+	actual, err := section.Title()
+	if err != nil {
+		t.Fatal(err)
+	}
 	expected := "What is it"
 	if actual != expected {
 		t.Fatalf("mismatching section title: expected '%s', got '%s'", expected, actual)
@@ -82,7 +88,10 @@ func TestSectionTitle(t *testing.T) {
 func TestSectionURL(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md"})
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### What is it\n", Doc: &doc})
-	actual := section.URL()
+	actual, err := section.URL()
+	if err != nil {
+		t.Fatal(err)
+	}
 	expected := "one.md#what-is-it"
 	if actual != expected {
 		t.Fatalf("mismatching section URL: expected '%s', got '%s'", expected, actual)

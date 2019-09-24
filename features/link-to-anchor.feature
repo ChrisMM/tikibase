@@ -1,6 +1,6 @@
 Feature: Link to anchor
 
-  Scenario: a link points to an anchor within a file
+  Scenario: a link points to an anchor within another file
     Given the workspace contains file "1.md" with content:
       """
       # One

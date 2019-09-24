@@ -17,7 +17,10 @@ func TestRenderMentionsSection(t *testing.T) {
 		{Title: "programming language", SourceSection: &(*goDoc.ContentSections())[0], TargetDocument: &targetDoc},
 		{Title: "programming language", SourceSection: &(*tsDoc.ContentSections())[0], TargetDocument: &targetDoc},
 	})
-	renderedSection := mentions.RenderMentionsSection(linksToDoc, &targetDoc)
+	renderedSection, err := mentions.RenderMentionsSection(linksToDoc, &targetDoc)
+	if err != nil {
+		t.Fatal(err)
+	}
 	expected := `### mentions
 
 - [Go (what is it)](go.md#what-is-it)

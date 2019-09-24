@@ -154,7 +154,11 @@ func TestScaffoldDocument(t *testing.T) {
 	if actual.FileName() == "" {
 		t.Fatal("no default FileName")
 	}
-	if actual.TitleSection().Title() == "" {
+	titleSectionTitle, err := actual.TitleSection().Title()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if titleSectionTitle == "" {
 		t.Fatal("no default section")
 	}
 }

@@ -32,8 +32,14 @@ func Run(dir string) error {
 		fileName := docs[i].FileName()
 		linksToDoc := linksToDocs[fileName]
 		fmt.Printf("- %s: %d references\n", fileName, len(linksToDoc))
-		oldMentionsSection := docs[i].FindSectionWithTitle("mentions")
-		newMentionsSection := RenderMentionsSection(linksToDoc, &docs[i])
+		oldMentionsSection, err := docs[i].FindSectionWithTitle("mentions")
+		if err != nil {
+			return errors.Wrapf(err, "error finding existing mentions sections in document '%s'", fileName)
+		}
+		newMentionsSection, err := RenderMentionsSection(linksToDoc, &docs[i])
+		if err != nil {
+			return errors.Wrapf(err, "error rendering new mentions sections for document '%s'", fileName)
+		}
 		var doc2 domain.Document
 		switch {
 		case len(linksToDoc) == 0 && oldMentionsSection == nil:
@@ -49,7 +55,7 @@ func Run(dir string) error {
 			// links to this doc and no existing "mentions" section --> append a new "mentions" section
 			doc2 = docs[i].AppendSection(newMentionsSection)
 		}
-		err := tb.SaveDocument(doc2)
+		err = tb.SaveDocument(doc2)
 		if err != nil {
 			log.Fatalf("cannot update document %s: %v", fileName, err)
 		}
