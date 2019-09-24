@@ -14,9 +14,9 @@
   sends an "UpdateTikiDoc" command containing a Document path and list of
   incomings links to a channel.
 - Workerpool 5: receives one "UpdateTikiDoc" command at a time, compiles the
-  "mentions" section, and sends that out as a "UpdateMentionsSectionInDoc"
+  "occurrences" section, and sends that out as a "UpdateOccurrencesSectionInDoc"
   command via a channel
-- Workerpool 6: receives one "UpdateMentionsSectionInDoc" command at a time,
+- Workerpool 6: receives one "UpdateOccurrencesSectionInDoc" command at a time,
   updates the file on disk, and sends out a "TikiDocUpdated" message via a
   channel
 - Goroutine 7: collects all "TikiDocUpdated" messages, prints the result, and
@@ -42,7 +42,7 @@ This feels too low-level, and complex for timeless code.
 - Step 3: reduce all found TikiLinks to the LinkMap of Documentsn and incoming
   TikiLinks.
 - Step 4: expand the directory name to a list of filenames again
-- Step 5: in parallel, map over all filenames, render the "mentions" section,
+- Step 5: in parallel, map over all filenames, render the "occurrences" section,
   and update the file
 - Step 6: reduce to the number of files processed and quit
 

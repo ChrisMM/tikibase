@@ -104,8 +104,8 @@ func (d *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection,
 		if err != nil {
 			return result, errors.Wrapf(err, "Cannot determine the TikiLinks of document '%s'", d.filename)
 		}
-		if sectionTitle == "mentions" {
-			// links inside existing "mentions" sections don't count
+		if sectionTitle == "occurrences" {
+			// links inside existing "occurrences" sections don't count
 			continue
 		}
 		links, err := d.sections[i].TikiLinks(tdc)

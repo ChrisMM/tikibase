@@ -12,14 +12,14 @@ Feature: Links
       # Two
       ### benefits
       """
-    When running Mentions
+    When running Occurrences
     Then file "1.md" is unchanged
     And the workspace should contain the file "2.md" with content:
       """
       # Two
       ### benefits
 
-      ### mentions
+      ### occurrences
 
       - [One (related)](1.md#related)
       """
@@ -34,7 +34,7 @@ Feature: Links
 
       ### benefits
       """
-    When running Mentions
+    When running Occurrences
     Then file "1.md" is unchanged
 
   Scenario: a file contains an HTTP link
@@ -45,7 +45,7 @@ Feature: Links
 
       <a href="http://google.com">Google again</a>
       """
-    When running Mentions
+    When running Occurrences
     Then file "1.md" is unchanged
 
   Scenario: a link points to an image file
@@ -56,5 +56,5 @@ Feature: Links
       ### advantages
       ![benefits](benefits.jpg)
       """
-    When running Mentions
+    When running Occurrences
     Then file "1.md" is unchanged

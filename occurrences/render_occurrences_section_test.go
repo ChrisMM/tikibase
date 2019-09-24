@@ -1,4 +1,4 @@
-package mentions_test
+package occurrences_test
 
 import (
 	"testing"
@@ -6,10 +6,10 @@ import (
 	"github.com/google/go-cmp/cmp"
 
 	"github.com/kevgo/tikibase/domain"
-	"github.com/kevgo/tikibase/mentions"
+	"github.com/kevgo/tikibase/occurrences"
 )
 
-func TestRenderMentionsSection(t *testing.T) {
+func TestRenderOccurrencesSection(t *testing.T) {
 	targetDoc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "programming-language.md", Content: "# Programming Language\n### what is it\n- system to author software\n"})
 	goDoc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "go.md", Content: "# Go\n### what is it\n- a [programming language](programming-language.md)\n"})
 	tsDoc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "typescript.md", Content: "# TypeScript\n### what is it\n- a [programming language](programming-language.md)\n"})
@@ -17,11 +17,11 @@ func TestRenderMentionsSection(t *testing.T) {
 		{Title: "programming language", SourceSection: &(*goDoc.ContentSections())[0], TargetDocument: &targetDoc},
 		{Title: "programming language", SourceSection: &(*tsDoc.ContentSections())[0], TargetDocument: &targetDoc},
 	})
-	renderedSection, err := mentions.RenderMentionsSection(linksToDoc, &targetDoc)
+	renderedSection, err := occurrences.RenderOccurrencesSection(linksToDoc, &targetDoc)
 	if err != nil {
 		t.Fatal(err)
 	}
-	expected := `### mentions
+	expected := `### occurrences
 
 - [Go (what is it)](go.md#what-is-it)
 - [TypeScript (what is it)](typescript.md#what-is-it)

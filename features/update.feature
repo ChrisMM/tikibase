@@ -1,6 +1,6 @@
-Feature: Updating existing "mentions" sections
+Feature: Updating existing "occurrences" sections
 
-  Scenario: updating an existing mentions section
+  Scenario: updating an existing occurrences section
     Given the workspace contains file "1.md" with content:
       """
       # One
@@ -10,7 +10,7 @@ Feature: Updating existing "mentions" sections
       - foo
       - bar
 
-      ### mentions
+      ### occurrences
 
       - [two](2.md)
       """
@@ -22,7 +22,7 @@ Feature: Updating existing "mentions" sections
 
       - an example of [one](1.md)
       """
-    When running Mentions
+    When running Occurrences
     Then the workspace should contain the file "1.md" with content:
       """
       # One
@@ -32,7 +32,7 @@ Feature: Updating existing "mentions" sections
       - foo
       - bar
 
-      ### mentions
+      ### occurrences
 
       - [Two (what is it)](2.md#what-is-it)
       """

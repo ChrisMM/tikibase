@@ -12,12 +12,12 @@ Feature: Ignore non-Markdown files
       - an example of [one](1.md)
       """
     And the workspace contains a binary file "1.png"
-    When running Mentions
+    When running Occurrences
     Then the workspace should contain the file "1.md" with content:
       """
       # One
 
-      ### mentions
+      ### occurrences
 
       - [Two (what is it)](2.md#what-is-it)
       """

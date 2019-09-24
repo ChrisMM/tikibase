@@ -10,7 +10,7 @@ import (
 
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
-	"github.com/kevgo/tikibase/mentions"
+	"github.com/kevgo/tikibase/occurrences"
 	"github.com/kevgo/tikibase/test"
 	"github.com/pkg/errors"
 )
@@ -58,8 +58,8 @@ func (w *workspaceFeature) fileIsUnchanged(filename string) error {
 	return nil
 }
 
-func (w *workspaceFeature) runMentions() error {
-	return mentions.Run(w.root)
+func (w *workspaceFeature) runOccurrences() error {
+	return occurrences.Run(w.root)
 }
 
 func (w *workspaceFeature) shouldContainFileWithContent(filename string, content *gherkin.DocString) error {
@@ -80,7 +80,7 @@ func FeatureContext(s *godog.Suite) {
 	workspace := &workspaceFeature{fileContents: make(map[string]string)}
 	s.BeforeScenario(workspace.createWorkspace)
 	s.Step(`^file "([^"]*)" is unchanged$`, workspace.fileIsUnchanged)
-	s.Step(`^running Mentions$`, workspace.runMentions)
+	s.Step(`^running Occurrences$`, workspace.runOccurrences)
 	s.Step(`^the workspace contains a binary file "([^"]*)"$`, workspace.containsBinaryFile)
 	s.Step(`^the workspace contains file "([^"]*)" with content:$`, workspace.containsFileWithContent)
 	s.Step(`^the workspace should contain the file "([^"]*)" with content:$`, workspace.shouldContainFileWithContent)

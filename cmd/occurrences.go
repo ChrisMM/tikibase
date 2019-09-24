@@ -5,19 +5,19 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kevgo/tikibase/mentions"
+	"github.com/kevgo/tikibase/occurrences"
 	"github.com/spf13/cobra"
 )
 
 //nolint:gochecknoglobals
-// mentionsCmd represents the mentions command
-var mentionsCmd = &cobra.Command{
-	Use:   "mentions",
-	Short: "Updates the 'mentions' section of all documents",
-	Long: `Updates the 'mentions' section of all documents,
+// occurrencesCmd represents the occurrences command
+var occurrencesCmd = &cobra.Command{
+	Use:   "occurrences",
+	Short: "Updates the 'occurrences' section of all documents",
+	Long: `Updates the 'occurrences' section of all documents,
 which contains backlinks to the current documents.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := mentions.Run(".")
+		err := occurrences.Run(".")
 		if err != nil {
 			errors := strings.Split(err.Error(), ":")
 			fmt.Printf("Error: %s:\n", errors[0])
@@ -31,5 +31,5 @@ which contains backlinks to the current documents.`,
 
 //nolint:gochecknoinits
 func init() {
-	rootCmd.AddCommand(mentionsCmd)
+	rootCmd.AddCommand(occurrencesCmd)
 }

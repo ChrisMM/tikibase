@@ -1,4 +1,4 @@
-package mentions
+package occurrences
 
 import (
 	"fmt"
@@ -6,9 +6,9 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
-// RenderMentionsSection provides a domain.Section containing the given mentions of a document.
-func RenderMentionsSection(links domain.TikiLinkCollection, doc *domain.Document) (result domain.Section, err error) {
-	builder := domain.NewSectionBuilder("### mentions\n\n", doc)
+// RenderOccurrencesSection provides a domain.Section containing the given occurrences of a document.
+func RenderOccurrencesSection(links domain.TikiLinkCollection, doc *domain.Document) (result domain.Section, err error) {
+	builder := domain.NewSectionBuilder("### occurrences\n\n", doc)
 	for i := range links {
 		sourceSection := links[i].SourceSection()
 		sourceDoc := sourceSection.Document()

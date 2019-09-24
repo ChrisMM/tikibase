@@ -19,8 +19,8 @@ help:   # prints all make targets
 lint:  # runs all linters
 	@golangci-lint run --enable-all -D lll -D godox
 
-mentions:  # runs the 'mentions' command
-	@go run main.go mentions
+occurrences:  # runs the 'occurrences' command
+	@go run main.go occurrences
 
 run:  # runs the command
 	@go run main.go

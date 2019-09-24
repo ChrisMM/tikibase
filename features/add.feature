@@ -1,6 +1,6 @@
-Feature: Adding new "mentions" sections to existing files
+Feature: Adding new "occurrences" sections to existing files
 
-  Scenario: a file contains no "mentions" section
+  Scenario: a file contains no "occurrences" section
     Given the workspace contains file "1.md" with content:
       """
       # One
@@ -18,7 +18,7 @@ Feature: Adding new "mentions" sections to existing files
 
       - an example of [one](1.md)
       """
-    When running Mentions
+    When running Occurrences
     Then the workspace should contain the file "1.md" with content:
       """
       # One
@@ -28,13 +28,13 @@ Feature: Adding new "mentions" sections to existing files
       - foo
       - bar
 
-      ### mentions
+      ### occurrences
 
       - [Two (what is it)](2.md#what-is-it)
       """
     And file "2.md" is unchanged
 
-  Scenario: updating an existing mentions section
+  Scenario: updating an existing occurrences section
     Given the workspace contains file "1.md" with content:
       """
       # One
@@ -44,7 +44,7 @@ Feature: Adding new "mentions" sections to existing files
       - foo
       - bar
 
-      ### mentions
+      ### occurrences
 
       Old content.
       """
@@ -56,7 +56,7 @@ Feature: Adding new "mentions" sections to existing files
 
       - an example of [one](1.md)
       """
-    When running Mentions
+    When running Occurrences
     Then the workspace should contain the file "1.md" with content:
       """
       # One
@@ -66,7 +66,7 @@ Feature: Adding new "mentions" sections to existing files
       - foo
       - bar
 
-      ### mentions
+      ### occurrences
 
       - [Two (what is it)](2.md#what-is-it)
       """

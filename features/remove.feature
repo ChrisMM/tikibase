@@ -1,6 +1,6 @@
-Feature: Removing obsolete "mentions" sections
+Feature: Removing obsolete "occurrences" sections
 
-  Scenario: a file contains an obsolete "mentions" section
+  Scenario: a file contains an obsolete "occurrences" section
     Given the workspace contains file "1.md" with content:
       """
       # One
@@ -10,7 +10,7 @@ Feature: Removing obsolete "mentions" sections
       - foo
       - bar
 
-      ### mentions
+      ### occurrences
 
       - [Two (what is it)](2.md#what-is-it)
       """
@@ -22,11 +22,11 @@ Feature: Removing obsolete "mentions" sections
 
       - an example of [one](1.md)
 
-      ### mentions
+      ### occurrences
 
-      Obsolete mentions content.
+      Obsolete occurrences content.
       """
-    When running Mentions
+    When running Occurrences
     Then file "1.md" is unchanged
     And the workspace should contain the file "2.md" with content:
       """
