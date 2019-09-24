@@ -1,4 +1,4 @@
-Feature: Link to anchor
+Feature: Links
 
   Scenario: a link points to an anchor within another file
     Given the workspace contains file "1.md" with content:
@@ -33,6 +33,15 @@ Feature: Link to anchor
       See also the many [benefits](#benefits)
 
       ### benefits
+      """
+    When running Mentions
+    Then file "1.md" is unchanged
+
+  Scenario: a file contains an HTTP link
+    Given the workspace contains file "1.md" with content:
+      """
+      # One
+      [Google](http://google.com)
       """
     When running Mentions
     Then file "1.md" is unchanged
