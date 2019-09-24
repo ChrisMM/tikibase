@@ -132,7 +132,8 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 		}
 		result = append(result, newTikiLink(linkTitle, s, targetDocument))
 	}
-	return result, nil
+
+	return result.Unique(), nil
 }
 
 // Title returns the human-friendly title of this TikiSection,

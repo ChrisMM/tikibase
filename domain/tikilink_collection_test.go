@@ -7,6 +7,21 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
+func TestTikiLinkCollectionContains(t *testing.T) {
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{{}, {}})
+	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+	})
+	containedLink := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]})
+	notContainedLink := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]})
+	if !links.Contains(containedLink) {
+		t.Fatal("expected collection to contain this link")
+	}
+	if links.Contains(notContainedLink) {
+		t.Fatal("expected collection to not contain this link")
+	}
+}
+
 func TestTikiLinkCollectionEqual(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{{}, {}})
 	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
@@ -96,5 +111,23 @@ func TestTikiLinkCollectionScaffold(t *testing.T) {
 	})
 	if actual[0].Title() != "foo" {
 		t.Fatal("didn't scaffold a TikiLink")
+	}
+}
+
+func TestTikiLinkCollectionUnique(t *testing.T) {
+	// create documents
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+		{FileName: "one.md"},
+		{FileName: "two.md"},
+	})
+
+	// convert links
+	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
+	})
+	actual := links.Unique()
+	if len(actual) != 1 {
+		t.Fatalf("expected 1 result, got %d", len(actual))
 	}
 }
