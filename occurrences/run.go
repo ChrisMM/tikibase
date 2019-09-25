@@ -3,6 +3,7 @@ package occurrences
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/kevgo/tikibase/domain"
 	"github.com/pkg/errors"
@@ -10,6 +11,7 @@ import (
 
 // Run executes the "occurrences" command in the given directory.
 func Run(dir string) error {
+	startTime := time.Now()
 	tb, err := domain.NewTikiBase(dir)
 	if err != nil {
 		return err
@@ -60,6 +62,7 @@ func Run(dir string) error {
 		}
 	}
 
-	fmt.Printf("\n\nprocessed %d TikiLinks in %d documents...\n", len(allLinks), len(docs))
+	timeDiff := time.Now().Sub(startTime)
+	fmt.Printf("\n\nprocessed %d TikiLinks in %d documents (%2s)\n", len(allLinks), len(docs), timeDiff)
 	return nil
 }
