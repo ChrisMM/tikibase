@@ -2,7 +2,6 @@ package occurrences
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/kevgo/tikibase/domain"
@@ -11,28 +10,24 @@ import (
 
 // Run executes the "occurrences" command in the given directory.
 func Run(dir string) error {
-	startTime := time.Now()
+	output := Output{startTime: time.Now()}
 	tb, err := domain.NewTikiBase(dir)
 	if err != nil {
 		return err
 	}
-
 	docs, err := tb.Documents()
 	if err != nil {
 		return errors.Wrap(err, "cannot get documents of TikiBase")
 	}
-
 	allLinks, err := docs.TikiLinks()
 	if err != nil {
 		return errors.Wrap(err, "cannot get links of TikiBase")
 	}
-
 	linksToDocs := allLinks.GroupByTarget()
-
 	for i := range docs {
 		fileName := docs[i].FileName()
 		linksToDoc := linksToDocs[fileName]
-		oldOccurrencesSection, err := docs[i].FindSectionWithTitle("occurrences")
+		existingOccurrencesSection, err := docs[i].FindSectionWithTitle("occurrences")
 		if err != nil {
 			return errors.Wrapf(err, "error finding existing occurrences sections in document '%s'", fileName)
 		}
@@ -40,29 +35,27 @@ func Run(dir string) error {
 		if err != nil {
 			return errors.Wrapf(err, "error rendering new occurrences sections for document '%s'", fileName)
 		}
-		var doc2 domain.Document
+		var newDoc domain.Document
 		switch {
-		case len(linksToDoc) == 0 && oldOccurrencesSection == nil:
-			// no links to this doc and no existing occurrences section --> ignore this file
+		case len(linksToDoc) == 0 && existingOccurrencesSection == nil:
+			output.NoChange()
 			continue
-		case len(linksToDoc) == 0 && oldOccurrencesSection != nil:
-			// no links to this doc but existing occurrences section --> delete the existing "occurrences" section
-			doc2 = docs[i].RemoveSection(oldOccurrencesSection)
-		case len(linksToDoc) > 0 && oldOccurrencesSection != nil:
-			// links to this doc and existing "occurrences" section --> replace the existing "occurrences" section
-			doc2 = docs[i].ReplaceSection(oldOccurrencesSection, newOccurrencesSection)
-		case len(linksToDoc) > 0 && oldOccurrencesSection == nil:
-			// links to this doc and no existing "occurrences" section --> append a new "occurrences" section
-			doc2 = docs[i].AppendSection(newOccurrencesSection)
+		case len(linksToDoc) == 0 && existingOccurrencesSection != nil:
+			output.Deleted()
+			newDoc = docs[i].RemoveSection(existingOccurrencesSection)
+		case len(linksToDoc) > 0 && existingOccurrencesSection != nil:
+			output.Updated()
+			newDoc = docs[i].ReplaceSection(existingOccurrencesSection, newOccurrencesSection)
+		case len(linksToDoc) > 0 && existingOccurrencesSection == nil:
+			output.Created()
+			newDoc = docs[i].AppendSection(newOccurrencesSection)
 		}
-		fmt.Print(".")
-		err = tb.SaveDocument(doc2)
+		err = tb.SaveDocument(newDoc)
 		if err != nil {
-			log.Fatalf("cannot update document %s: %v", fileName, err)
+			return errors.Wrapf(err, "cannot update document %s", fileName)
 		}
 	}
 
-	timeDiff := time.Now().Sub(startTime)
-	fmt.Printf("\n\nprocessed %d TikiLinks in %d documents (%2s)\n", len(allLinks), len(docs), timeDiff)
+	fmt.Println("\n\n" + output.Footer(output.Elapsed(time.Now())))
 	return nil
 }
