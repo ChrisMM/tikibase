@@ -42,9 +42,17 @@ store information that I want to remember:
 - various custom-built web and desktop applications
 
 All of them have been limited and/or became unsupported at some point. Or I
-changed platforms and couldn't use them anymore.
+changed platforms and couldn't use them anymore. Whatever fancy new tool shows
+up on the stage, I can already see how it looks and feels completely outdated in
+10 years and nobody wants to use it anymore.
 
-- off-the-shelf tools lack structure for knowledge management and backlinks.
+Almost all -the-shelf tools lack structure for knowledge management and
+backlinks. Dedicated Ontology and RDF frameworks can model the knowledge graph
+more precisely, but are limited to representing only that type of knowledge and
+require very technical ways of querying and navigating them. TikiBase can
+combine a simple and intuitively accessible knowledge graph with human-written
+rich text that can put it all together in a very human-friendly way and provide
+many forms of additional information easily and seamlessly.
 
 ### Limitations
 
