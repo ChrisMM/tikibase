@@ -45,14 +45,14 @@ var htmlLinkRE = regexp.MustCompile(`<a[^>]* href="(.*?)"[^>]*>(.*?)</a>`)
 var stripTitleTagRE = regexp.MustCompile(`#+\s*(.*)`)
 
 // ScaffoldSection provides new TikiSection instances for testing.
-func ScaffoldSection(data SectionScaffold) Section {
+func ScaffoldSection(data SectionScaffold) *Section {
 	if data.Content == "" {
 		data.Content = "### default section\ncontent\n"
 	}
 	if data.Doc == nil {
 		data.Doc = ScaffoldDocument(DocumentScaffold{})
 	}
-	return Section{content: SectionContent(data.Content), document: data.Doc}
+	return &Section{content: SectionContent(data.Content), document: data.Doc}
 }
 
 // Anchor provides the URL anchor for this TikiSection.

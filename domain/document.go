@@ -50,11 +50,11 @@ func (d *Document) AllSections() (result *SectionCollection) {
 }
 
 // AppendSection provides a new Document with the given Section appended.
-func (d *Document) AppendSection(section Section) *Document {
+func (d *Document) AppendSection(section *Section) *Document {
 	// add an empty line to the last section
 	lastSection := d.sections[len(d.sections)-1]
 	newLastSection := lastSection.AppendLine("\n")
-	replacedSections := d.sections.Replace(&lastSection, newLastSection)
+	replacedSections := d.sections.Replace(lastSection, &newLastSection)
 
 	// add the new section
 	newSections := append(replacedSections, section)
@@ -91,7 +91,7 @@ func (d *Document) RemoveSection(section *Section) *Document {
 
 // ReplaceSection provides a new Document that is like this one
 // and has the given old section replaced with the given new section.
-func (d *Document) ReplaceSection(oldSection *Section, newSection Section) *Document {
+func (d *Document) ReplaceSection(oldSection *Section, newSection *Section) *Document {
 	newSections := d.AllSections().Replace(oldSection, newSection)
 	return newDocument(d.filename, newSections.Text())
 }
@@ -119,7 +119,7 @@ func (d *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection,
 
 // TitleSection provides the section before the content sections start.
 func (d *Document) TitleSection() *Section {
-	return &d.sections[0]
+	return d.sections[0]
 }
 
 // URL provides the URL of this Document within its TikiBase.

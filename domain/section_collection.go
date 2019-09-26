@@ -8,7 +8,7 @@ import (
 )
 
 // SectionCollection is a collection of Sections.
-type SectionCollection []Section
+type SectionCollection []*Section
 
 func newSectionCollection(content string, doc *Document) (result SectionCollection) {
 	tsb := NewSectionBuilder("", doc)
@@ -41,7 +41,7 @@ func (sc SectionCollection) Equal(other SectionCollection) bool {
 		return false
 	}
 	for i := range sc {
-		if sc[i] != other[i] {
+		if *sc[i] != *other[i] {
 			return false
 		}
 	}
@@ -58,7 +58,7 @@ func (sc SectionCollection) FindByTitle(title string) (*Section, error) {
 			return nil, errors.Wrapf(err, "cannot find section with title '%s'", title)
 		}
 		if sectionTitle == title {
-			return &section, nil
+			return section, nil
 		}
 	}
 	return nil, nil
@@ -67,7 +67,7 @@ func (sc SectionCollection) FindByTitle(title string) (*Section, error) {
 // Remove provides a copy of this SectionCollection that contains all its sections except the given one.
 func (sc SectionCollection) Remove(section *Section) (result SectionCollection) {
 	for i := range sc {
-		if sc[i] != *section {
+		if sc[i] != section {
 			result = append(result, sc[i])
 		}
 	}
@@ -75,9 +75,9 @@ func (sc SectionCollection) Remove(section *Section) (result SectionCollection) 
 }
 
 // Replace provides a new SectionCollection where the given old section is replaced with the given new section.
-func (sc SectionCollection) Replace(oldSection *Section, newSection Section) (result SectionCollection) {
+func (sc SectionCollection) Replace(oldSection *Section, newSection *Section) (result SectionCollection) {
 	for i := range sc {
-		if sc[i] == *oldSection {
+		if sc[i] == oldSection {
 			result = append(result, newSection)
 		} else {
 			result = append(result, sc[i])

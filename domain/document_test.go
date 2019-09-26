@@ -94,7 +94,7 @@ func TestDocumentReplaceSection(t *testing.T) {
 	sections := td.AllSections()
 	twoSection := (*sections)[2]
 	newSection := domain.ScaffoldSection(domain.SectionScaffold{Content: "### Two\n\nNew section 2.\n", Doc: td})
-	newdoc := td.ReplaceSection(&twoSection, newSection)
+	newdoc := td.ReplaceSection(twoSection, newSection)
 
 	newSections := newdoc.AllSections()
 	if len(*newSections) != 3 {
