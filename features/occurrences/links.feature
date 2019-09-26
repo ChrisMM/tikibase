@@ -1,6 +1,6 @@
 Feature: Links
 
-  Scenario: a link points to an anchor within another file
+  Scenario: a link points to an anchor in a content section of another file
     Given the workspace contains file "1.md" with content:
       """
       # One
@@ -77,30 +77,6 @@ Feature: Links
 
       ### advantages
       See also the many [benefits](#benefits)
-
-      ### benefits
-      """
-    When running Occurrences
-    Then file "1.md" is unchanged
-
-  Scenario: a file contains an HTTP link
-    Given the workspace contains file "1.md" with content:
-      """
-      # One
-      [Google](http://google.com)
-
-      <a href="http://google.com">Google again</a>
-      """
-    When running Occurrences
-    Then file "1.md" is unchanged
-
-  Scenario: a link points to an image file
-    Given the workspace contains file "1.md" with content:
-      """
-      # One
-
-      ### advantages
-      ![benefits](benefits.jpg)
       """
     When running Occurrences
     Then file "1.md" is unchanged

@@ -22,3 +22,14 @@ Feature: Ignore non-Markdown files
       - [Two (what is it)](2.md#what-is-it)
       """
     And file "2.md" is unchanged
+
+  Scenario: a link points to an image file
+    Given the workspace contains file "1.md" with content:
+      """
+      # One
+
+      ### advantages
+      ![benefits](benefits.jpg)
+      """
+    When running Occurrences
+    Then file "1.md" is unchanged
