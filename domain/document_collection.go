@@ -5,7 +5,7 @@ import (
 )
 
 // DocumentCollection is a collection of Documents.
-type DocumentCollection []Document
+type DocumentCollection []*Document
 
 // ScaffoldDocumentCollection provides new DocumentCollections for testing.
 func ScaffoldDocumentCollection(data []DocumentScaffold) (result DocumentCollection) {
@@ -27,7 +27,7 @@ func (dc DocumentCollection) FileNames() (result []DocumentFilename, err error) 
 func (dc DocumentCollection) Find(filename DocumentFilename) (result *Document, err error) {
 	for i := range dc {
 		if dc[i].FileName() == filename {
-			return &dc[i], nil
+			return dc[i], nil
 		}
 	}
 	return result, fmt.Errorf("cannot find document '%s'", filename)

@@ -26,14 +26,14 @@ type DocumentScaffold struct {
 // newDocument creates a new Document instance.
 // This constructor is internal to this module,
 // call (TikiBase).CreateDocument() to create new documents in production.
-func newDocument(filename DocumentFilename, content string) Document {
+func newDocument(filename DocumentFilename, content string) *Document {
 	doc := Document{filename: filename}
 	doc.sections = newSectionCollection(content, &doc)
-	return doc
+	return &doc
 }
 
 // ScaffoldDocument provides new Documents for testing.
-func ScaffoldDocument(data DocumentScaffold) Document {
+func ScaffoldDocument(data DocumentScaffold) *Document {
 	if data.FileName == "" {
 		data.FileName = "default.md"
 	}
@@ -50,7 +50,7 @@ func (d *Document) AllSections() (result *SectionCollection) {
 }
 
 // AppendSection provides a new Document with the given Section appended.
-func (d *Document) AppendSection(section Section) Document {
+func (d *Document) AppendSection(section Section) *Document {
 	// add an empty line to the last section
 	lastSection := d.sections[len(d.sections)-1]
 	newLastSection := lastSection.AppendLine("\n")
@@ -84,14 +84,14 @@ func (d *Document) FileName() DocumentFilename {
 }
 
 // RemoveSection provides a copy of this Document that contains all its sections except the given one.
-func (d *Document) RemoveSection(section *Section) Document {
+func (d *Document) RemoveSection(section *Section) *Document {
 	newSections := d.AllSections().Remove(section)
 	return newDocument(d.filename, newSections.Text())
 }
 
 // ReplaceSection provides a new Document that is like this one
 // and has the given old section replaced with the given new section.
-func (d *Document) ReplaceSection(oldSection *Section, newSection Section) Document {
+func (d *Document) ReplaceSection(oldSection *Section, newSection Section) *Document {
 	newSections := d.AllSections().Replace(oldSection, newSection)
 	return newDocument(d.filename, newSections.Text())
 }

@@ -31,11 +31,11 @@ func Run(dir string) error {
 		if err != nil {
 			return errors.Wrapf(err, "error finding existing occurrences sections in document '%s'", fileName)
 		}
-		newOccurrencesSection, err := RenderOccurrencesSection(linksToDoc, &docs[i])
+		newOccurrencesSection, err := RenderOccurrencesSection(linksToDoc, docs[i])
 		if err != nil {
 			return errors.Wrapf(err, "error rendering new occurrences sections for document '%s'", fileName)
 		}
-		var newDoc domain.Document
+		var newDoc *domain.Document
 		switch {
 		case len(linksToDoc) == 0 && existingOccurrencesSection == nil:
 			output.NoChange()

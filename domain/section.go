@@ -50,8 +50,7 @@ func ScaffoldSection(data SectionScaffold) Section {
 		data.Content = "### default section\ncontent\n"
 	}
 	if data.Doc == nil {
-		doc := ScaffoldDocument(DocumentScaffold{})
-		data.Doc = &doc
+		data.Doc = ScaffoldDocument(DocumentScaffold{})
 	}
 	return Section{content: SectionContent(data.Content), document: data.Doc}
 }

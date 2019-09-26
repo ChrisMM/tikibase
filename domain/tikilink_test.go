@@ -23,8 +23,8 @@ func TestTikiLinkSourceSection(t *testing.T) {
 
 func TestTikiLinkTargetDocument(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{})
-	link := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{TargetDocument: &doc})
-	if link.TargetDocument() != &doc {
+	link := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{TargetDocument: doc})
+	if link.TargetDocument() != doc {
 		t.Fatalf("wrong TargetDocument returned")
 	}
 }

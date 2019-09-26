@@ -31,7 +31,7 @@ func NewTikiBase(dir string) (result TikiBase, err error) {
 }
 
 // CreateDocument creates a new Document with the given content.
-func (tb *TikiBase) CreateDocument(filename DocumentFilename, content string) (result Document, err error) {
+func (tb *TikiBase) CreateDocument(filename DocumentFilename, content string) (result *Document, err error) {
 	if !strings.HasSuffix(string(filename), ".md") {
 		filename += ".md"
 	}
@@ -61,7 +61,7 @@ func (tb *TikiBase) Documents() (result DocumentCollection, err error) {
 }
 
 // Load provides the Document with the given filename, or an error if one doesn't exist.
-func (tb *TikiBase) Load(filename DocumentFilename) (result Document, err error) {
+func (tb *TikiBase) Load(filename DocumentFilename) (result *Document, err error) {
 	if !strings.HasSuffix(string(filename), ".md") {
 		filename += ".md"
 	}
@@ -74,7 +74,7 @@ func (tb *TikiBase) Load(filename DocumentFilename) (result Document, err error)
 }
 
 // SaveDocument stores the given Document in this TikiBase.
-func (tb *TikiBase) SaveDocument(doc Document) error {
+func (tb *TikiBase) SaveDocument(doc *Document) error {
 	filePath := path.Join(tb.dir, string(doc.FileName()))
 	return ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
 }

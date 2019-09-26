@@ -93,7 +93,7 @@ func TestDocumentReplaceSection(t *testing.T) {
 	})
 	sections := td.AllSections()
 	twoSection := (*sections)[2]
-	newSection := domain.ScaffoldSection(domain.SectionScaffold{Content: "### Two\n\nNew section 2.\n", Doc: &td})
+	newSection := domain.ScaffoldSection(domain.SectionScaffold{Content: "### Two\n\nNew section 2.\n", Doc: td})
 	newdoc := td.ReplaceSection(&twoSection, newSection)
 
 	newSections := newdoc.AllSections()
@@ -133,7 +133,7 @@ func TestDocumentTikiLinks(t *testing.T) {
 		t.Fatalf("error getting TikiLinks for doc2: %v", err)
 	}
 	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "one", SourceSection: docs[1].TitleSection(), TargetDocument: &docs[0]},
+		{Title: "one", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
 	})
 	if diff := cmp.Diff(expected, actual); diff != "" {
 		t.Fatal(diff)
