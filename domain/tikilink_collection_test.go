@@ -115,13 +115,10 @@ func TestTikiLinkCollectionScaffold(t *testing.T) {
 }
 
 func TestTikiLinkCollectionUnique(t *testing.T) {
-	// create documents
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "one.md"},
 		{FileName: "two.md"},
 	})
-
-	// convert links
 	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
 		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
 		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: &docs[1]},
