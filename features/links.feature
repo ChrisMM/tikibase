@@ -24,6 +24,27 @@ Feature: Links
       - [One (related)](1.md#related)
       """
 
+  Scenario: a link points to an anchor in the title section of another file
+    Given the workspace contains file "1.md" with content:
+      """
+      # One
+      [benefits of two](2.md)
+      """
+    And the workspace contains file "2.md" with content:
+      """
+      # Two
+      """
+    When running Occurrences
+    Then file "1.md" is unchanged
+    And the workspace should contain the file "2.md" with content:
+      """
+      # Two
+
+      ### occurrences
+
+      - [One](1.md)
+      """
+
   Scenario: two links to the same section
     Given the workspace contains file "1.md" with content:
       """

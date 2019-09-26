@@ -32,3 +32,24 @@ func TestRenderOccurrencesSection(t *testing.T) {
 		t.Fatal(diff)
 	}
 }
+
+func TestRenderOccurrencesSectionLinkToTitleSection(t *testing.T) {
+	targetDoc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "programming-language.md", Content: "# Programming Language\n### what is it\n- system to author software\n"})
+	goDoc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "go.md", Content: "# Go\na [programming language](programming-language.md)\n"})
+	linksToDoc := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "programming language", SourceSection: &(*goDoc.TitleSection()), TargetDocument: &targetDoc},
+	})
+	renderedSection, err := occurrences.RenderOccurrencesSection(linksToDoc, &targetDoc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected := `### occurrences
+
+- [Go](go.md)
+`
+	actual := string(renderedSection.Content())
+	diff := cmp.Diff(expected, actual)
+	if diff != "" {
+		t.Fatal(diff)
+	}
+}
