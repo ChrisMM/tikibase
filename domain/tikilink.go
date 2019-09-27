@@ -21,23 +21,16 @@ type TikiLinkScaffold struct {
 }
 
 // newTikiLink creates a new TikiLink instance.
-func newTikiLink(title string, sourceSection *Section, targetDocument *Document) TikiLink {
-	return TikiLink{title: title, sourceSection: sourceSection, targetDocument: targetDocument}
+func newTikiLink(title string, sourceSection *Section, targetDocument *Document) *TikiLink {
+	return &TikiLink{title: title, sourceSection: sourceSection, targetDocument: targetDocument}
 }
 
 // ScaffoldTikiLink provides TikiLink instances for testing.
-func ScaffoldTikiLink(data TikiLinkScaffold) TikiLink {
+func ScaffoldTikiLink(data TikiLinkScaffold) *TikiLink {
 	if data.Title == "" {
 		data.Title = "default title"
 	}
 	return newTikiLink(data.Title, data.SourceSection, data.TargetDocument)
-}
-
-// Equal indicates whether this TikiLink is identical to the given TikiLink.
-func (tl *TikiLink) Equal(other TikiLink) bool {
-	return tl.title == other.title &&
-		tl.sourceSection == other.sourceSection &&
-		tl.targetDocument == other.targetDocument
 }
 
 // SourceSection provides the TikiSection in which this link is located.

@@ -7,6 +7,7 @@ import (
 
 	"github.com/kevgo/tikibase/domain"
 	"github.com/kevgo/tikibase/test"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewTikiBase(t *testing.T) {
@@ -19,127 +20,78 @@ func TestNewTikiBase(t *testing.T) {
 func TestTikiBaseCreateDocument(t *testing.T) {
 	tb := test.NewTempTikiBase(t)
 	_, err := tb.CreateDocument("one", "The one.")
-	if err != nil {
-		t.Fatalf("cannot create document: %v", err)
-	}
+	assert.Nil(t, err, "cannot create document")
 	filePath := path.Join(tb.StorageDir(), "one.md")
 	fileInfo, err := os.Stat(filePath)
-	if err != nil {
-		t.Fatalf("file %s not found: %v", filePath, err)
-	}
-	if fileInfo.IsDir() {
-		t.Fatalf("file %s should not be a directory", filePath)
-	}
-	if fileInfo.Mode() != 0644 {
-		t.Fatalf("file %s should have access 0644 but has %#o", filePath, fileInfo.Mode())
-	}
+	assert.Nil(t, err, "file not found:", filePath)
+	assert.False(t, fileInfo.IsDir(), "file should not be a directory")
+	fileMode := fileInfo.Mode()
+	assert.Equalf(t, os.FileMode(0644), fileMode, "file should have access 0644 but has %#o", fileMode)
 }
 
 func TestTikiBaseDocumentsIgnoresNonMarkdown(t *testing.T) {
 	tb1 := test.NewTempTikiBase(t)
 	_, err := tb1.CreateDocument("one", "")
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 	err = test.CreateBinaryFile(path.Join(tb1.StorageDir(), "foo.png"))
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 
 	// get the documents
 	tb2, err := domain.NewTikiBase(tb1.StorageDir())
-	if err != nil {
-		t.Fatalf("cannot instantiate tb2: %v", err)
-	}
+	assert.Nil(t, err, "cannot instantiate tb2")
 	actual, err := tb2.Documents()
-	if err != nil {
-		t.Fatalf("cannot call tb.Documents(): %v", err)
-	}
+	assert.Nil(t, err, "cannot call tb.Documents()")
 
 	// verify results
-	expected := 1
-	if len(actual) != expected {
-		t.Errorf("expected %d documents but got %d", expected, len(actual))
-	}
+	assert.Len(t, actual, 1)
 }
 
 func TestTikiBaseDocuments(t *testing.T) {
 	tb1 := test.NewTempTikiBase(t)
 	_, err := tb1.CreateDocument("one", "")
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 	_, err = tb1.CreateDocument("two", "")
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 
 	// get the documents
 	tb2, err := domain.NewTikiBase(tb1.StorageDir())
-	if err != nil {
-		t.Fatalf("cannot instantiate tb2: %v", err)
-	}
+	assert.Nil(t, err, "cannot instantiate tb2")
 	actual, err := tb2.Documents()
-	if err != nil {
-		t.Fatalf("cannot call tb.Documents(): %v", err)
-	}
+	assert.Nil(t, err, "cannot call tb.Documents()")
 
 	// verify results
-	if len(actual) != 2 {
-		t.Errorf("expected %d documents but got %d", 2, len(actual))
-	}
+	assert.Len(t, actual, 2)
 }
 
 func TestTikiBaseLoad(t *testing.T) {
 	tb := test.NewTempTikiBase(t)
 	expected, err := tb.CreateDocument("one.md", "The one")
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 	tb2, err := domain.NewTikiBase(tb.StorageDir())
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 	actual, err := tb2.Load("one.md")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if actual.Content() != expected.Content() {
-		t.Fatalf("mismatching content: expected '%s', got '%s", expected.Content(), actual.Content())
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, expected.Content(), actual.Content(), "mismatching content")
 }
 
 func TestTikiBaseSaveDocument(t *testing.T) {
 	tb := test.NewTempTikiBase(t)
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md", Content: "document content"})
 	err := tb.SaveDocument(doc)
-	if err != nil {
-		t.Fatalf("cannot save document: %v", err)
-	}
+	assert.Nil(t, err, "cannot save document")
 	filePath := path.Join(tb.StorageDir(), "one.md")
 	fileInfo, err := os.Stat(filePath)
-	if err != nil {
-		t.Fatalf("file %s not found: %v", filePath, err)
-	}
-	if fileInfo.IsDir() {
-		t.Fatalf("file %s should not be a directory", filePath)
-	}
-	if fileInfo.Mode() != 0644 {
-		t.Fatalf("file %s should have access 0644 but has %#o", filePath, fileInfo.Mode())
-	}
+	assert.Nil(t, err, "file not found")
+	assert.False(t, fileInfo.IsDir(), "file should not be a directory")
+	fileMode := fileInfo.Mode()
+	assert.Equalf(t, os.FileMode(0644), fileMode, "file should have access 0644 but has %#o", fileMode)
 }
 
 func TestTikiBaseStorageDir(t *testing.T) {
 	currentDir, err := os.Getwd()
-	if err != nil {
-		t.Fatalf("cannot determine current working directory: %v", err)
-	}
+	assert.Nil(t, err, "cannot determine current working directory")
 	tb, err := domain.NewTikiBase(currentDir)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 	actual := tb.StorageDir()
-	if actual != currentDir {
-		t.Fatalf("wrong StorageDir provided: expected '%s', got '%s'", currentDir, actual)
-	}
+	assert.Equal(t, currentDir, actual, "wrong StorageDir provided")
 }

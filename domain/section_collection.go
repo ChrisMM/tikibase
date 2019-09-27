@@ -35,19 +35,6 @@ func ScaffoldSectionCollection(data []SectionScaffold) (result SectionCollection
 	return result
 }
 
-// Equal indicates whether this SectionCollection has the same content as the given one.
-func (sc SectionCollection) Equal(other SectionCollection) bool {
-	if len(sc) != len(other) {
-		return false
-	}
-	for i := range sc {
-		if *sc[i] != *other[i] {
-			return false
-		}
-	}
-	return true
-}
-
 // FindByTitle provides the section with the given title
 // or nil if none was found
 func (sc SectionCollection) FindByTitle(title string) (*Section, error) {

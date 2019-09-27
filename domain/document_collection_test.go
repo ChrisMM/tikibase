@@ -3,8 +3,8 @@ package domain_test
 import (
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDocumentCollectionFileNames(t *testing.T) {
@@ -12,17 +12,11 @@ func TestDocumentCollectionFileNames(t *testing.T) {
 		{FileName: "one.md"},
 		{FileName: "two.md"},
 	})
-	actual, err := docs.FileNames()
-	if err != nil {
-		t.Fatalf("cannot get filenames of docs: %v", err)
-	}
-	expected := []domain.DocumentFilename{
-		domain.DocumentFilename("one.md"),
-		domain.DocumentFilename("two.md"),
-	}
-	if diff := cmp.Diff(expected, actual); diff != "" {
-		t.Fatal(diff)
-	}
+	result, err := docs.FileNames()
+	assert.Nil(t, err, "cannot get filenames of docs")
+	assert.Equal(t, len(result), 2)
+	assert.Equal(t, result[0], domain.DocumentFilename("one.md"))
+	assert.Equal(t, result[1], domain.DocumentFilename("two.md"))
 }
 
 func TestDocumentCollectionFind(t *testing.T) {
@@ -31,12 +25,8 @@ func TestDocumentCollectionFind(t *testing.T) {
 		{FileName: "two.md", Content: "# The other\n[The one](one.md)"},
 	})
 	actual, err := docs.Find("two.md")
-	if err != nil {
-		t.Fatalf("cannot find document 'two.md': %v", err)
-	}
-	if actual.FileName() != "two.md" {
-		t.Fatalf("found the wrong document: %s", actual.FileName())
-	}
+	assert.Nil(t, err, "cannot find document 'two.md'")
+	assert.Equal(t, domain.DocumentFilename("two.md"), actual.FileName(), "found the wrong document")
 }
 
 func TestDocumentCollectionTikiLinks(t *testing.T) {
@@ -45,14 +35,12 @@ func TestDocumentCollectionTikiLinks(t *testing.T) {
 		{FileName: "two.md", Content: "# The other\n[The one](one.md)"},
 	})
 	actual, err := docs.TikiLinks()
-	if err != nil {
-		t.Fatalf("cannot get TikiLinks of docs: %v", err)
-	}
-	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "The other", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
-		{Title: "The one", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
-	})
-	if diff := cmp.Diff(expected, actual); diff != "" {
-		t.Fatal(diff)
-	}
+	assert.Nil(t, err, "cannot get TikiLinks of docs")
+	assert.Len(t, actual, 2)
+	assert.Equal(t, actual[0].Title(), "The other")
+	assert.Same(t, actual[0].SourceSection(), docs[0].TitleSection())
+	assert.Same(t, actual[0].TargetDocument(), docs[1])
+	assert.Equal(t, actual[1].Title(), "The one")
+	assert.Same(t, actual[1].SourceSection(), docs[1].TitleSection())
+	assert.Same(t, actual[1].TargetDocument(), docs[0])
 }

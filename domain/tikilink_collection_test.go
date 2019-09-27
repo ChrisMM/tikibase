@@ -3,8 +3,8 @@ package domain_test
 import (
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTikiLinkCollectionContains(t *testing.T) {
@@ -14,65 +14,8 @@ func TestTikiLinkCollectionContains(t *testing.T) {
 	})
 	containedLink := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]})
 	notContainedLink := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]})
-	if !links.Contains(containedLink) {
-		t.Fatal("expected collection to contain this link")
-	}
-	if links.Contains(notContainedLink) {
-		t.Fatal("expected collection to not contain this link")
-	}
-}
-
-func TestTikiLinkCollectionEqual(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{{}, {}})
-	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
-		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
-	})
-
-	// compare against a TikiLinkCollection with similar contents
-	equal := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
-		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
-	})
-	if diff := cmp.Diff(expected, equal); diff != "" {
-		t.Fatalf("equal: didn't match: %s", diff)
-	}
-
-	// compare against a longer TikiLinkCollection
-	longer := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
-		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
-		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
-	})
-	if diff := cmp.Diff(expected, longer); diff == "" {
-		t.Fatalf("longer: unexpected match: %v", diff)
-	}
-
-	// compare against a shorter TikiLinkCollection
-	shorter := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
-	})
-	if diff := cmp.Diff(expected, shorter); diff == "" {
-		t.Fatalf("shorter: unexpected match: %v", diff)
-	}
-
-	// compare against a TikiLinkCollection with a different section
-	differentSection := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
-		{Title: "2-1", SourceSection: docs[0].TitleSection(), TargetDocument: docs[0]},
-	})
-	if diff := cmp.Diff(expected, differentSection); diff == "" {
-		t.Fatalf("differentSection: unexpected match: %s", diff)
-	}
-
-	// compare against a TikiLinkCollection with a different target document
-	differentDoc := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
-		{Title: "2-1", SourceSection: docs[1].TitleSection(), TargetDocument: docs[1]},
-	})
-	if diff := cmp.Diff(expected, differentDoc); diff == "" {
-		t.Fatalf("differentDoc: unexpected match: %s", diff)
-	}
+	assert.True(t, links.Contains(containedLink), "expected collection to contain this link")
+	assert.False(t, links.Contains(notContainedLink), "expected collection to not contain this link")
 }
 
 func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
@@ -95,23 +38,16 @@ func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
 	actual := links.GroupByTarget()
 
 	// verify
-	expected := map[domain.DocumentFilename]domain.TikiLinkCollection{
-		domain.DocumentFilename("one.md"):   {links[2], links[4]},
-		domain.DocumentFilename("two.md"):   {links[0], links[5]},
-		domain.DocumentFilename("three.md"): {links[1], links[3]},
-	}
-	if diff := cmp.Diff(expected, actual); diff != "" {
-		t.Fatal(diff)
-	}
+	assert.Equal(t, actual[domain.DocumentFilename("one.md")], domain.TikiLinkCollection{links[2], links[4]})
+	assert.Equal(t, actual[domain.DocumentFilename("two.md")], domain.TikiLinkCollection{links[0], links[5]})
+	assert.Equal(t, actual[domain.DocumentFilename("three.md")], domain.TikiLinkCollection{links[1], links[3]})
 }
 
 func TestTikiLinkCollectionScaffold(t *testing.T) {
 	actual := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
 		{Title: "foo"},
 	})
-	if actual[0].Title() != "foo" {
-		t.Fatal("didn't scaffold a TikiLink")
-	}
+	assert.Equal(t, "foo", actual[0].Title(), "didn't scaffold a TikiLink")
 }
 
 func TestTikiLinkCollectionUnique(t *testing.T) {
@@ -123,8 +59,5 @@ func TestTikiLinkCollectionUnique(t *testing.T) {
 		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
 		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
 	})
-	actual := links.Unique()
-	if len(actual) != 1 {
-		t.Fatalf("expected 1 result, got %d", len(actual))
-	}
+	assert.Len(t, links.Unique(), 1)
 }

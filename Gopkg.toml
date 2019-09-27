@@ -38,9 +38,9 @@
   version = "0.0.5"
 
 [[constraint]]
-  name = "github.com/google/go-cmp"
-  version = "0.3.1"
-
-[[constraint]]
   branch = "master"
   name = "github.com/iancoleman/strcase"
+
+[[constraint]]
+  name = "github.com/stretchr/testify"
+  version = "1.4.0"

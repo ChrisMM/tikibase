@@ -4,35 +4,28 @@ import (
 	"testing"
 
 	"github.com/kevgo/tikibase/domain"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestScaffoldTikiLink(t *testing.T) {
 	actual := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{})
-	if actual.Title() == "" {
-		t.Fatal("link scaffolded wrong")
-	}
+	assert.NotEqual(t, "", actual.Title(), "link scaffolded wrong")
 }
 
 func TestTikiLinkSourceSection(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{})
 	link := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{SourceSection: section})
-	if link.SourceSection() != section {
-		t.Fatalf("wrong section returned")
-	}
+	assert.Same(t, section, link.SourceSection(), "wrong section returned")
 }
 
 func TestTikiLinkTargetDocument(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{})
 	link := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{TargetDocument: doc})
-	if link.TargetDocument() != doc {
-		t.Fatalf("wrong TargetDocument returned")
-	}
+	assert.Same(t, doc, link.TargetDocument(), "wrong TargetDocument returned")
 }
 
 func TestTikiLinkTitle(t *testing.T) {
 	expected := "My Title"
 	link := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{Title: expected})
-	if link.Title() != expected {
-		t.Fatalf("wrong TargetDocument returned")
-	}
+	assert.Equal(t, expected, link.Title())
 }

@@ -3,88 +3,42 @@ package domain_test
 import (
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDocumentAllSections(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{
 		FileName: "one.md", Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nThe other.\n",
 	})
-	// TODO: compare against expected datastructure
 	sections := doc.AllSections()
-	if len(*sections) != 3 {
-		t.Fatalf("unexpected sections length: expected 3 got %d", len(*sections))
-	}
-
-	// verify title section
-	expected := domain.SectionContent("# Title\n\nmy doc\n\n")
-	actual := (*sections)[0].Content()
-	if actual != expected {
-		t.Fatalf("unexpected title section: expected '%s' got '%s'", expected, actual)
-	}
-
-	// verify content section 1
-	expected = "### One\n\nThe one.\n\n"
-	actual = (*sections)[1].Content()
-	if actual != expected {
-		t.Fatalf("unexpected content section 1: expected '%s' got '%s'", expected, actual)
-	}
-
-	// verify content section 2
-	expected = "### Two\n\nThe other.\n"
-	actual = (*sections)[2].Content()
-	if actual != expected {
-		t.Fatalf("unexpected content section 2: expected '%s' got '%s'", expected, actual)
-	}
+	assert.Len(t, *sections, 3)
+	assert.Equal(t, domain.SectionContent("# Title\n\nmy doc\n\n"), (*sections)[0].Content(), "unexpected title section")
+	assert.Equal(t, domain.SectionContent("### One\n\nThe one.\n\n"), (*sections)[1].Content(), "unexpected content section 1")
+	assert.Equal(t, domain.SectionContent("### Two\n\nThe other.\n"), (*sections)[2].Content(), "unexpected content section 2")
 }
 
 func TestDocumentAppendSection(t *testing.T) {
 	oldDoc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md", Content: "existing document content\n"})
 	newSection := domain.ScaffoldSection(domain.SectionScaffold{Content: "### new section\n"})
 	newDoc := oldDoc.AppendSection(newSection)
-	expectedContent := "existing document content\n\n### new section\n"
-	if newDoc.Content() != expectedContent {
-		t.Fatalf("mismatching document content: expected '%s', got '%s'", expectedContent, newDoc.Content())
-	}
-	expectedFileName := domain.DocumentFilename("one.md")
-	if newDoc.FileName() != expectedFileName {
-		t.Fatalf("didn't bring the filename over to the new doc: expected '%s', got '%s'", expectedFileName, newDoc.FileName())
-	}
+	assert.Equal(t, "existing document content\n\n### new section\n", newDoc.Content(), "mismatching document content")
+	assert.Equal(t, domain.DocumentFilename("one.md"), newDoc.FileName(), "didn't bring the filename over to the new doc")
 }
 
 func TestDocumentContentSections(t *testing.T) {
-	td := domain.ScaffoldDocument(domain.DocumentScaffold{
+	doc := domain.ScaffoldDocument(domain.DocumentScaffold{
 		FileName: "one.md", Content: "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.\n",
 	})
-	// TODO: compare against expected datastructure
-	sections := td.ContentSections()
-	if len(*sections) != 2 {
-		t.Fatalf("unexpected sections length: expected 2 got %d", len(*sections))
-	}
-
-	// verify content section 1
-	expected := domain.SectionContent("### One\nThe one.\n")
-	actual := (*sections)[0].Content()
-	if actual != expected {
-		t.Fatalf("unexpected content section 1: expected '%s' got '%s'", expected, actual)
-	}
-
-	// verify content section 2
-	expected = domain.SectionContent("### Two\nThe other.\n")
-	actual = (*sections)[1].Content()
-	if actual != expected {
-		t.Fatalf("unexpected content section 2: expected '%s' got '%s'", expected, actual)
-	}
+	sections := doc.ContentSections()
+	assert.Len(t, *sections, 2, "unexpected sections length")
+	assert.Equal(t, domain.SectionContent("### One\nThe one.\n"), (*sections)[0].Content(), "unexpected content section 1")
+	assert.Equal(t, domain.SectionContent("### Two\nThe other.\n"), (*sections)[1].Content(), "unexpected content section 2")
 }
 
 func TestDocumentFileName(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md"})
-	expectedFileName := "one.md"
-	actualFileName := string(doc.FileName())
-	if actualFileName != expectedFileName {
-		t.Fatalf("expected '%s' got '%s'", expectedFileName, actualFileName)
-	}
+	assert.Equal(t, domain.DocumentFilename("one.md"), doc.FileName())
 }
 
 func TestDocumentReplaceSection(t *testing.T) {
@@ -97,30 +51,10 @@ func TestDocumentReplaceSection(t *testing.T) {
 	newdoc := td.ReplaceSection(twoSection, newSection)
 
 	newSections := newdoc.AllSections()
-	if len(*newSections) != 3 {
-		t.Fatalf("unexpected newSections length: expected 3 got %d", len(*newSections))
-	}
-
-	// verify title section
-	expected := domain.SectionContent("# Title\n\nmy doc\n\n")
-	actual := (*newSections)[0].Content()
-	if actual != expected {
-		t.Fatalf("unexpected title section: expected '%s' got '%s'", expected, actual)
-	}
-
-	// verify content section 1
-	expected = domain.SectionContent("### One\n\nThe one.\n\n")
-	actual = (*newSections)[1].Content()
-	if actual != expected {
-		t.Fatalf("unexpected content section 1: expected '%s' got '%s'", expected, actual)
-	}
-
-	// verify content section 2
-	expected = domain.SectionContent("### Two\n\nNew section 2.\n")
-	actual = (*newSections)[2].Content()
-	if actual != expected {
-		t.Fatalf("unexpected content section 2: expected '%s' got '%s'", expected, actual)
-	}
+	assert.Len(t, *newSections, 3, "unexpected newSections length")
+	assert.Equal(t, domain.SectionContent("# Title\n\nmy doc\n\n"), (*newSections)[0].Content(), "unexpected title section")
+	assert.Equal(t, domain.SectionContent("### One\n\nThe one.\n\n"), (*newSections)[1].Content(), "unexpected content section 1")
+	assert.Equal(t, domain.SectionContent("### Two\n\nNew section 2.\n"), (*newSections)[2].Content(), "unexpected content section 2")
 }
 
 func TestDocumentTikiLinks(t *testing.T) {
@@ -129,36 +63,23 @@ func TestDocumentTikiLinks(t *testing.T) {
 		{FileName: "doc2.md", Content: "### Two\n[one](doc1.md)"},
 	})
 	actual, err := docs[1].TikiLinks(docs)
-	if err != nil {
-		t.Fatalf("error getting TikiLinks for doc2: %v", err)
-	}
-	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "one", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
-	})
-	if diff := cmp.Diff(expected, actual); diff != "" {
-		t.Fatal(diff)
-	}
+	assert.Nil(t, err, "error getting TikiLinks for doc2")
+	assert.Len(t, actual, 1)
+	assert.Equal(t, "one", actual[0].Title())
+	assert.Equal(t, docs[1].TitleSection(), actual[0].SourceSection())
+	assert.Equal(t, docs[0], actual[0].TargetDocument())
 }
 
 func TestDocumentTitleSection(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{Content: "# My Title\n\nTitle section content.\n\n### Content Section\n Content section content.\n"})
 	section := doc.TitleSection()
-	expectedContent := "# My Title\n\nTitle section content.\n\n"
-	if diff := cmp.Diff(string(section.Content()), expectedContent); diff != "" {
-		t.Fatalf("mismatching section content: %s", diff)
-	}
+	assert.Equal(t, domain.SectionContent("# My Title\n\nTitle section content.\n\n"), section.Content())
 }
 
 func TestScaffoldDocument(t *testing.T) {
 	actual := domain.ScaffoldDocument(domain.DocumentScaffold{})
-	if actual.FileName() == "" {
-		t.Fatal("no default FileName")
-	}
+	assert.NotEqual(t, "", actual.FileName(), "no default FileName")
 	titleSectionTitle, err := actual.TitleSection().Title()
-	if err != nil {
-		t.Fatal(err)
-	}
-	if titleSectionTitle == "" {
-		t.Fatal("no default section")
-	}
+	assert.Nil(t, err)
+	assert.NotEqual(t, "", titleSectionTitle, "no default section")
 }

@@ -19,7 +19,7 @@ type TikiBase struct {
 
 // NewTikiBase creates a new TikiBase instance using the given directory path as its storage directory.
 // The given file path must exist and be a directory.
-func NewTikiBase(dir string) (result TikiBase, err error) {
+func NewTikiBase(dir string) (result *TikiBase, err error) {
 	info, err := os.Stat(dir)
 	if err != nil {
 		return result, err
@@ -27,7 +27,7 @@ func NewTikiBase(dir string) (result TikiBase, err error) {
 	if !info.IsDir() {
 		return result, fmt.Errorf("%s is not a directory", dir)
 	}
-	return TikiBase{dir}, nil
+	return &TikiBase{dir}, nil
 }
 
 // CreateDocument creates a new Document with the given content.

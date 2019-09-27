@@ -3,39 +3,27 @@ package domain_test
 import (
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/domain"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSectionAnchor(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### what is it\n"})
 	actual, err := section.Anchor()
-	if err != nil {
-		t.Fatal(err)
-	}
-	expected := "what-is-it"
-	if actual != expected {
-		t.Fatalf("mismatching section anchors: expected '%s', got '%s'", expected, actual)
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, "what-is-it", actual, "mismatching section anchors")
 }
 
 func TestSectionAppendLine(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "existing content\n"})
 	newSection := section.AppendLine("new line\n")
-	actual := newSection.Content()
-	expected := domain.SectionContent("existing content\nnew line\n")
-	if actual != expected {
-		t.Fatalf("did not append line correctly: expected '%s', got '%s'", expected, actual)
-	}
+	assert.Equal(t, domain.SectionContent("existing content\nnew line\n"), newSection.Content(), "did not append line correctly")
 }
 
 func TestSectionContent(t *testing.T) {
 	expectedContent := "### title\nthe content\n"
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: expectedContent})
-	actualContent := string(section.Content())
-	if actualContent != expectedContent {
-		t.Fatalf("mismatching content! expected '%s' got '%s'", expectedContent, actualContent)
-	}
+	assert.Equal(t, domain.SectionContent(expectedContent), section.Content())
 }
 
 func TestSectionTikiLinks(t *testing.T) {
@@ -45,18 +33,17 @@ func TestSectionTikiLinks(t *testing.T) {
 	})
 	section := docs[1].TitleSection()
 	actual, err := section.TikiLinks(docs)
-	if err != nil {
-		t.Fatalf("cannot get links in section: %v", err)
-	}
-	expected := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "MD link to doc1", SourceSection: section, TargetDocument: docs[0]},
-		{Title: "MD link to doc2", SourceSection: section, TargetDocument: docs[1]},
-		{Title: "HTML link to doc1", SourceSection: section, TargetDocument: docs[0]},
-	})
-	diff := cmp.Diff(expected, actual)
-	if diff != "" {
-		t.Fatal(diff)
-	}
+	assert.Nil(t, err, "cannot get links in section")
+	assert.Len(t, actual, 3)
+	assert.Equal(t, "MD link to doc1", actual[0].Title())
+	assert.Same(t, section, actual[0].SourceSection())
+	assert.Same(t, docs[0], actual[0].TargetDocument())
+	assert.Equal(t, "MD link to doc2", actual[1].Title())
+	assert.Same(t, section, actual[1].SourceSection())
+	assert.Same(t, docs[1], actual[1].TargetDocument())
+	assert.Equal(t, "HTML link to doc1", actual[2].Title())
+	assert.Same(t, section, actual[2].SourceSection())
+	assert.Same(t, docs[0], actual[2].TargetDocument())
 }
 
 func TestSectionTikiLinksIgnoresHtmlLinks(t *testing.T) {
@@ -65,35 +52,21 @@ func TestSectionTikiLinksIgnoresHtmlLinks(t *testing.T) {
 	})
 	section := docs[0].TitleSection()
 	actual, err := section.TikiLinks(docs)
-	if err != nil {
-		t.Fatalf("cannot get links in section: %v", err)
-	}
-	if len(actual) != 0 {
-		t.Fatalf("shouldn't have found any links here")
-	}
+	assert.Nil(t, err)
+	assert.Len(t, actual, 0, "shouldn't have found any links here")
 }
 
 func TestSectionTitle(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### What is it\n"})
 	actual, err := section.Title()
-	if err != nil {
-		t.Fatal(err)
-	}
-	expected := "What is it"
-	if actual != expected {
-		t.Fatalf("mismatching section title: expected '%s', got '%s'", expected, actual)
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, "What is it", actual, "mismatching section title")
 }
 
 func TestSectionURL(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md"})
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### What is it\n", Doc: doc})
 	actual, err := section.URL()
-	if err != nil {
-		t.Fatal(err)
-	}
-	expected := "one.md#what-is-it"
-	if actual != expected {
-		t.Fatalf("mismatching section URL: expected '%s', got '%s'", expected, actual)
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, "one.md#what-is-it", actual, "mismatching section URL")
 }

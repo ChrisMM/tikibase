@@ -1,7 +1,7 @@
 package domain
 
 // TikiLinkCollection is a collection of TikiLinks.
-type TikiLinkCollection []TikiLink
+type TikiLinkCollection []*TikiLink
 
 // ScaffoldTikiLinkCollection provides TikiLinkCollection instances for testing.
 func ScaffoldTikiLinkCollection(data []TikiLinkScaffold) (result TikiLinkCollection) {
@@ -12,27 +12,13 @@ func ScaffoldTikiLinkCollection(data []TikiLinkScaffold) (result TikiLinkCollect
 }
 
 // Contains indicates whether this TikiLinkCollection contains the given TikiLink.
-func (tlc TikiLinkCollection) Contains(link TikiLink) bool {
+func (tlc TikiLinkCollection) Contains(link *TikiLink) bool {
 	for i := range tlc {
-		if tlc[i].Equal(link) {
+		if *tlc[i] == *link {
 			return true
 		}
 	}
 	return false
-}
-
-// Equal indicates whether this TikiLinkCollection has the same content as the given TikiLinkCollection.
-// This method is needed by https://godoc.org/github.com/google/go-cmp/cmp.
-func (tlc TikiLinkCollection) Equal(other TikiLinkCollection) bool {
-	if len(tlc) != len(other) {
-		return false
-	}
-	for i := range tlc {
-		if tlc[i] != other[i] {
-			return false
-		}
-	}
-	return true
 }
 
 // GroupByTarget determines which links in the given TikiLink list point to which Document.
