@@ -80,3 +80,20 @@ Feature: Links
       """
     When running Occurrences
     Then file "1.md" is unchanged
+
+  Scenario: a document already contains a link to a file in which it occurs
+    Given the workspace contains file "1.md" with content:
+      """
+      # One
+      ### what is it
+      a [number](number.md)
+      """
+    And the workspace contains file "number.md" with content:
+      """
+      # Numbers
+      ### examples
+      - [1](1.md)
+      """
+    When running Occurrences
+    Then file "1.md" is unchanged
+    And file "number.md" is unchanged

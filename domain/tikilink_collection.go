@@ -31,6 +31,29 @@ func (tlc TikiLinkCollection) GroupByTarget() map[DocumentFilename]TikiLinkColle
 	return result
 }
 
+// ReferencedDocs provides the Documents that the links in this TikiLinkCollection point to.
+func (tlc TikiLinkCollection) ReferencedDocs() (result DocumentCollection) {
+	for i := range tlc {
+		link := tlc[i]
+		doc := link.TargetDocument()
+		if !result.Contains(doc) {
+			result = append(result, doc)
+		}
+	}
+	return result
+}
+
+// RemoveLinksFromDocs provides a copy of the given TikiLinkCollection
+// that does not contain links from the given Documents.
+func (tlc TikiLinkCollection) RemoveLinksFromDocs(docs DocumentCollection) (result TikiLinkCollection) {
+	for i := range tlc {
+		if !docs.Contains(tlc[i].SourceSection().Document()) {
+			result = append(result, tlc[i])
+		}
+	}
+	return result
+}
+
 // Unique provides a new TikiLinkCollection that contains the links from this one
 // with all duplicates removed.
 func (tlc TikiLinkCollection) Unique() (result TikiLinkCollection) {

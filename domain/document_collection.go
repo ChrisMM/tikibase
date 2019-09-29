@@ -15,6 +15,16 @@ func ScaffoldDocumentCollection(data []DocumentScaffold) (result DocumentCollect
 	return result
 }
 
+// Contains indicates whether this DocumentCollection contains the given document.
+func (dc DocumentCollection) Contains(doc *Document) bool {
+	for i := range dc {
+		if dc[i] == doc {
+			return true
+		}
+	}
+	return false
+}
+
 // FileNames returns the filenames of all documents in this DocumentCollection.
 func (dc DocumentCollection) FileNames() (result []DocumentFilename, err error) {
 	for i := range dc {

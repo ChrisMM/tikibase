@@ -7,6 +7,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestDocumentCollectionContains(t *testing.T) {
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+		{FileName: "one.md"},
+		{FileName: "two.md"},
+	})
+	otherDoc := domain.ScaffoldDocument(domain.DocumentScaffold{})
+	assert.True(t, docs.Contains(docs[0]), "looking contain existing doc")
+	assert.False(t, docs.Contains(otherDoc), "should not contain otherDoc")
+}
+
 func TestDocumentCollectionFileNames(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "one.md"},
