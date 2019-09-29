@@ -31,19 +31,19 @@ func NewTikiBase(dir string) (result *TikiBase, err error) {
 }
 
 // CreateDocument creates a new Document with the given content.
-func (tb *TikiBase) CreateDocument(filename DocumentFilename, content string) (result *Document, err error) {
+func (tikiBase *TikiBase) CreateDocument(filename DocumentFilename, content string) (result *Document, err error) {
 	if !strings.HasSuffix(string(filename), ".md") {
 		filename += ".md"
 	}
 	doc := newDocument(filename, content)
-	filePath := path.Join(tb.dir, string(doc.FileName()))
+	filePath := path.Join(tikiBase.dir, string(doc.FileName()))
 	err = ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
 	return doc, err
 }
 
 // Documents returns all Documents in this TikiBase.
-func (tb *TikiBase) Documents() (result DocumentCollection, err error) {
-	fileInfos, err := ioutil.ReadDir(tb.dir)
+func (tikiBase *TikiBase) Documents() (result DocumentCollection, err error) {
+	fileInfos, err := ioutil.ReadDir(tikiBase.dir)
 	if err != nil {
 		return result, errors.Wrap(err, "cannot read TikiBase directory")
 	}
@@ -51,7 +51,7 @@ func (tb *TikiBase) Documents() (result DocumentCollection, err error) {
 		if !strings.HasSuffix(fileInfos[i].Name(), ".md") {
 			continue
 		}
-		doc, err := tb.Load(DocumentFilename(fileInfos[i].Name()))
+		doc, err := tikiBase.Load(DocumentFilename(fileInfos[i].Name()))
 		if err != nil {
 			return result, errors.Wrap(err, "cannot get all documents")
 		}
@@ -61,11 +61,11 @@ func (tb *TikiBase) Documents() (result DocumentCollection, err error) {
 }
 
 // Load provides the Document with the given filename, or an error if one doesn't exist.
-func (tb *TikiBase) Load(filename DocumentFilename) (result *Document, err error) {
+func (tikiBase *TikiBase) Load(filename DocumentFilename) (result *Document, err error) {
 	if !strings.HasSuffix(string(filename), ".md") {
 		filename += ".md"
 	}
-	path := path.Join(tb.StorageDir(), string(filename))
+	path := path.Join(tikiBase.StorageDir(), string(filename))
 	contentData, err := ioutil.ReadFile(path)
 	if err != nil {
 		return result, errors.Wrapf(err, "cannot read file '%s'", path)
@@ -74,12 +74,12 @@ func (tb *TikiBase) Load(filename DocumentFilename) (result *Document, err error
 }
 
 // SaveDocument stores the given Document in this TikiBase.
-func (tb *TikiBase) SaveDocument(doc *Document) error {
-	filePath := path.Join(tb.dir, string(doc.FileName()))
+func (tikiBase *TikiBase) SaveDocument(doc *Document) error {
+	filePath := path.Join(tikiBase.dir, string(doc.FileName()))
 	return ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
 }
 
 // StorageDir provides the full directory path in which this TikiBase is stored.
-func (tb *TikiBase) StorageDir() string {
-	return tb.dir
+func (tikiBase *TikiBase) StorageDir() string {
+	return tikiBase.dir
 }

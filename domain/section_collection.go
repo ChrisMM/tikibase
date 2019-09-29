@@ -37,9 +37,9 @@ func ScaffoldSectionCollection(data []SectionScaffold) (result SectionCollection
 
 // FindByTitle provides the section with the given title
 // or nil if none was found
-func (sc SectionCollection) FindByTitle(title string) (*Section, error) {
-	for i := range sc {
-		section := sc[i]
+func (sections SectionCollection) FindByTitle(title string) (*Section, error) {
+	for i := range sections {
+		section := sections[i]
 		sectionTitle, err := section.Title()
 		if err != nil {
 			return nil, errors.Wrapf(err, "cannot find section with title '%s'", title)
@@ -52,31 +52,31 @@ func (sc SectionCollection) FindByTitle(title string) (*Section, error) {
 }
 
 // Remove provides a copy of this SectionCollection that contains all its sections except the given one.
-func (sc SectionCollection) Remove(section *Section) (result SectionCollection) {
-	for i := range sc {
-		if sc[i] != section {
-			result = append(result, sc[i])
+func (sections SectionCollection) Remove(section *Section) (result SectionCollection) {
+	for i := range sections {
+		if sections[i] != section {
+			result = append(result, sections[i])
 		}
 	}
 	return result
 }
 
 // Replace provides a new SectionCollection where the given old section is replaced with the given new section.
-func (sc SectionCollection) Replace(oldSection *Section, newSection *Section) (result SectionCollection) {
-	for i := range sc {
-		if sc[i] == oldSection {
+func (sections SectionCollection) Replace(oldSection *Section, newSection *Section) (result SectionCollection) {
+	for i := range sections {
+		if sections[i] == oldSection {
 			result = append(result, newSection)
 		} else {
-			result = append(result, sc[i])
+			result = append(result, sections[i])
 		}
 	}
 	return result
 }
 
 // Text provides the full text of this SectionCollection.
-func (sc SectionCollection) Text() (result string) {
-	for i := range sc {
-		result += string(sc[i].Content())
+func (sections SectionCollection) Text() (result string) {
+	for i := range sections {
+		result += string(sections[i].Content())
 	}
 	return result
 }

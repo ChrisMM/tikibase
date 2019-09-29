@@ -16,9 +16,9 @@ func ScaffoldDocumentCollection(data []DocumentScaffold) (result DocumentCollect
 }
 
 // Contains indicates whether this DocumentCollection contains the given document.
-func (dc DocumentCollection) Contains(doc *Document) bool {
-	for i := range dc {
-		if dc[i] == doc {
+func (docs DocumentCollection) Contains(doc *Document) bool {
+	for i := range docs {
+		if docs[i] == doc {
 			return true
 		}
 	}
@@ -26,27 +26,27 @@ func (dc DocumentCollection) Contains(doc *Document) bool {
 }
 
 // FileNames returns the filenames of all documents in this DocumentCollection.
-func (dc DocumentCollection) FileNames() (result []DocumentFilename, err error) {
-	for i := range dc {
-		result = append(result, dc[i].FileName())
+func (docs DocumentCollection) FileNames() (result []DocumentFilename, err error) {
+	for i := range docs {
+		result = append(result, docs[i].FileName())
 	}
 	return result, nil
 }
 
 // Find returns the Document with the given filename.
-func (dc DocumentCollection) Find(filename DocumentFilename) (result *Document, err error) {
-	for i := range dc {
-		if dc[i].FileName() == filename {
-			return dc[i], nil
+func (docs DocumentCollection) Find(filename DocumentFilename) (result *Document, err error) {
+	for i := range docs {
+		if docs[i].FileName() == filename {
+			return docs[i], nil
 		}
 	}
 	return result, fmt.Errorf("cannot find document '%s'", filename)
 }
 
 // TikiLinks provides all TikiLinks in all Documents within this TikiBase.
-func (dc DocumentCollection) TikiLinks() (result TikiLinkCollection, err error) {
-	for i := range dc {
-		links, err := dc[i].TikiLinks(dc)
+func (docs DocumentCollection) TikiLinks() (result TikiLinkCollection, err error) {
+	for i := range docs {
+		links, err := docs[i].TikiLinks(docs)
 		if err != nil {
 			return result, err
 		}

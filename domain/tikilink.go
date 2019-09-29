@@ -34,16 +34,16 @@ func ScaffoldTikiLink(data TikiLinkScaffold) *TikiLink {
 }
 
 // SourceSection provides the TikiSection in which this link is located.
-func (tl *TikiLink) SourceSection() *Section {
-	return tl.sourceSection
+func (link *TikiLink) SourceSection() *Section {
+	return link.sourceSection
 }
 
 // TargetDocument provides the Document that this link points to.
-func (tl *TikiLink) TargetDocument() *Document {
-	return tl.targetDocument
+func (link *TikiLink) TargetDocument() *Document {
+	return link.targetDocument
 }
 
 // Title provides the human-readable title of this link.
-func (tl *TikiLink) Title() string {
-	return tl.title
+func (link *TikiLink) Title() string {
+	return link.title
 }

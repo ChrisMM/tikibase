@@ -56,8 +56,8 @@ func ScaffoldSection(data SectionScaffold) *Section {
 }
 
 // Anchor provides the URL anchor for this TikiSection.
-func (s *Section) Anchor() (string, error) {
-	sectionTitle, err := s.Title()
+func (section *Section) Anchor() (string, error) {
+	sectionTitle, err := section.Title()
 	if err != nil {
 		return "", errors.Wrap(err, "cannot determine the section anchor")
 	}
@@ -65,27 +65,27 @@ func (s *Section) Anchor() (string, error) {
 }
 
 // AppendLine provides a new Section that is this Section with the given line appended.
-func (s *Section) AppendLine(line string) Section {
-	return Section{content: s.content + SectionContent(line), document: s.document}
+func (section *Section) AppendLine(line string) Section {
+	return Section{content: section.content + SectionContent(line), document: section.document}
 }
 
 // Content returns the complete content of the entire section.
-func (s *Section) Content() SectionContent {
-	return s.content
+func (section *Section) Content() SectionContent {
+	return section.content
 }
 
 // Document provides a link to the Document containing this section.
-func (s *Section) Document() *Document {
-	return s.document
+func (section *Section) Document() *Document {
+	return section.document
 }
 
 // TikiLinks returns all TikiLinks in this section.
-func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
-	sectionTitle, err := s.Title()
+func (section *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
+	sectionTitle, err := section.Title()
 	if err != nil {
 		return result, err
 	}
-	matches := markdownLinkRE.FindAllStringSubmatch(string(s.content), 9999)
+	matches := markdownLinkRE.FindAllStringSubmatch(string(section.content), 9999)
 	for i := range matches {
 		linkTitle := matches[i][1]
 		linkTarget := matches[i][2]
@@ -107,9 +107,9 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, sectionTitle)
 		}
-		result = append(result, newTikiLink(linkTitle, s, targetDocument))
+		result = append(result, newTikiLink(linkTitle, section, targetDocument))
 	}
-	matches = htmlLinkRE.FindAllStringSubmatch(string(s.content), 9999)
+	matches = htmlLinkRE.FindAllStringSubmatch(string(section.content), 9999)
 	for _, match := range matches {
 		linkTitle := match[2]
 		targetFilename := match[1]
@@ -129,7 +129,7 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 		if err != nil {
 			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s'", targetFilename, linkTitle)
 		}
-		result = append(result, newTikiLink(linkTitle, s, targetDocument))
+		result = append(result, newTikiLink(linkTitle, section, targetDocument))
 	}
 
 	return result.Unique(), nil
@@ -137,8 +137,8 @@ func (s *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, 
 
 // Title returns the human-friendly title of this TikiSection,
 // i.e. its title tag without the "###"" in front
-func (s *Section) Title() (string, error) {
-	titleLine := strings.SplitN(string(s.content), "\n", 1)[0]
+func (section *Section) Title() (string, error) {
+	titleLine := strings.SplitN(string(section.content), "\n", 1)[0]
 	matches := stripTitleTagRE.FindStringSubmatch(titleLine)
 	if len(matches) == 0 {
 		return "", fmt.Errorf("malformatted section title: '%s'", titleLine)
@@ -147,10 +147,10 @@ func (s *Section) Title() (string, error) {
 }
 
 // URL provides the full URL to this Section (link to document that contains this section + anchor of the section.
-func (s *Section) URL() (string, error) {
-	sectionAnchor, err := s.Anchor()
+func (section *Section) URL() (string, error) {
+	sectionAnchor, err := section.Anchor()
 	if err != nil {
 		return "", errors.Wrap(err, "cannot determine the URL for section")
 	}
-	return s.document.URL() + "#" + sectionAnchor, nil
+	return section.document.URL() + "#" + sectionAnchor, nil
 }
