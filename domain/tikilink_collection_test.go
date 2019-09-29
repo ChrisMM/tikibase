@@ -97,8 +97,8 @@ func TestTikiLinkCollectionUnique(t *testing.T) {
 		{FileName: "two.md"},
 	})
 	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
-		{Title: "1-2", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
+		{Title: "0-1", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
+		{Title: "0-1", SourceSection: docs[0].TitleSection(), TargetDocument: docs[1]},
 	})
 	assert.Len(t, links.Unique(), 1)
 }

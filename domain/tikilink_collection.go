@@ -66,9 +66,8 @@ func (links TikiLinkCollection) RemoveLinksFromDocs(docs DocumentCollection) (re
 // with all duplicates removed.
 func (links TikiLinkCollection) Unique() (result TikiLinkCollection) {
 	for i := range links {
-		link := links[i]
-		if !result.Contains(link) {
-			result = append(result, link)
+		if !result.Contains(links[i]) {
+			result = append(result, links[i])
 		}
 	}
 	return result
