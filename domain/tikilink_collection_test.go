@@ -18,6 +18,14 @@ func TestTikiLinkCollectionContains(t *testing.T) {
 	assert.False(t, links.Contains(notContainedLink), "expected collection to not contain this link")
 }
 
+func TestTikiLinkCollectionFilter(t *testing.T) {
+	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{{}, {}})
+	actual := links.Filter(func(link *domain.TikiLink) bool { return true })
+	assert.Len(t, actual, 2)
+	actual = links.Filter(func(link *domain.TikiLink) bool { return false })
+	assert.Len(t, actual, 0)
+}
+
 func TestTikiLinkCollectionGroupByTarget(t *testing.T) {
 	// create documents
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{

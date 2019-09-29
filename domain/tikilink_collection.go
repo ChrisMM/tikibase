@@ -21,6 +21,17 @@ func (tlc TikiLinkCollection) Contains(link *TikiLink) bool {
 	return false
 }
 
+// Filter provides a copy of this TikiLinkCollection
+// containing only the elements for which the given filter function is true.
+func (tlc TikiLinkCollection) Filter(filter func(link *TikiLink) bool) (result TikiLinkCollection) {
+	for i := range tlc {
+		if filter(tlc[i]) {
+			result = append(result, tlc[i])
+		}
+	}
+	return result
+}
+
 // GroupByTarget determines which links in the given TikiLink list point to which Document.
 func (tlc TikiLinkCollection) GroupByTarget() map[DocumentFilename]TikiLinkCollection {
 	result := make(map[DocumentFilename]TikiLinkCollection)
@@ -46,12 +57,9 @@ func (tlc TikiLinkCollection) ReferencedDocs() (result DocumentCollection) {
 // RemoveLinksFromDocs provides a copy of the given TikiLinkCollection
 // that does not contain links from the given Documents.
 func (tlc TikiLinkCollection) RemoveLinksFromDocs(docs DocumentCollection) (result TikiLinkCollection) {
-	for i := range tlc {
-		if !docs.Contains(tlc[i].SourceSection().Document()) {
-			result = append(result, tlc[i])
-		}
-	}
-	return result
+	return tlc.Filter(func(link *TikiLink) bool {
+		return !docs.Contains(link.SourceSection().Document())
+	})
 }
 
 // Unique provides a new TikiLinkCollection that contains the links from this one
