@@ -54,6 +54,13 @@ combine a simple and intuitively accessible knowledge graph with human-written
 rich text that can put it all together in a very human-friendly way and provide
 many forms of additional information easily and seamlessly.
 
+There will always be excellent Markdown editors, even in a few decades.
+
+### Best Practices
+
+- avoid deep hierarchies. Taxonomies are highly debatable, even amongst
+  yourself.
+
 ### Limitations
 
 - it would be nice to reference other files via **#shortname** rather than
