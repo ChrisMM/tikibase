@@ -97,3 +97,29 @@ Feature: Links
     When running Occurrences
     Then file "1.md" is unchanged
     And file "number.md" is unchanged
+
+  Scenario: links to different sections of the same document
+    Given the workspace contains file "1.md" with content:
+      """
+      # One
+
+      ### what is it
+      a [number](number.md)
+
+      ### how it works
+      just like the other [numbers](number.md)
+      """
+    And the workspace contains file "number.md" with content:
+      """
+      # Number
+      """
+    When running Occurrences
+    Then file "1.md" is unchanged
+    And the workspace should contain the file "number.md" with content:
+      """
+      # Number
+
+      ### occurrences
+
+      - [One](1.md)
+      """

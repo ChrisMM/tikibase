@@ -21,6 +21,26 @@ func (links TikiLinkCollection) Contains(link *TikiLink) bool {
 	return false
 }
 
+// CombineLinksFromSameDocuments provides a copy of this TikiLinkCollection
+// where multiple links to the same document are combined into one link.
+func (links TikiLinkCollection) CombineLinksFromSameDocuments() (result TikiLinkCollection) {
+	referencedDocs := make(map[string]TikiLinkCollection)
+	for i := range links {
+		fileName := string(links[i].SourceSection().Document().FileName())
+		referencedDocs[fileName] = append(referencedDocs[fileName], links[i])
+	}
+	for _, links := range referencedDocs {
+		switch {
+		case len(links) == 1:
+			result = append(result, links[0])
+		case len(links) > 1:
+			newLink := newTikiLink("merged link", links[0].SourceSection().Document().TitleSection(), links[0].TargetDocument())
+			result = append(result, newLink)
+		}
+	}
+	return result
+}
+
 // Filter provides a copy of this TikiLinkCollection
 // containing only the elements for which the given filter function is true.
 func (links TikiLinkCollection) Filter(filter func(link *TikiLink) bool) (result TikiLinkCollection) {

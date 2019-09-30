@@ -7,6 +7,22 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestTikiLinkCollectionCombineLinksFromSameDocuments(t *testing.T) {
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+		{Content: "# One\n\n### sec1\n\n### sec2\n"},
+		{},
+	})
+	doc0sections := docs[0].AllSections()
+	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "0a-1", SourceSection: (*doc0sections)[0], TargetDocument: docs[1]},
+		{Title: "0b-1", SourceSection: (*doc0sections)[1], TargetDocument: docs[1]},
+	})
+	actual := links.CombineLinksFromSameDocuments()
+	assert.Len(t, actual, 1)
+	assert.Same(t, docs[0].TitleSection(), actual[0].SourceSection())
+	assert.Same(t, docs[1], actual[0].TargetDocument())
+}
+
 func TestTikiLinkCollectionContains(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{{}, {}})
 	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{

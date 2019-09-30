@@ -31,8 +31,10 @@ func Run(dir string) error {
 		if err != nil {
 			return err
 		}
-		missingOccurrencesLinks := linksToDocs[fileName].RemoveLinksFromDocs(linksInDoc.ReferencedDocs())
-		newOccurrencesSection, err := RenderOccurrencesSection(missingOccurrencesLinks, docs[i])
+		allOccurrencesLinks := linksToDocs[fileName]
+		missingOccurrencesLinks := allOccurrencesLinks.RemoveLinksFromDocs(linksInDoc.ReferencedDocs())
+		dedupedOccurrencesLinks := missingOccurrencesLinks.CombineLinksFromSameDocuments()
+		newOccurrencesSection, err := RenderOccurrencesSection(dedupedOccurrencesLinks, docs[i])
 		if err != nil {
 			return errors.Wrapf(err, "error rendering new occurrences sections for document '%s'", fileName)
 		}
@@ -42,16 +44,16 @@ func Run(dir string) error {
 		}
 		var newDoc *domain.Document
 		switch {
-		case len(missingOccurrencesLinks) == 0 && existingOccurrencesSection == nil:
+		case len(dedupedOccurrencesLinks) == 0 && existingOccurrencesSection == nil:
 			output.NoChange()
 			continue
-		case len(missingOccurrencesLinks) == 0 && existingOccurrencesSection != nil:
+		case len(dedupedOccurrencesLinks) == 0 && existingOccurrencesSection != nil:
 			output.Deleted()
 			newDoc = docs[i].RemoveSection(existingOccurrencesSection)
-		case len(missingOccurrencesLinks) > 0 && existingOccurrencesSection != nil:
+		case len(dedupedOccurrencesLinks) > 0 && existingOccurrencesSection != nil:
 			output.Updated()
 			newDoc = docs[i].ReplaceSection(existingOccurrencesSection, newOccurrencesSection)
-		case len(missingOccurrencesLinks) > 0 && existingOccurrencesSection == nil:
+		case len(dedupedOccurrencesLinks) > 0 && existingOccurrencesSection == nil:
 			output.Created()
 			newDoc = docs[i].AppendSection(newOccurrencesSection)
 		}
