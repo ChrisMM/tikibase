@@ -16,22 +16,16 @@ func TestSectionCollectionFindByTitle(t *testing.T) {
 	})
 	actual, err := sections.FindByTitle("what is it")
 	assert.Nil(t, err)
-	assert.Same(t, sections[1], actual, "found wrong document")
+	assert.Same(t, sections[1], actual)
 }
 
 func TestSectionCollectionRemove(t *testing.T) {
-	sections := domain.ScaffoldSectionCollection([]domain.SectionScaffold{
-		{Content: "section 1\n"},
-		{Content: "section 2\n"},
-	})
+	sections := domain.ScaffoldSectionCollection([]domain.SectionScaffold{{}, {}})
 	assert.Equal(t, domain.SectionCollection{sections[0]}, sections.Remove(sections[1]))
 }
 
 func TestSectionCollectionReplace(t *testing.T) {
-	sections := domain.ScaffoldSectionCollection([]domain.SectionScaffold{
-		{Content: "section 1\n"},
-		{Content: "section 2\n"},
-	})
+	sections := domain.ScaffoldSectionCollection([]domain.SectionScaffold{{}, {}})
 	newSection2 := domain.ScaffoldSection(domain.SectionScaffold{Content: "new section 2\n"})
 	assert.Equal(t, domain.SectionCollection{sections[0], newSection2}, sections.Replace(sections[1], newSection2))
 }

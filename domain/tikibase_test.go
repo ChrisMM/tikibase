@@ -12,9 +12,7 @@ import (
 
 func TestNewTikiBase(t *testing.T) {
 	_, err := domain.NewTikiBase(".")
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 }
 
 func TestTikiBaseCreateDocument(t *testing.T) {
@@ -30,56 +28,45 @@ func TestTikiBaseCreateDocument(t *testing.T) {
 }
 
 func TestTikiBaseDocumentsIgnoresNonMarkdown(t *testing.T) {
-	tb1 := test.NewTempTikiBase(t)
-	_, err := tb1.CreateDocument("one", "")
+	tikiBase := test.NewTempTikiBase(t)
+	_, err := tikiBase.CreateDocument("one.md", "")
 	assert.Nil(t, err)
-	err = test.CreateBinaryFile(path.Join(tb1.StorageDir(), "foo.png"))
+	err = test.CreateBinaryFile(path.Join(tikiBase.StorageDir(), "foo.png"))
 	assert.Nil(t, err)
-
-	// get the documents
-	tb2, err := domain.NewTikiBase(tb1.StorageDir())
-	assert.Nil(t, err, "cannot instantiate tb2")
-	actual, err := tb2.Documents()
+	docs, err := tikiBase.Documents()
 	assert.Nil(t, err, "cannot call tb.Documents()")
-
-	// verify results
-	assert.Len(t, actual, 1)
+	assert.Len(t, docs, 1)
+	assert.Equal(t, domain.DocumentFilename("one.md"), docs[0].FileName())
 }
 
 func TestTikiBaseDocuments(t *testing.T) {
-	tb1 := test.NewTempTikiBase(t)
-	_, err := tb1.CreateDocument("one", "")
+	tikiBase := test.NewTempTikiBase(t)
+	_, err := tikiBase.CreateDocument("one.md", "")
 	assert.Nil(t, err)
-	_, err = tb1.CreateDocument("two", "")
+	_, err = tikiBase.CreateDocument("two.md", "")
 	assert.Nil(t, err)
-
-	// get the documents
-	tb2, err := domain.NewTikiBase(tb1.StorageDir())
-	assert.Nil(t, err, "cannot instantiate tb2")
-	actual, err := tb2.Documents()
-	assert.Nil(t, err, "cannot call tb.Documents()")
-
-	// verify results
-	assert.Len(t, actual, 2)
+	docs, err := tikiBase.Documents()
+	assert.Nil(t, err)
+	assert.Len(t, docs, 2)
+	assert.Equal(t, domain.DocumentFilename("one.md"), docs[0].FileName())
+	assert.Equal(t, domain.DocumentFilename("two.md"), docs[1].FileName())
 }
 
 func TestTikiBaseLoad(t *testing.T) {
-	tb := test.NewTempTikiBase(t)
-	expected, err := tb.CreateDocument("one.md", "The one")
+	tikiBase := test.NewTempTikiBase(t)
+	_, err := tikiBase.CreateDocument("one.md", "The one")
 	assert.Nil(t, err)
-	tb2, err := domain.NewTikiBase(tb.StorageDir())
+	doc, err := tikiBase.Load("one.md")
 	assert.Nil(t, err)
-	actual, err := tb2.Load("one.md")
-	assert.Nil(t, err)
-	assert.Equal(t, expected.Content(), actual.Content(), "mismatching content")
+	assert.Equal(t, domain.DocumentFilename("one.md"), doc.FileName())
 }
 
 func TestTikiBaseSaveDocument(t *testing.T) {
-	tb := test.NewTempTikiBase(t)
+	tikiBase := test.NewTempTikiBase(t)
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md", Content: "document content"})
-	err := tb.SaveDocument(doc)
+	err := tikiBase.SaveDocument(doc)
 	assert.Nil(t, err, "cannot save document")
-	filePath := path.Join(tb.StorageDir(), "one.md")
+	filePath := path.Join(tikiBase.StorageDir(), "one.md")
 	fileInfo, err := os.Stat(filePath)
 	assert.Nil(t, err, "file not found")
 	assert.False(t, fileInfo.IsDir(), "file should not be a directory")
@@ -93,5 +80,5 @@ func TestTikiBaseStorageDir(t *testing.T) {
 	tb, err := domain.NewTikiBase(currentDir)
 	assert.Nil(t, err)
 	actual := tb.StorageDir()
-	assert.Equal(t, currentDir, actual, "wrong StorageDir provided")
+	assert.Equal(t, currentDir, actual)
 }

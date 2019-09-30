@@ -11,13 +11,13 @@ func TestSectionAnchor(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### what is it\n"})
 	actual, err := section.Anchor()
 	assert.Nil(t, err)
-	assert.Equal(t, "what-is-it", actual, "mismatching section anchors")
+	assert.Equal(t, "what-is-it", actual)
 }
 
 func TestSectionAppendLine(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "existing content\n"})
 	newSection := section.AppendLine("new line\n")
-	assert.Equal(t, domain.SectionContent("existing content\nnew line\n"), newSection.Content(), "did not append line correctly")
+	assert.Equal(t, domain.SectionContent("existing content\nnew line\n"), newSection.Content())
 }
 
 func TestSectionContent(t *testing.T) {
@@ -48,12 +48,11 @@ func TestSectionTikiLinks(t *testing.T) {
 
 func TestSectionTikiLinksIgnoresHtmlLinks(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
-		{FileName: "one.md", Content: "# Title\ntext [HTML link](http://google.com)"},
+		{Content: "# Title\ntext [HTML link](http://google.com)"},
 	})
-	section := docs[0].TitleSection()
-	actual, err := section.TikiLinks(docs)
+	actual, err := docs[0].TitleSection().TikiLinks(docs)
 	assert.Nil(t, err)
-	assert.Len(t, actual, 0, "shouldn't have found any links here")
+	assert.Len(t, actual, 0)
 }
 
 func TestSectionTitle(t *testing.T) {
@@ -68,5 +67,5 @@ func TestSectionURL(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### What is it\n", Doc: doc})
 	actual, err := section.URL()
 	assert.Nil(t, err)
-	assert.Equal(t, "one.md#what-is-it", actual, "mismatching section URL")
+	assert.Equal(t, "one.md#what-is-it", actual)
 }

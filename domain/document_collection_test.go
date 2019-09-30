@@ -8,10 +8,7 @@ import (
 )
 
 func TestDocumentCollectionContains(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
-		{FileName: "one.md"},
-		{FileName: "two.md"},
-	})
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{{}})
 	otherDoc := domain.ScaffoldDocument(domain.DocumentScaffold{})
 	assert.True(t, docs.Contains(docs[0]), "looking contain existing doc")
 	assert.False(t, docs.Contains(otherDoc), "should not contain otherDoc")
@@ -24,19 +21,18 @@ func TestDocumentCollectionFileNames(t *testing.T) {
 	})
 	result, err := docs.FileNames()
 	assert.Nil(t, err, "cannot get filenames of docs")
-	assert.Equal(t, len(result), 2)
-	assert.Equal(t, result[0], domain.DocumentFilename("one.md"))
-	assert.Equal(t, result[1], domain.DocumentFilename("two.md"))
+	expected := []domain.DocumentFilename{"one.md", "two.md"}
+	assert.Equal(t, expected, result)
 }
 
 func TestDocumentCollectionFind(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
-		{FileName: "one.md", Content: "# The one\n[The other](two.md)"},
-		{FileName: "two.md", Content: "# The other\n[The one](one.md)"},
+		{FileName: "one.md"},
+		{FileName: "two.md"},
 	})
 	actual, err := docs.Find("two.md")
 	assert.Nil(t, err, "cannot find document 'two.md'")
-	assert.Equal(t, domain.DocumentFilename("two.md"), actual.FileName(), "found the wrong document")
+	assert.Equal(t, domain.DocumentFilename("two.md"), actual.FileName())
 }
 
 func TestDocumentCollectionTikiLinks(t *testing.T) {

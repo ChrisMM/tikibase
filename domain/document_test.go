@@ -9,31 +9,31 @@ import (
 
 func TestDocumentAllSections(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{
-		FileName: "one.md", Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nThe other.\n",
+		Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nThe other.\n",
 	})
 	sections := doc.AllSections()
 	assert.Len(t, *sections, 3)
-	assert.Equal(t, domain.SectionContent("# Title\n\nmy doc\n\n"), (*sections)[0].Content(), "unexpected title section")
-	assert.Equal(t, domain.SectionContent("### One\n\nThe one.\n\n"), (*sections)[1].Content(), "unexpected content section 1")
-	assert.Equal(t, domain.SectionContent("### Two\n\nThe other.\n"), (*sections)[2].Content(), "unexpected content section 2")
+	assert.Equal(t, domain.SectionContent("# Title\n\nmy doc\n\n"), (*sections)[0].Content())
+	assert.Equal(t, domain.SectionContent("### One\n\nThe one.\n\n"), (*sections)[1].Content())
+	assert.Equal(t, domain.SectionContent("### Two\n\nThe other.\n"), (*sections)[2].Content())
 }
 
 func TestDocumentAppendSection(t *testing.T) {
 	oldDoc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md", Content: "existing document content\n"})
 	newSection := domain.ScaffoldSection(domain.SectionScaffold{Content: "### new section\n"})
 	newDoc := oldDoc.AppendSection(newSection)
-	assert.Equal(t, "existing document content\n\n### new section\n", newDoc.Content(), "mismatching document content")
+	assert.Equal(t, "existing document content\n\n### new section\n", newDoc.Content())
 	assert.Equal(t, domain.DocumentFilename("one.md"), newDoc.FileName(), "didn't bring the filename over to the new doc")
 }
 
 func TestDocumentContentSections(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{
-		FileName: "one.md", Content: "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.\n",
+		Content: "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.\n",
 	})
 	sections := doc.ContentSections()
 	assert.Len(t, *sections, 2, "unexpected sections length")
-	assert.Equal(t, domain.SectionContent("### One\nThe one.\n"), (*sections)[0].Content(), "unexpected content section 1")
-	assert.Equal(t, domain.SectionContent("### Two\nThe other.\n"), (*sections)[1].Content(), "unexpected content section 2")
+	assert.Equal(t, domain.SectionContent("### One\nThe one.\n"), (*sections)[0].Content())
+	assert.Equal(t, domain.SectionContent("### Two\nThe other.\n"), (*sections)[1].Content())
 }
 
 func TestDocumentFileName(t *testing.T) {
@@ -43,13 +43,12 @@ func TestDocumentFileName(t *testing.T) {
 
 func TestDocumentReplaceSection(t *testing.T) {
 	td := domain.ScaffoldDocument(domain.DocumentScaffold{
-		FileName: "one.md", Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nOld section 2.\n",
+		Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nOld section 2.\n",
 	})
 	sections := td.AllSections()
 	twoSection := (*sections)[2]
 	newSection := domain.ScaffoldSection(domain.SectionScaffold{Content: "### Two\n\nNew section 2.\n", Doc: td})
 	newdoc := td.ReplaceSection(twoSection, newSection)
-
 	newSections := newdoc.AllSections()
 	assert.Len(t, *newSections, 3, "unexpected newSections length")
 	assert.Equal(t, domain.SectionContent("# Title\n\nmy doc\n\n"), (*newSections)[0].Content(), "unexpected title section")
