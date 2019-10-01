@@ -34,6 +34,7 @@ func Run(dir string) error {
 		allOccurrencesLinks := linksToDocs[fileName]
 		missingOccurrencesLinks := allOccurrencesLinks.RemoveLinksFromDocs(linksInDoc.ReferencedDocs())
 		dedupedOccurrencesLinks := missingOccurrencesLinks.CombineLinksFromSameDocuments()
+		dedupedOccurrencesLinks.SortByTargetDocumentTitle()
 		newOccurrencesSection, err := RenderOccurrencesSection(dedupedOccurrencesLinks, docs[i])
 		if err != nil {
 			return errors.Wrapf(err, "error rendering new occurrences sections for document '%s'", fileName)

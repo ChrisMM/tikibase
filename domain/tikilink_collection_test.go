@@ -100,6 +100,24 @@ func TestTikiLinkCollectionScaffold(t *testing.T) {
 	assert.Equal(t, "foo", actual[0].Title())
 }
 
+func TestTikiLinkCollectionSortByTargetDocumentTitle(t *testing.T) {
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+		{Content: "# Foo"},
+		{Content: "# Bar"},
+		{Content: "# Baz"},
+	})
+	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
+		{Title: "one", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
+		{Title: "two", SourceSection: docs[2].TitleSection(), TargetDocument: docs[1]},
+		{Title: "three", SourceSection: docs[0].TitleSection(), TargetDocument: docs[2]},
+	})
+	links.SortByTargetDocumentTitle()
+	assert.Len(t, links, 3)
+	assert.Equal(t, "two", links[0].Title())
+	assert.Equal(t, "three", links[1].Title())
+	assert.Equal(t, "one", links[2].Title())
+}
+
 func TestTikiLinkCollectionUnique(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "0.md"},
