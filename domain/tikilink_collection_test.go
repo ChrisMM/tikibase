@@ -100,22 +100,22 @@ func TestTikiLinkCollectionScaffold(t *testing.T) {
 	assert.Equal(t, "foo", actual[0].Title())
 }
 
-func TestTikiLinkCollectionSortByTargetDocumentTitle(t *testing.T) {
+func TestTikiLinkCollectionSortBySourceDocumentTitle(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
-		{Content: "# Foo"},
-		{Content: "# Bar"},
-		{Content: "# Baz"},
+		{Content: "# One"},
+		{Content: "# Two"},
+		{Content: "# Three"},
 	})
 	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "one", SourceSection: docs[1].TitleSection(), TargetDocument: docs[0]},
-		{Title: "two", SourceSection: docs[2].TitleSection(), TargetDocument: docs[1]},
-		{Title: "three", SourceSection: docs[0].TitleSection(), TargetDocument: docs[2]},
+		{SourceSection: docs[0].TitleSection()},
+		{SourceSection: docs[1].TitleSection()},
+		{SourceSection: docs[2].TitleSection()},
 	})
-	links.SortByTargetDocumentTitle()
+	links.SortBySourceDocumentTitle()
 	assert.Len(t, links, 3)
-	assert.Equal(t, "two", links[0].Title())
-	assert.Equal(t, "three", links[1].Title())
-	assert.Equal(t, "one", links[2].Title())
+	assert.Same(t, docs[0].TitleSection(), links[0].SourceSection())
+	assert.Same(t, docs[2].TitleSection(), links[1].SourceSection())
+	assert.Same(t, docs[1].TitleSection(), links[2].SourceSection())
 }
 
 func TestTikiLinkCollectionUnique(t *testing.T) {

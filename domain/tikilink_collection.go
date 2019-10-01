@@ -1,6 +1,9 @@
 package domain
 
-import "sort"
+import (
+	"sort"
+	"strings"
+)
 
 // TikiLinkCollection is a collection of TikiLinks.
 type TikiLinkCollection []*TikiLink
@@ -84,18 +87,18 @@ func (links TikiLinkCollection) RemoveLinksFromDocs(docs DocumentCollection) (re
 	})
 }
 
-// SortByTargetDocumentTitle sorts this TikiLinkCollection alphabetically by the target document title.
-func (links TikiLinkCollection) SortByTargetDocumentTitle() {
+// SortBySourceDocumentTitle sorts this TikiLinkCollection alphabetically by the target document title.
+func (links TikiLinkCollection) SortBySourceDocumentTitle() {
 	sort.Slice(links, func(i, j int) bool {
-		title1, err := links[i].TargetDocument().TitleSection().Title()
+		title1, err := links[i].SourceSection().Document().TitleSection().Title()
 		if err != nil {
 			panic(err)
 		}
-		title2, err := links[j].TargetDocument().TitleSection().Title()
+		title2, err := links[j].SourceSection().Document().TitleSection().Title()
 		if err != nil {
 			panic(err)
 		}
-		return title1 < title2
+		return strings.ToLower(title1) < strings.ToLower(title2)
 	})
 }
 
