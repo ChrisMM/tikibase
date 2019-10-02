@@ -1,71 +1,67 @@
+<img src="tikibase.jpg" width="92" height="216" align="right">
+
 # TikiBase
 
 [![CircleCI](https://circleci.com/gh/kevgo/tikibase.svg?style=shield)](https://circleci.com/gh/kevgo/tikibase)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kevgo/tikibase)](https://goreportcard.com/report/github.com/kevgo/tikibase)
 
-### what is it
-
-- a timeless wiki-like knowledge database
-- a robust knowledge base designed
-
-### what does it
-
-- makes various forms of information usable for decades, on all current and
-  future compute platforms
+TikiBase is a timeless, low-tech wiki-like knowledge base designed to last for
+decades. It makes semi-structured rich-text information available on all current
+and future compute platforms.
 
 ### how it works
 
-- since all compute is specific to platforms or at least computing paradigms,
-  TikiBase is pure data
-- TikiBase is completely manually usable, with some optional tooling for
-  lightweight automation
+All forms of compute are platform-specific. Platforms change every decade. To
+remain usable over decades, TikiBase is pure human-accessible data: Markdown
+documents stored in a folder. All you need to use TikiBase is a Markdown or text
+editor. TikiBase provides lightweight tooling (this codebase) for automation of
+peripheral automation like managing hyperlinks.
 
-data store:
+### why
 
-- human and machine-editable information store: a folder containing Markdown
-  files
-- semi-structured document format: documents contain semantically meaningful
-  sections
-- logical connection between documents via links and backlinks
+Over the last couple of decades, I have used a multitude of software products
+for Windows, Linux, MacOS, or the web to store information that I want to
+remember:
 
-### Why
+- **outliners:** OmniOutliner, Workflowy, Dynalist, ThinkLinkr, etc
+- **note-taking applications:** Evernote, SimpleNote, Apple Notes, Notational
+  Velocity
+- **todo-lists:** Todoist, TickTick, Clear, etc
+- multiple **custom-built solutions** that I didn't have time to develop into a
+  full product
 
-Over the last couple of decades, I have used many types of software products to
-store information that I want to remember:
+All these solutions have been lacking functionality or became unsupported at
+some point. Or I changed platforms and couldn't use the applications anymore.
+Whatever fancy new web/mobile/wearable tool shows up next, I can already feel
+how it also will look and feel outdated in no more than 10 years and will be
+almost unusable in 15, on at least some platforms that I'll use at that time. As
+an example, try using OrgMode on mobile!
 
-- various outliners on Windows, MacOS, and the web
-- Evernote
-- Simplenote
-- Apple Notes
-- Dynalist
-- Notational Velocity
-- various custom-built web and desktop applications
+### functionality
 
-All of them have been limited and/or became unsupported at some point. Or I
-changed platforms and couldn't use them anymore. Whatever fancy new tool shows
-up on the stage, I can already see how it looks and feels completely outdated in
-10 years and nobody wants to use it anymore.
+You use (create, edit, search) a TikiBase completely manually, for example using
+the GitHub or GitLab UI, or your favorite MarkDown editor. On top of that, the
+TikiBase tool in this repository provides these commands:
 
-Almost all -the-shelf tools lack structure for knowledge management and
-backlinks. Dedicated Ontology and RDF frameworks can model the knowledge graph
-more precisely, but are limited to representing only that type of knowledge and
-require very technical ways of querying and navigating them. TikiBase can
-combine a simple and intuitively accessible knowledge graph with human-written
-rich text that can put it all together in a very human-friendly way and provide
-many forms of additional information easily and seamlessly.
+- **occurrences:** adds an `occurrences` section to each document that lists the
+  documents that link to this document. This section only only contains
+  documents that aren't otherwise mentioned in this document already.
 
-There will always be excellent Markdown editors, even in a few decades.
+You can run these commands using the CLI, on a CI server, or bundle them into a
+bot to run them automatically on each change.
 
-### Best Practices
+### best practices
 
-- avoid deep hierarchies. Taxonomies are highly debatable, even amongst
-  yourself.
+- **avoid deep hierarchies:** Taxonomies are highly debatable, even amongst your
+  current and future self. Keep information organized in a relatively flat
+  namespace and retrieve information alphabetically or via fulltext search.
 
-### Limitations
+### limitations
 
 - it would be nice to reference other files via **#shortname** rather than
   having to create a Markdown link to the file
 
-### Development
+### development
 
-- run a single unit test: `go test ./storage/foo_test.go`
+- **make test:** run all tests
+- see the [Makefile](Makefile) for available commands
