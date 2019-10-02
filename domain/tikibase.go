@@ -68,7 +68,7 @@ func (tikiBase *TikiBase) Load(filename DocumentFilename) (result *Document, err
 	path := path.Join(tikiBase.StorageDir(), string(filename))
 	contentData, err := ioutil.ReadFile(path)
 	if err != nil {
-		return result, errors.Wrapf(err, "cannot read file '%s'", path)
+		return result, errors.Wrapf(err, "cannot read file %q", path)
 	}
 	return newDocument(filename, string(contentData)), nil
 }

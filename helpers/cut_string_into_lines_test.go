@@ -13,20 +13,20 @@ func TestCutStringIntoLines(t *testing.T) {
 	actual := helpers.CutStringIntoLines("one\ntwo\nthree\n")
 	diff := cmp.Diff(expected, actual)
 	if diff != "" {
-		t.Fatalf("test 1: expected '%s', got '%s'", expected, actual)
+		t.Fatalf("test 1: expected %q, got %q", expected, actual)
 	}
 
 	expected = []string{"one\n", "two\n", "three"}
 	actual = helpers.CutStringIntoLines("one\ntwo\nthree")
 	diff = cmp.Diff(expected, actual)
 	if diff != "" {
-		t.Fatalf("test 2: expected '%s', got '%s'", expected, actual)
+		t.Fatalf("test 2: expected %q, got %q", expected, actual)
 	}
 
 	expected = []string{""}
 	actual = helpers.CutStringIntoLines("")
 	diff = cmp.Diff(expected, actual)
 	if diff != "" {
-		t.Fatalf("test 3: expected '%s', got '%s'", expected, actual)
+		t.Fatalf("test 3: expected %q, got %q", expected, actual)
 	}
 }

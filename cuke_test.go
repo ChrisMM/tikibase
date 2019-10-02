@@ -45,11 +45,11 @@ func (w *workspaceFeature) createWorkspace(arg interface{}) {
 func (w *workspaceFeature) fileIsUnchanged(filename string) error {
 	expected, exists := w.fileContents[filename]
 	if !exists {
-		return fmt.Errorf("no cached content for file '%s' found", filename)
+		return fmt.Errorf("no cached content for file %q found", filename)
 	}
 	data, err := ioutil.ReadFile(path.Join(w.root, filename))
 	if err != nil {
-		return errors.Wrapf(err, "Cannot find file '%s' in workspace", filename)
+		return errors.Wrapf(err, "Cannot find file %q in workspace", filename)
 	}
 	actual := string(data)
 	if diff := cmp.Diff(expected, actual); diff != "" {
@@ -65,7 +65,7 @@ func (w *workspaceFeature) runOccurrences() error {
 func (w *workspaceFeature) shouldContainFileWithContent(filename string, content *gherkin.DocString) error {
 	data, err := ioutil.ReadFile(path.Join(w.root, filename))
 	if err != nil {
-		return errors.Wrapf(err, "Cannot find file '%s' in workspace", filename)
+		return errors.Wrapf(err, "Cannot find file %q in workspace", filename)
 	}
 	actual := string(data)
 	expected := content.Content + "\n"

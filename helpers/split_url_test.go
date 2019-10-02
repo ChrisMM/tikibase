@@ -19,10 +19,10 @@ func TestSplitURL(t *testing.T) {
 	for input, expected := range testData {
 		filename, anchor := helpers.SplitURL(input)
 		if filename != expected.filename {
-			t.Fatalf("mismatching filename for '%s': expected '%s', got '%s'", input, expected.filename, filename)
+			t.Fatalf("mismatching filename for %q: expected %q, got %q", input, expected.filename, filename)
 		}
 		if anchor != expected.anchor {
-			t.Fatalf("mismatching anchor for '%s': expected '%s', got '%s'", input, expected.anchor, anchor)
+			t.Fatalf("mismatching anchor for %q: expected %q, got %q", input, expected.anchor, anchor)
 		}
 	}
 }

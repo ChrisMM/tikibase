@@ -16,7 +16,7 @@ func TestIsURL(t *testing.T) {
 	for input, expected := range testData {
 		actual := helpers.IsURL(input)
 		if actual != expected {
-			t.Fatalf("expected '%s' to yield %t but got %t", input, expected, actual)
+			t.Fatalf("expected %q to yield %t but got %t", input, expected, actual)
 		}
 	}
 }

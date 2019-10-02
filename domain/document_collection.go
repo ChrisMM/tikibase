@@ -40,7 +40,7 @@ func (docs DocumentCollection) Find(filename DocumentFilename) (result *Document
 			return docs[i], nil
 		}
 	}
-	return result, fmt.Errorf("cannot find document '%s'", filename)
+	return result, fmt.Errorf("cannot find document %q", filename)
 }
 
 // TikiLinks provides all TikiLinks in all Documents within this TikiBase.

@@ -105,7 +105,7 @@ func (section *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollec
 		targetFileName := DocumentFilename(filename)
 		targetDocument, err := tdc.Find(targetFileName)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s' in Section '%s'", targetFileName, linkTitle, sectionTitle)
+			return result, errors.Wrapf(err, "cannot find target document (%q) for link %q in Section %q", targetFileName, linkTitle, sectionTitle)
 		}
 		result = append(result, newTikiLink(linkTitle, section, targetDocument))
 	}
@@ -127,7 +127,7 @@ func (section *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollec
 		}
 		targetDocument, err := tdc.Find(DocumentFilename(targetFilename))
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot find target document ('%s') for link '%s'", targetFilename, linkTitle)
+			return result, errors.Wrapf(err, "cannot find target document (%q) for link %q", targetFilename, linkTitle)
 		}
 		result = append(result, newTikiLink(linkTitle, section, targetDocument))
 	}
@@ -141,7 +141,7 @@ func (section *Section) Title() (string, error) {
 	titleLine := strings.SplitN(string(section.content), "\n", 1)[0]
 	matches := stripTitleTagRE.FindStringSubmatch(titleLine)
 	if len(matches) == 0 {
-		return "", fmt.Errorf("malformatted section title: '%s'", titleLine)
+		return "", fmt.Errorf("malformatted section title: %q", titleLine)
 	}
 	return matches[1], nil
 }

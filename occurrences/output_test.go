@@ -17,7 +17,7 @@ func TestFooter(t *testing.T) {
 		output := occurrences.ScaffoldOutput(input[0], input[1], input[2])
 		actual := output.Footer(time.Duration(input[3]) * time.Millisecond)
 		if actual != expected {
-			t.Fatalf("expected '%s', got '%s'", expected, actual)
+			t.Fatalf("expected %q, got %q", expected, actual)
 		}
 	}
 }

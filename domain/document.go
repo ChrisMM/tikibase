@@ -102,7 +102,7 @@ func (doc *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollectio
 		section := doc.sections[i]
 		sectionTitle, err := section.Title()
 		if err != nil {
-			return result, errors.Wrapf(err, "Cannot determine the TikiLinks of document '%s'", doc.filename)
+			return result, errors.Wrapf(err, "Cannot determine the TikiLinks of document %q", doc.filename)
 		}
 		if sectionTitle == "occurrences" {
 			// links inside existing "occurrences" sections don't count
@@ -110,7 +110,7 @@ func (doc *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollectio
 		}
 		links, err := doc.sections[i].TikiLinks(tdc)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot determine the TikiLinks of document '%s'", doc.filename)
+			return result, errors.Wrapf(err, "cannot determine the TikiLinks of document %q", doc.filename)
 		}
 		result = append(result, links...)
 	}

@@ -37,11 +37,11 @@ func Run(dir string) error {
 		dedupedOccurrencesLinks.SortBySourceDocumentTitle()
 		newOccurrencesSection, err := RenderOccurrencesSection(dedupedOccurrencesLinks, docs[i])
 		if err != nil {
-			return errors.Wrapf(err, "error rendering new occurrences sections for document '%s'", fileName)
+			return errors.Wrapf(err, "error rendering new occurrences sections for document %q", fileName)
 		}
 		existingOccurrencesSection, err := docs[i].FindSectionWithTitle("occurrences")
 		if err != nil {
-			return errors.Wrapf(err, "error finding existing occurrences sections in document '%s'", fileName)
+			return errors.Wrapf(err, "error finding existing occurrences sections in document %q", fileName)
 		}
 		var newDoc *domain.Document
 		switch {

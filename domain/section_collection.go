@@ -42,7 +42,7 @@ func (sections SectionCollection) FindByTitle(title string) (*Section, error) {
 		section := sections[i]
 		sectionTitle, err := section.Title()
 		if err != nil {
-			return nil, errors.Wrapf(err, "cannot find section with title '%s'", title)
+			return nil, errors.Wrapf(err, "cannot find section with title %q", title)
 		}
 		if sectionTitle == title {
 			return section, nil
