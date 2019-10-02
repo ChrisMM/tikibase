@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
-	"strings"
+	"github.com/kevgo/tikibase/helpers"
 
 	"github.com/kevgo/tikibase/occurrences"
 	"github.com/spf13/cobra"
@@ -18,14 +16,7 @@ var occurrencesCmd = &cobra.Command{
 which contains backlinks to the current documents.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := occurrences.Run(".")
-		if err != nil {
-			errors := strings.Split(err.Error(), ":")
-			fmt.Printf("Error: %s:\n", errors[0])
-			for _, error := range errors[1:] {
-				fmt.Printf("- %s\n", error)
-			}
-			os.Exit(1)
-		}
+		helpers.PrintErrors(err)
 	},
 }
 
