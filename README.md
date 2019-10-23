@@ -52,7 +52,7 @@ bot to run them automatically on each change.
 
 ### best practices
 
-- **avoid deep hierarchies:** Taxonomies are highly debatable, even amongst your
+- **avoid deep hierarchies:** Taxonomies are highly debatable, even between your
   current and future self. Keep information organized in a relatively flat
   namespace and retrieve information alphabetically or via fulltext search.
 
