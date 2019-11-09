@@ -22,4 +22,4 @@ bot to run them automatically on each change.
 ### development
 
 - **make test:** run all tests
-- see the [Makefile](Makefile) for available commands
+- **make help:** see all available tasks in the [Makefile](Makefile)
