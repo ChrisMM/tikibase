@@ -7,16 +7,18 @@ import (
 )
 
 func TestIsURL(t *testing.T) {
-	testData := map[string]bool{
+	tests := map[string]bool{
 		"one.md":             false,
 		"http://google.com":  true,
 		"https://google.com": true,
 		"//google.com":       true,
 	}
-	for input, expected := range testData {
-		actual := helpers.IsURL(input)
-		if actual != expected {
-			t.Fatalf("expected %q to yield %t but got %t", input, expected, actual)
-		}
+	for input, expected := range tests {
+		t.Run(input, func(t *testing.T) {
+			actual := helpers.IsURL(input)
+			if actual != expected {
+				t.Fatalf("expected %q to yield %t but got %t", input, expected, actual)
+			}
+		})
 	}
 }

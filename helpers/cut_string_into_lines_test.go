@@ -9,24 +9,18 @@ import (
 )
 
 func TestCutStringIntoLines(t *testing.T) {
-	expected := []string{"one\n", "two\n", "three\n"}
-	actual := helpers.CutStringIntoLines("one\ntwo\nthree\n")
-	diff := cmp.Diff(expected, actual)
-	if diff != "" {
-		t.Fatalf("test 1: expected %q, got %q", expected, actual)
+	tests := map[string][]string{
+		"one\ntwo\nthree\n": []string{"one\n", "two\n", "three\n"},
+		"one\ntwo\nthree":   []string{"one\n", "two\n", "three"},
+		"":                  []string{""},
 	}
-
-	expected = []string{"one\n", "two\n", "three"}
-	actual = helpers.CutStringIntoLines("one\ntwo\nthree")
-	diff = cmp.Diff(expected, actual)
-	if diff != "" {
-		t.Fatalf("test 2: expected %q, got %q", expected, actual)
-	}
-
-	expected = []string{""}
-	actual = helpers.CutStringIntoLines("")
-	diff = cmp.Diff(expected, actual)
-	if diff != "" {
-		t.Fatalf("test 3: expected %q, got %q", expected, actual)
+	for input, expected := range tests {
+		t.Run(input, func(t *testing.T) {
+			actual := helpers.CutStringIntoLines(input)
+			diff := cmp.Diff(expected, actual)
+			if diff != "" {
+				t.Fatalf("expected %q, got %q", expected, actual)
+			}
+		})
 	}
 }
