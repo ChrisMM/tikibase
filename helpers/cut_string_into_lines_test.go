@@ -10,9 +10,9 @@ import (
 
 func TestCutStringIntoLines(t *testing.T) {
 	tests := map[string][]string{
-		"one\ntwo\nthree\n": []string{"one\n", "two\n", "three\n"},
-		"one\ntwo\nthree":   []string{"one\n", "two\n", "three"},
-		"":                  []string{""},
+		"one\ntwo\nthree\n": {"one\n", "two\n", "three\n"},
+		"one\ntwo\nthree":   {"one\n", "two\n", "three"},
+		"":                  {""},
 	}
 	for input, expected := range tests {
 		t.Run(input, func(t *testing.T) {
