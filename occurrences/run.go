@@ -11,7 +11,7 @@ import (
 // Run executes the "occurrences" command in the given directory.
 //nolint:funlen
 func Run(dir string) error {
-	output := Output{startTime: time.Now()}
+	output := NewDotOutput()
 	tikibase, err := domain.NewTikiBase(dir)
 	if err != nil {
 		return err
