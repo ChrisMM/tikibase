@@ -7,7 +7,7 @@ import (
 	"github.com/kevgo/tikibase/occurrences"
 )
 
-func TestOutput_Footer_complete(t *testing.T) {
+func TestDotOutput_Footer_complete(t *testing.T) {
 	output := occurrences.NewDotOutput()
 	output.Created()
 	output.Updated()
@@ -22,7 +22,7 @@ func TestOutput_Footer_complete(t *testing.T) {
 	}
 }
 
-func TestOutput_Footer_created(t *testing.T) {
+func TestDotOutput_Footer_created(t *testing.T) {
 	output := occurrences.NewDotOutput()
 	output.Created()
 	expected := regexp.MustCompile(`1 created in \dm?s`)
@@ -32,7 +32,7 @@ func TestOutput_Footer_created(t *testing.T) {
 	}
 }
 
-func TestOutput_Footer_noChanges(t *testing.T) {
+func TestDotOutput_Footer_noChanges(t *testing.T) {
 	output := occurrences.NewDotOutput()
 	expected := regexp.MustCompile(`no changes, \dm?s`)
 	actual := output.Footer()
