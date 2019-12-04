@@ -1,27 +1,42 @@
 package occurrences_test
 
 import (
+	"regexp"
 	"testing"
-	"time"
 
 	"github.com/kevgo/tikibase/occurrences"
 )
 
-func TestOutput_Footer(t *testing.T) {
-	tests := map[string][4]int{
-		"1 created, 2 updated, 3 deleted in 45ms": {1, 2, 3, 45},
-		"1 created in 45ms":                       {1, 0, 0, 45},
-		"no changes, 1ms":                         {0, 0, 0, 1},
+func TestOutput_Footer_complete(t *testing.T) {
+	output := occurrences.NewDotOutput()
+	output.Created()
+	output.Updated()
+	output.Updated()
+	output.Deleted()
+	output.Deleted()
+	output.Deleted()
+	expected := regexp.MustCompile(`1 created, 2 updated, 3 deleted in \dm?s`)
+	actual := output.Footer()
+	if !expected.MatchString(actual) {
+		t.Fatalf("expected %q, got %q", expected, actual)
 	}
-	for expected, input := range tests {
-		t.Run(expected, func(t *testing.T) {
-			output := occurrences.ScaffoldOutput(input[0], input[1], input[2])
+}
 
-			actual := output.Footer(time.Duration(input[3]) * time.Millisecond)
+func TestOutput_Footer_created(t *testing.T) {
+	output := occurrences.NewDotOutput()
+	output.Created()
+	expected := regexp.MustCompile(`1 created in \dm?s`)
+	actual := output.Footer()
+	if !expected.MatchString(actual) {
+		t.Fatalf("expected %q, got %q", expected, actual)
+	}
+}
 
-			if actual != expected {
-				t.Fatalf("expected %q, got %q", expected, actual)
-			}
-		})
+func TestOutput_Footer_noChanges(t *testing.T) {
+	output := occurrences.NewDotOutput()
+	expected := regexp.MustCompile(`no changes, \dm?s`)
+	actual := output.Footer()
+	if !expected.MatchString(actual) {
+		t.Fatalf("expected %q, got %q", expected, actual)
 	}
 }

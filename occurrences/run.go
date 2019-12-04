@@ -2,7 +2,6 @@ package occurrences
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/kevgo/tikibase/domain"
 	"github.com/pkg/errors"
@@ -64,6 +63,6 @@ func Run(dir string) error {
 		}
 	}
 
-	fmt.Println("\n\n" + output.Footer(output.Elapsed(time.Now())))
+	fmt.Println("\n\n" + output.Footer())
 	return nil
 }

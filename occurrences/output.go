@@ -21,9 +21,7 @@ type Output interface {
 	Updated()
 
 	// Footer provides the textual summary of an "occurrences" command.
-	Footer(duration time.Duration) string
-
-	Elapsed(time.Time) time.Duration
+	Footer() string
 }
 
 // dotOutput implements CLI output that summarizes the changes.
@@ -38,12 +36,6 @@ type dotOutput struct {
 // initialized to the current time.
 func NewDotOutput() Output {
 	return &dotOutput{startTime: time.Now()}
-}
-
-// ScaffoldOutput provides an Output instance prepopulated with the given counts.
-// This is only for testing.
-func ScaffoldOutput(created, updated, deleted int) Output {
-	return &dotOutput{createdCount: created, updatedCount: updated, deletedCount: deleted, startTime: time.Now()}
 }
 
 // NoChange gets called if an existing Document was already up to date.
@@ -70,7 +62,8 @@ func (o *dotOutput) Updated() {
 
 // Footer provides the textual summary of an "occurrences" command.
 // To calculate the duration, you can use Output.Elapsed(time.Now()).
-func (o *dotOutput) Footer(duration time.Duration) string {
+func (o *dotOutput) Footer() string {
+	duration := time.Since(o.startTime) / time.Millisecond * time.Millisecond
 	parts := []string{}
 	if o.createdCount == 0 && o.updatedCount == 0 && o.deletedCount == 0 {
 		return fmt.Sprintf("no changes, %s", duration)
@@ -85,9 +78,4 @@ func (o *dotOutput) Footer(duration time.Duration) string {
 		parts = append(parts, fmt.Sprintf("%d deleted", o.deletedCount))
 	}
 	return fmt.Sprintf("%s in %s", strings.Join(parts, ", "), duration)
-}
-
-// Elapsed provides the time that has passed between when this output object was created and the given time.
-func (o *dotOutput) Elapsed(t time.Time) time.Duration {
-	return t.Sub(o.startTime) / time.Millisecond * time.Millisecond
 }
