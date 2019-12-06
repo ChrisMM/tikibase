@@ -1,6 +1,6 @@
 package domain
 
-import "github.com/pkg/errors"
+import "fmt"
 
 // Document represents a MarkDown file in the document base.
 // Create new instances via DocumentCollection.CreateDocument
@@ -102,7 +102,7 @@ func (doc *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollectio
 		section := doc.sections[i]
 		sectionTitle, err := section.Title()
 		if err != nil {
-			return result, errors.Wrapf(err, "Cannot determine the TikiLinks of document %q", doc.filename)
+			return result, fmt.Errorf("cannot determine the TikiLinks of document %q: %w", doc.filename, err)
 		}
 		if sectionTitle == "occurrences" {
 			// links inside existing "occurrences" sections don't count
@@ -110,7 +110,7 @@ func (doc *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollectio
 		}
 		links, err := doc.sections[i].TikiLinks(tdc)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot determine the TikiLinks of document %q", doc.filename)
+			return result, fmt.Errorf("cannot determine the TikiLinks of document %q: %w", doc.filename, err)
 		}
 		result = append(result, links...)
 	}

@@ -12,7 +12,6 @@ import (
 	"github.com/DATA-DOG/godog/gherkin"
 	"github.com/kevgo/tikibase/occurrences"
 	"github.com/kevgo/tikibase/test"
-	"github.com/pkg/errors"
 )
 
 //nolint:unused
@@ -49,7 +48,7 @@ func (w *workspaceFeature) fileIsUnchanged(filename string) error {
 	}
 	data, err := ioutil.ReadFile(path.Join(w.root, filename))
 	if err != nil {
-		return errors.Wrapf(err, "Cannot find file %q in workspace", filename)
+		return fmt.Errorf("Cannot find file %q in workspace: %w", filename, err)
 	}
 	actual := string(data)
 	if diff := cmp.Diff(expected, actual); diff != "" {
@@ -65,7 +64,7 @@ func (w *workspaceFeature) runOccurrences() error {
 func (w *workspaceFeature) shouldContainFileWithContent(filename string, content *gherkin.DocString) error {
 	data, err := ioutil.ReadFile(path.Join(w.root, filename))
 	if err != nil {
-		return errors.Wrapf(err, "Cannot find file %q in workspace", filename)
+		return fmt.Errorf("Cannot find file %q in workspace: %w", filename, err)
 	}
 	actual := string(data)
 	expected := content.Content + "\n"

@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/kevgo/tikibase/domain"
-	"github.com/pkg/errors"
 )
 
 // Run executes the "occurrences" command in the given directory.
@@ -17,11 +16,11 @@ func Run(dir string) error {
 	}
 	docs, err := tikibase.Documents()
 	if err != nil {
-		return errors.Wrap(err, "cannot get documents of TikiBase")
+		return fmt.Errorf("cannot get documents of TikiBase: %w", err)
 	}
 	allLinks, err := docs.TikiLinks()
 	if err != nil {
-		return errors.Wrap(err, "cannot get links of TikiBase")
+		return fmt.Errorf("cannot get links of TikiBase: %w", err)
 	}
 	linksToDocs := allLinks.GroupByTarget()
 	for i := range docs {
@@ -36,11 +35,11 @@ func Run(dir string) error {
 		dedupedOccurrencesLinks.SortBySourceDocumentTitle()
 		newOccurrencesSection, err := RenderOccurrencesSection(dedupedOccurrencesLinks, docs[i])
 		if err != nil {
-			return errors.Wrapf(err, "error rendering new occurrences sections for document %q", fileName)
+			return fmt.Errorf("error rendering new occurrences sections for document %q: %w", fileName, err)
 		}
 		existingOccurrencesSection, err := docs[i].FindSectionWithTitle("occurrences")
 		if err != nil {
-			return errors.Wrapf(err, "error finding existing occurrences sections in document %q", fileName)
+			return fmt.Errorf("error finding existing occurrences sections in document %q: %w", fileName, err)
 		}
 		var newDoc *domain.Document
 		switch {
@@ -59,7 +58,7 @@ func Run(dir string) error {
 		}
 		err = tikibase.SaveDocument(newDoc)
 		if err != nil {
-			return errors.Wrapf(err, "cannot update document %s", fileName)
+			return fmt.Errorf("cannot update document %s: %w", fileName, err)
 		}
 	}
 

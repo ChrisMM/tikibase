@@ -1,10 +1,10 @@
 package domain
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/kevgo/tikibase/helpers"
-	"github.com/pkg/errors"
 )
 
 // SectionCollection is a collection of Sections.
@@ -42,7 +42,7 @@ func (sections SectionCollection) FindByTitle(title string) (*Section, error) {
 		section := sections[i]
 		sectionTitle, err := section.Title()
 		if err != nil {
-			return nil, errors.Wrapf(err, "cannot find section with title %q", title)
+			return nil, fmt.Errorf("cannot find section with title %q: %w", title, err)
 		}
 		if sectionTitle == title {
 			return section, nil

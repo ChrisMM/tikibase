@@ -6,8 +6,6 @@ import (
 	"os"
 	"path"
 	"strings"
-
-	"github.com/pkg/errors"
 )
 
 // TikiBase represents a collection of Documents stored in a filesystem directory
@@ -45,7 +43,7 @@ func (tikiBase *TikiBase) CreateDocument(filename DocumentFilename, content stri
 func (tikiBase *TikiBase) Documents() (result DocumentCollection, err error) {
 	fileInfos, err := ioutil.ReadDir(tikiBase.dir)
 	if err != nil {
-		return result, errors.Wrap(err, "cannot read TikiBase directory")
+		return result, fmt.Errorf("cannot read TikiBase directory: %w", err)
 	}
 	for i := range fileInfos {
 		if !strings.HasSuffix(fileInfos[i].Name(), ".md") {
@@ -53,7 +51,7 @@ func (tikiBase *TikiBase) Documents() (result DocumentCollection, err error) {
 		}
 		doc, err := tikiBase.Load(DocumentFilename(fileInfos[i].Name()))
 		if err != nil {
-			return result, errors.Wrap(err, "cannot get all documents")
+			return result, fmt.Errorf("cannot get all documents: %w", err)
 		}
 		result = append(result, doc)
 	}
@@ -68,7 +66,7 @@ func (tikiBase *TikiBase) Load(filename DocumentFilename) (result *Document, err
 	path := path.Join(tikiBase.StorageDir(), string(filename))
 	contentData, err := ioutil.ReadFile(path)
 	if err != nil {
-		return result, errors.Wrapf(err, "cannot read file %q", path)
+		return result, fmt.Errorf("cannot read file %q: %w", path, err)
 	}
 	return newDocument(filename, string(contentData)), nil
 }

@@ -5,11 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/kevgo/tikibase/helpers"
-
 	"github.com/iancoleman/strcase"
-
-	"github.com/pkg/errors"
+	"github.com/kevgo/tikibase/helpers"
 )
 
 // Section represents a section in a Document.
@@ -59,7 +56,7 @@ func ScaffoldSection(data SectionScaffold) *Section {
 func (section *Section) Anchor() (string, error) {
 	sectionTitle, err := section.Title()
 	if err != nil {
-		return "", errors.Wrap(err, "cannot determine the section anchor")
+		return "", fmt.Errorf("cannot determine the section anchor: %w", err)
 	}
 	return strcase.ToKebab(sectionTitle), nil
 }
@@ -105,7 +102,7 @@ func (section *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollec
 		targetFileName := DocumentFilename(filename)
 		targetDocument, err := tdc.Find(targetFileName)
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot find target document (%q) for link %q in Section %q", targetFileName, linkTitle, sectionTitle)
+			return result, fmt.Errorf("cannot find target document (%q) for link %q in Section %q: %w", targetFileName, linkTitle, sectionTitle, err)
 		}
 		result = append(result, newTikiLink(linkTitle, section, targetDocument))
 	}
@@ -127,7 +124,7 @@ func (section *Section) TikiLinks(tdc DocumentCollection) (result TikiLinkCollec
 		}
 		targetDocument, err := tdc.Find(DocumentFilename(targetFilename))
 		if err != nil {
-			return result, errors.Wrapf(err, "cannot find target document (%q) for link %q", targetFilename, linkTitle)
+			return result, fmt.Errorf("cannot find target document (%q) for link %q: %w", targetFilename, linkTitle, err)
 		}
 		result = append(result, newTikiLink(linkTitle, section, targetDocument))
 	}
@@ -150,7 +147,7 @@ func (section *Section) Title() (string, error) {
 func (section *Section) URL() (string, error) {
 	sectionAnchor, err := section.Anchor()
 	if err != nil {
-		return "", errors.Wrap(err, "cannot determine the URL for section")
+		return "", fmt.Errorf("cannot determine the URL for section: %w", err)
 	}
 	return section.document.URL() + "#" + sectionAnchor, nil
 }
