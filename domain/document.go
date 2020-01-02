@@ -55,7 +55,6 @@ func (doc *Document) AppendSection(section *Section) *Document {
 	lastSection := doc.sections[len(doc.sections)-1]
 	newLastSection := lastSection.AppendLine("\n")
 	replacedSections := doc.sections.Replace(lastSection, &newLastSection)
-
 	// add the new section
 	newSections := append(replacedSections, section)
 	return newDocument(doc.filename, newSections.Text())
