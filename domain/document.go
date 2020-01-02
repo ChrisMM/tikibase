@@ -1,6 +1,10 @@
 package domain
 
-import "fmt"
+import (
+	"fmt"
+	"path"
+	"strings"
+)
 
 // Document represents a MarkDown file in the document base.
 // Create new instances via DocumentCollection.CreateDocument
@@ -80,6 +84,12 @@ func (doc *Document) FindSectionWithTitle(title string) (*Section, error) {
 // FileName returns the file path (handle + extension) of this Document.
 func (doc *Document) FileName() DocumentFilename {
 	return doc.filename
+}
+
+// ID provides the unique ID of this document.
+func (doc *Document) ID() string {
+	filename := string(doc.filename)
+	return strings.TrimSuffix(filename, path.Ext(filename))
 }
 
 // RemoveSection provides a copy of this Document that contains all its sections except the given one.

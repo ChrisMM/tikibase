@@ -41,6 +41,19 @@ func TestDocumentFileName(t *testing.T) {
 	assert.Equal(t, domain.DocumentFilename("one.md"), doc.FileName())
 }
 
+func TestDocumentId(t *testing.T) {
+	tests := map[string]string{
+		"foo.md":         "foo",
+		"markdown-it.md": "markdown-it",
+	}
+	for give, want := range tests {
+		t.Run(give, func(t *testing.T) {
+			doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: give})
+			assert.Equal(t, want, doc.ID())
+		})
+	}
+}
+
 func TestDocumentReplaceSection(t *testing.T) {
 	td := domain.ScaffoldDocument(domain.DocumentScaffold{
 		Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nOld section 2.\n",

@@ -10,6 +10,7 @@ import (
 
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
+	"github.com/kevgo/tikibase/list"
 	"github.com/kevgo/tikibase/occurrences"
 	"github.com/kevgo/tikibase/test"
 )
@@ -22,6 +23,8 @@ type workspaceFeature struct {
 
 	// cache of the file contents
 	fileContents map[string]string
+
+	listResult []string
 }
 
 func (w *workspaceFeature) containsBinaryFile(filename string) error {
@@ -57,6 +60,26 @@ func (w *workspaceFeature) fileIsUnchanged(filename string) error {
 	return nil
 }
 
+func (w *workspaceFeature) itFinds(table *gherkin.DataTable) error {
+	if len(table.Rows) != len(w.listResult) {
+		return fmt.Errorf("expected %d results, got %d", len(table.Rows), len(w.listResult))
+	}
+	for i := range table.Rows {
+		expected := table.Rows[i].Cells[0].Value
+		actual := w.listResult[i]
+		if actual != expected {
+			return fmt.Errorf("mismatching entry %d: expected %s, got %s", i, expected, actual)
+		}
+	}
+	return nil
+}
+
+func (w *workspaceFeature) listing(argument string) error {
+	var err error
+	w.listResult, err = list.Run(w.root, []string{argument})
+	return err
+}
+
 func (w *workspaceFeature) runOccurrences() error {
 	return occurrences.Run(w.root)
 }
@@ -79,6 +102,8 @@ func FeatureContext(s *godog.Suite) {
 	workspace := &workspaceFeature{fileContents: make(map[string]string)}
 	s.BeforeScenario(workspace.createWorkspace)
 	s.Step(`^file "([^"]*)" is unchanged$`, workspace.fileIsUnchanged)
+	s.Step(`^it finds:$`, workspace.itFinds)
+	s.Step(`^listing "([^"]+)"$`, workspace.listing)
 	s.Step(`^running Occurrences$`, workspace.runOccurrences)
 	s.Step(`^the workspace contains a binary file "([^"]*)"$`, workspace.containsBinaryFile)
 	s.Step(`^the workspace contains file "([^"]*)" with content:$`, workspace.containsFileWithContent)
