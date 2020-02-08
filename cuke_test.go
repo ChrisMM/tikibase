@@ -8,8 +8,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/DATA-DOG/godog"
-	"github.com/DATA-DOG/godog/gherkin"
+	"github.com/cucumber/godog"
+	"github.com/cucumber/godog/gherkin"
 	"github.com/kevgo/tikibase/list"
 	"github.com/kevgo/tikibase/occurrences"
 	"github.com/kevgo/tikibase/test"
