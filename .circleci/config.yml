@@ -9,4 +9,5 @@ jobs:
       - checkout
       - run: make unit
       - run: go get github.com/cucumber/godog/cmd/godog
-      - run: make cuke
+      - run: rm -rf vendor
+      - run: godog --format=progress

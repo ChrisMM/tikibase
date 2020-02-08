@@ -5,7 +5,7 @@ clean:   # Removes all build artifacts
 	@go clean -i
 
 cuke:  # runs the feature specs
-	@godog --format=progress
+	env GOFLAGS=-mod=vendor godog --format=progress
 
 cuke-parallel:  # runs the feature specs
 	godog --concurrency=$(shell nproc --all) --format=progress
@@ -32,4 +32,4 @@ test:  # runs all tests
 .PHONY: test
 
 unit:  # runs the unit tests
-	@go test ./...
+	@env GOFLAGS=-mod=vendor go test ./...
