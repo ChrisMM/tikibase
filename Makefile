@@ -25,6 +25,9 @@ occurrences:  # runs the 'occurrences' command
 run:  # runs the command
 	@go run main.go
 
+stats:  # shows code statistics
+	@find . -type f | grep -v 'node_modules' | grep -v '\./.git/' | grep -v '\./vendor/' | xargs scc
+
 test:  # runs all tests
 	@go test ./... &
 	@golangci-lint run --enable-all -D lll -D godox -D wsl &
