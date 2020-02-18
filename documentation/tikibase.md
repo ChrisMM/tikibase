@@ -2,8 +2,9 @@
 
 A TikiBase is a timeless, low-tech, wiki-like knowledge base designed to last
 for decades. It makes semi-structured rich-text information embedded with
-RDF-like associations available on all current and future compute platforms. It
-can be used completely manually.
+[RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework)-like
+associations available on all current and future compute platforms. It can be
+used completely manually.
 
 ### how it works
 
