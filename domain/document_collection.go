@@ -25,14 +25,6 @@ func (docs DocumentCollection) Contains(doc *Document) bool {
 	return false
 }
 
-// FileNames returns the filenames of all documents in this DocumentCollection.
-func (docs DocumentCollection) FileNames() (result []DocumentFilename, err error) {
-	for i := range docs {
-		result = append(result, docs[i].FileName())
-	}
-	return result, nil
-}
-
 // Find returns the Document with the given filename.
 func (docs DocumentCollection) Find(filename DocumentFilename) (result *Document, err error) {
 	for i := range docs {

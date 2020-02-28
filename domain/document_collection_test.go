@@ -15,19 +15,6 @@ func TestDocumentCollection_Contains(t *testing.T) {
 	assert.False(t, docs.Contains(otherDoc), "should not contain otherDoc")
 }
 
-func TestDocumentCollection_FileNames(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
-		{FileName: "one.md"},
-		{FileName: "two.md"},
-	})
-
-	result, err := docs.FileNames()
-
-	assert.Nil(t, err, "cannot get filenames of docs")
-	expected := []domain.DocumentFilename{"one.md", "two.md"}
-	assert.Equal(t, expected, result)
-}
-
 func TestDocumentCollection_Find(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "one.md"},
