@@ -15,14 +15,12 @@ func TestScaffoldTikiLink(t *testing.T) {
 func TestTikiLink_SourceSection(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{})
 	link := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{SourceSection: section})
-
 	assert.Same(t, section, link.SourceSection())
 }
 
 func TestTikiLink_TargetDocument(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{})
 	link := domain.ScaffoldTikiLink(domain.TikiLinkScaffold{TargetDocument: doc})
-
 	assert.Same(t, doc, link.TargetDocument())
 }
 

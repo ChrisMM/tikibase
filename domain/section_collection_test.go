@@ -14,9 +14,7 @@ func TestSectionCollection_FindByTitle(t *testing.T) {
 		{Content: "### what is it\ntext 2\n"},
 		{Content: "### what does it\ntext 3\n"},
 	})
-
 	actual, err := sections.FindByTitle("what is it")
-
 	assert.Nil(t, err)
 	assert.Same(t, sections[1], actual)
 }
