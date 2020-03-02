@@ -16,7 +16,7 @@ func TestSection_Anchor(t *testing.T) {
 
 func TestSection_AppendLine(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "existing content\n"})
-	newSection := section.AppendLine("new line\n")
+	newSection := section.AppendText("new line\n")
 	assert.Equal(t, domain.SectionContent("existing content\nnew line\n"), newSection.Content())
 }
 

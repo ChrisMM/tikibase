@@ -57,7 +57,7 @@ func (doc *Document) AllSections() (result *SectionCollection) {
 func (doc *Document) AppendSection(section *Section) *Document {
 	// add an empty line to the last section
 	lastSection := doc.sections[len(doc.sections)-1]
-	newLastSection := lastSection.AppendLine("\n")
+	newLastSection := lastSection.AppendText("\n")
 	replacedSections := doc.sections.Replace(lastSection, &newLastSection)
 	// add the new section
 	newSections := append(replacedSections, section)

@@ -61,8 +61,8 @@ func (section *Section) Anchor() (string, error) {
 	return strcase.ToKebab(sectionTitle), nil
 }
 
-// AppendLine provides a new Section that is this Section with the given line appended.
-func (section *Section) AppendLine(line string) Section {
+// AppendText provides a new Section that is this Section with the given line appended.
+func (section *Section) AppendText(line string) Section {
 	return Section{content: section.content + SectionContent(line), document: section.document}
 }
 
