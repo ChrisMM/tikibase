@@ -106,7 +106,7 @@ func (doc *Document) ReplaceSection(oldSection *Section, newSection *Section) *D
 }
 
 // TikiLinks returns the TikiLinks in this Document.
-func (doc *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollection, err error) {
+func (doc *Document) TikiLinks(dc DocumentCollection) (result TikiLinkCollection, err error) {
 	for i := range doc.sections {
 		section := doc.sections[i]
 		sectionTitle, err := section.Title()
@@ -117,7 +117,7 @@ func (doc *Document) TikiLinks(tdc DocumentCollection) (result TikiLinkCollectio
 			// links inside existing "occurrences" sections don't count
 			continue
 		}
-		links, err := doc.sections[i].TikiLinks(tdc)
+		links, err := doc.sections[i].TikiLinks(dc)
 		if err != nil {
 			return result, fmt.Errorf("cannot determine the TikiLinks of document %q: %w", doc.filename, err)
 		}
