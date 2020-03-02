@@ -11,19 +11,19 @@ import (
 type SectionCollection []*Section
 
 func newSectionCollection(content string, doc *Document) (result SectionCollection) {
-	tsb := NewSectionBuilder("", doc)
+	sb := NewSectionBuilder("", doc)
 	lines := helpers.CutStringIntoLines(content)
 	for i := range lines {
 		if strings.HasPrefix(lines[i], "#") {
-			if tsb.Len() > 0 {
-				result = append(result, tsb.Section())
+			if sb.Len() > 0 {
+				result = append(result, sb.Section())
 			}
-			tsb = NewSectionBuilder(lines[i], doc)
+			sb = NewSectionBuilder(lines[i], doc)
 		} else {
-			tsb.AddLine(lines[i])
+			sb.AddLine(lines[i])
 		}
 	}
-	result = append(result, tsb.Section())
+	result = append(result, sb.Section())
 	return result
 }
 
@@ -51,7 +51,7 @@ func (sections SectionCollection) FindByTitle(title string) (*Section, error) {
 	return nil, nil
 }
 
-// Remove provides a copy of this SectionCollection that contains all its sections except the given one.
+// Remove provides a copy of this SectionCollection with the given sections removed.
 func (sections SectionCollection) Remove(section *Section) (result SectionCollection) {
 	for i := range sections {
 		if sections[i] != section {
