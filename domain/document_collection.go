@@ -25,8 +25,8 @@ func (docs DocumentCollection) Contains(doc *Document) bool {
 	return false
 }
 
-// Find returns the Document with the given filename.
-func (docs DocumentCollection) Find(filename DocumentFilename) (result *Document, err error) {
+// FindByFilename returns the Document with the given filename.
+func (docs DocumentCollection) FindByFilename(filename DocumentFilename) (result *Document, err error) {
 	for i := range docs {
 		if docs[i].FileName() == filename {
 			return docs[i], nil

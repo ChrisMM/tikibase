@@ -19,7 +19,7 @@ func TestDocumentCollection_Find(t *testing.T) {
 		{FileName: "one.md"},
 		{FileName: "two.md"},
 	})
-	actual, err := docs.Find("two.md")
+	actual, err := docs.FindByFilename("two.md")
 	assert.Nil(t, err, "cannot find document 'two.md'")
 	assert.Equal(t, domain.DocumentFilename("two.md"), actual.FileName())
 }
