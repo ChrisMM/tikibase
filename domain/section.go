@@ -32,11 +32,11 @@ type SectionContent string
 
 // This is a global constant that doesn't need to be stubbed in tests.
 //nolint:gochecknoglobals
-var markdownLinkRE *regexp.Regexp
+var mdLinkRE *regexp.Regexp
 
 // Helps initialize markdownLinkRE
 //nolint:gochecknoglobals
-var markdownLinkOnce sync.Once
+var mdLinkOnce sync.Once
 
 // This global variable is a constant and doesn't need to be stubbed in tests.
 //nolint:gochecknoglobals
@@ -95,8 +95,8 @@ func (section *Section) TikiLinks(dc DocumentCollection) (result TikiLinkCollect
 	if err != nil {
 		return result, err
 	}
-	markdownLinkOnce.Do(func() { markdownLinkRE = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`) })
-	matches := markdownLinkRE.FindAllStringSubmatch(string(section.content), 9999)
+	mdLinkOnce.Do(func() { mdLinkRE = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`) })
+	matches := mdLinkRE.FindAllStringSubmatch(string(section.content), 9999)
 	for i := range matches {
 		linkTitle := matches[i][1]
 		linkTarget := matches[i][2]
