@@ -69,7 +69,7 @@ func (tikiBase *TikiBase) LoadDocument(filename DocumentFilename) (result *Docum
 	path := path.Join(tikiBase.StorageDir(), string(filename))
 	contentData, err := ioutil.ReadFile(path)
 	if err != nil {
-		return result, fmt.Errorf("cannot read file %q: %w", path, err)
+		return result, fmt.Errorf("cannot load TikiBase document %q: %w", path, err)
 	}
 	return newDocument(filename, string(contentData)), nil
 }
@@ -77,7 +77,11 @@ func (tikiBase *TikiBase) LoadDocument(filename DocumentFilename) (result *Docum
 // SaveDocument stores the given Document in this TikiBase.
 func (tikiBase *TikiBase) SaveDocument(doc *Document) error {
 	filePath := path.Join(tikiBase.dir, string(doc.FileName()))
-	return ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
+	err := ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
+	if err != nil {
+		return fmt.Errorf("cannot save document %q: %w", doc.FileName(), err)
+	}
+	return nil
 }
 
 // StorageDir provides the full directory path in which this TikiBase is stored.
