@@ -79,7 +79,7 @@ func (links TikiLinkCollection) ReferencedDocs() (result DocumentCollection) {
 	return result
 }
 
-// RemoveLinksFromDocs provides a copy of the given TikiLinkCollection
+// RemoveLinksFromDocs provides a copy of this TikiLinkCollection
 // that does not contain links from the given Documents.
 func (links TikiLinkCollection) RemoveLinksFromDocs(docs DocumentCollection) (result TikiLinkCollection) {
 	return links.Filter(func(link *TikiLink) bool {
