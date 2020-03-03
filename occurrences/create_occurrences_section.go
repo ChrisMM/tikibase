@@ -6,8 +6,8 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
-// RenderOccurrencesSection provides a domain.Section containing the given occurrences of a document.
-func RenderOccurrencesSection(links domain.TikiLinkCollection, doc *domain.Document) (result *domain.Section, err error) {
+// CreateOccurrencesSection provides a domain.Section containing the given occurrences of a document.
+func CreateOccurrencesSection(links domain.TikiLinkCollection, doc *domain.Document) (result *domain.Section, err error) {
 	builder := domain.NewSectionBuilder("### occurrences\n\n", doc)
 	for i := range links {
 		sourceSection := links[i].SourceSection()

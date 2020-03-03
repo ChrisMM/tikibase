@@ -18,7 +18,7 @@ func TestRenderOccurrencesSection(t *testing.T) {
 		{Title: "programming language", SourceSection: (*tsDoc.ContentSections())[0], TargetDocument: targetDoc},
 	})
 
-	renderedSection, err := occurrences.RenderOccurrencesSection(linksToDoc, targetDoc)
+	renderedSection, err := occurrences.CreateOccurrencesSection(linksToDoc, targetDoc)
 
 	if err != nil {
 		t.Fatal(err)
@@ -42,7 +42,7 @@ func TestRenderOccurrencesSection_LinkToTitleSection(t *testing.T) {
 		{Title: "programming language", SourceSection: &(*goDoc.TitleSection()), TargetDocument: targetDoc},
 	})
 
-	renderedSection, err := occurrences.RenderOccurrencesSection(linksToDoc, targetDoc)
+	renderedSection, err := occurrences.CreateOccurrencesSection(linksToDoc, targetDoc)
 
 	if err != nil {
 		t.Fatal(err)
