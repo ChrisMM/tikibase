@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"sync"
 
 	"github.com/iancoleman/strcase"
 	"github.com/kevgo/tikibase/helpers"
@@ -29,17 +30,29 @@ type SectionScaffold struct {
 // including heading tag and body.
 type SectionContent string
 
-// This global variable is a constant and doesn't need to be stubbed in tests.
+// This is a global constant that doesn't need to be stubbed in tests.
 //nolint:gochecknoglobals
-var markdownLinkRE = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
+var markdownLinkRE *regexp.Regexp
+
+// Helps initialize markdownLinkRE
+//nolint:gochecknoglobals
+var markdownLinkOnce sync.Once
 
 // This global variable is a constant and doesn't need to be stubbed in tests.
 //nolint:gochecknoglobals
-var htmlLinkRE = regexp.MustCompile(`<a[^>]* href="(.*?)"[^>]*>(.*?)</a>`)
+var htmlLinkRE *regexp.Regexp
+
+// Helps initialize htmlLinkRE
+//nolint:gochecknoglobals
+var htmlLinkOnce sync.Once
 
 // This global variable is a constant and doesn't need to be stubbed in tests.
 //nolint:gochecknoglobals
-var stripTitleTagRE = regexp.MustCompile(`#+\s*(.*)`)
+var stripTitleTagRE *regexp.Regexp
+
+// Helps initialize stripTitleTagRE
+//nolint:gochecknoglobals
+var stripTitleTagOnce sync.Once
 
 // ScaffoldSection provides new TikiSection instances for testing.
 func ScaffoldSection(data SectionScaffold) *Section {
@@ -82,6 +95,7 @@ func (section *Section) TikiLinks(dc DocumentCollection) (result TikiLinkCollect
 	if err != nil {
 		return result, err
 	}
+	markdownLinkOnce.Do(func() { markdownLinkRE = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`) })
 	matches := markdownLinkRE.FindAllStringSubmatch(string(section.content), 9999)
 	for i := range matches {
 		linkTitle := matches[i][1]
@@ -105,6 +119,7 @@ func (section *Section) TikiLinks(dc DocumentCollection) (result TikiLinkCollect
 		}
 		result = append(result, newTikiLink(linkTitle, section, targetDocument))
 	}
+	htmlLinkOnce.Do(func() { htmlLinkRE = regexp.MustCompile(`<a[^>]* href="(.*?)"[^>]*>(.*?)</a>`) })
 	matches = htmlLinkRE.FindAllStringSubmatch(string(section.content), 9999)
 	for _, match := range matches {
 		linkTitle := match[2]
@@ -135,6 +150,7 @@ func (section *Section) TikiLinks(dc DocumentCollection) (result TikiLinkCollect
 // i.e. its title tag without the "###"" in front
 func (section *Section) Title() (string, error) {
 	titleLine := strings.SplitN(string(section.content), "\n", 1)[0]
+	stripTitleTagOnce.Do(func() { stripTitleTagRE = regexp.MustCompile(`#+\s*(.*)`) })
 	matches := stripTitleTagRE.FindStringSubmatch(titleLine)
 	if len(matches) == 0 {
 		return "", fmt.Errorf("malformatted section title: %q", titleLine)
