@@ -6,10 +6,9 @@ import (
 	"log"
 	"path"
 
-	"github.com/google/go-cmp/cmp"
-
 	"github.com/cucumber/godog"
 	"github.com/cucumber/godog/gherkin"
+	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/list"
 	"github.com/kevgo/tikibase/occurrences"
 	"github.com/kevgo/tikibase/test"
