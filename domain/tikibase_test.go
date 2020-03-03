@@ -56,7 +56,7 @@ func TestTikiBase_Load(t *testing.T) {
 	tikiBase := test.NewTempTikiBase(t)
 	_, err := tikiBase.CreateDocument("one.md", "The one")
 	assert.Nil(t, err)
-	doc, err := tikiBase.Load("one.md")
+	doc, err := tikiBase.LoadDocument("one.md")
 	assert.Nil(t, err)
 	assert.Equal(t, domain.DocumentFilename("one.md"), doc.FileName())
 }

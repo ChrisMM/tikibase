@@ -52,7 +52,7 @@ func (tikiBase *TikiBase) Documents() (result DocumentCollection, err error) {
 		if !strings.HasSuffix(fileInfos[i].Name(), ".md") {
 			continue
 		}
-		doc, err := tikiBase.Load(DocumentFilename(fileInfos[i].Name()))
+		doc, err := tikiBase.LoadDocument(DocumentFilename(fileInfos[i].Name()))
 		if err != nil {
 			return result, fmt.Errorf("cannot get all documents in TikiBase %q: %w", tikiBase.dir, err)
 		}
@@ -61,8 +61,8 @@ func (tikiBase *TikiBase) Documents() (result DocumentCollection, err error) {
 	return result, nil
 }
 
-// Load provides the Document with the given filename, or an error if one doesn't exist.
-func (tikiBase *TikiBase) Load(filename DocumentFilename) (result *Document, err error) {
+// LoadDocument provides the Document with the given filename, or an error if one doesn't exist.
+func (tikiBase *TikiBase) LoadDocument(filename DocumentFilename) (result *Document, err error) {
 	if !strings.HasSuffix(string(filename), ".md") {
 		filename += ".md"
 	}
