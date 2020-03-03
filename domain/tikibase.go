@@ -20,10 +20,10 @@ type TikiBase struct {
 func NewTikiBase(dir string) (result *TikiBase, err error) {
 	info, err := os.Stat(dir)
 	if err != nil {
-		return result, err
+		return result, fmt.Errorf("cannot create TikiBase in directory %q: %w", dir, err)
 	}
 	if !info.IsDir() {
-		return result, fmt.Errorf("%s is not a directory", dir)
+		return result, fmt.Errorf("%s must be a directory to contain a TikiBase", dir)
 	}
 	return &TikiBase{dir}, nil
 }
@@ -36,14 +36,17 @@ func (tikiBase *TikiBase) CreateDocument(filename DocumentFilename, content stri
 	doc := newDocument(filename, content)
 	filePath := path.Join(tikiBase.dir, string(doc.FileName()))
 	err = ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
-	return doc, err
+	if err != nil {
+		return result, fmt.Errorf("cannot create new document %q: %w", filename, err)
+	}
+	return doc, nil
 }
 
 // Documents returns all Documents in this TikiBase.
 func (tikiBase *TikiBase) Documents() (result DocumentCollection, err error) {
 	fileInfos, err := ioutil.ReadDir(tikiBase.dir)
 	if err != nil {
-		return result, fmt.Errorf("cannot read TikiBase directory: %w", err)
+		return result, fmt.Errorf("cannot read TikiBase directory %q: %w", tikiBase.dir, err)
 	}
 	for i := range fileInfos {
 		if !strings.HasSuffix(fileInfos[i].Name(), ".md") {
@@ -51,7 +54,7 @@ func (tikiBase *TikiBase) Documents() (result DocumentCollection, err error) {
 		}
 		doc, err := tikiBase.Load(DocumentFilename(fileInfos[i].Name()))
 		if err != nil {
-			return result, fmt.Errorf("cannot get all documents: %w", err)
+			return result, fmt.Errorf("cannot get all documents in TikiBase %q: %w", tikiBase.dir, err)
 		}
 		result = append(result, doc)
 	}
