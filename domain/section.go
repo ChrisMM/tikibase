@@ -142,7 +142,6 @@ func (section *Section) TikiLinks(dc DocumentCollection) (result TikiLinkCollect
 		}
 		result = append(result, newTikiLink(linkTitle, section, targetDocument))
 	}
-
 	return result.Unique(), nil
 }
 
