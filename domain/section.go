@@ -89,58 +89,50 @@ func (section *Section) Document() *Document {
 	return section.document
 }
 
+// Links returns all links in this section.
+func (section *Section) Links() (result []Link) {
+	mdLinkOnce.Do(func() { mdLinkRE = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`) })
+	matches := mdLinkRE.FindAllStringSubmatch(string(section.content), 9999)
+	for i := range matches {
+		title := matches[i][1]
+		target := matches[i][2]
+		result = append(result, Link{title: title, sourceSection: section, target: target})
+	}
+	htmlLinkOnce.Do(func() { htmlLinkRE = regexp.MustCompile(`<a[^>]* href="(.*?)"[^>]*>(.*?)</a>`) })
+	matches = htmlLinkRE.FindAllStringSubmatch(string(section.content), 9999)
+	for _, match := range matches {
+		title := match[2]
+		target := match[1]
+		result = append(result, Link{title: title, sourceSection: section, target: target})
+	}
+	return result
+}
+
 // TikiLinks returns all TikiLinks in this section.
 func (section *Section) TikiLinks(dc DocumentCollection) (result TikiLinkCollection, err error) {
 	sectionTitle, err := section.Title()
 	if err != nil {
 		return result, err
 	}
-	mdLinkOnce.Do(func() { mdLinkRE = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`) })
-	matches := mdLinkRE.FindAllStringSubmatch(string(section.content), 9999)
-	for i := range matches {
-		linkTitle := matches[i][1]
-		linkTarget := matches[i][2]
-		if helpers.IsURL(linkTarget) {
+	for _, link := range section.Links() {
+		if helpers.IsURL(link.Target()) {
 			// we can ignore links to external files here
 			continue
 		}
-		if strings.HasPrefix(linkTarget, "#") {
+		if strings.HasPrefix(link.Target(), "#") {
 			// we can ignore links within the same file here
 			continue
 		}
-		filename, _ := helpers.SplitURL(linkTarget)
+		filename, _ := helpers.SplitURL(link.Target())
 		if !strings.HasSuffix(filename, ".md") {
 			// we can ignore links to non-Markdown files here
 			continue
 		}
 		targetDocument, err := dc.FindByFilename(DocumentFilename(filename))
 		if err != nil {
-			return result, fmt.Errorf("cannot find target document (%q) for link %q in Section %q: %w", filename, linkTitle, sectionTitle, err)
+			return result, fmt.Errorf("cannot find target document (%q) for link %q in Section %q: %w", filename, link.Title(), sectionTitle, err)
 		}
-		result = append(result, newTikiLink(linkTitle, section, targetDocument))
-	}
-	htmlLinkOnce.Do(func() { htmlLinkRE = regexp.MustCompile(`<a[^>]* href="(.*?)"[^>]*>(.*?)</a>`) })
-	matches = htmlLinkRE.FindAllStringSubmatch(string(section.content), 9999)
-	for _, match := range matches {
-		linkTitle := match[2]
-		targetFilename := match[1]
-		if helpers.IsURL(targetFilename) {
-			// we can ignore links to external files here
-			continue
-		}
-		if strings.HasPrefix(targetFilename, "#") {
-			// we can ignore links within the same file here
-			continue
-		}
-		if !strings.HasSuffix(targetFilename, ".md") {
-			// we can ignore links to non-Markdown files here
-			continue
-		}
-		targetDocument, err := dc.FindByFilename(DocumentFilename(targetFilename))
-		if err != nil {
-			return result, fmt.Errorf("cannot find target document (%q) for link %q: %w", targetFilename, linkTitle, err)
-		}
-		result = append(result, newTikiLink(linkTitle, section, targetDocument))
+		result = append(result, newTikiLink(link.Title(), section, targetDocument))
 	}
 	return result.Unique(), nil
 }
