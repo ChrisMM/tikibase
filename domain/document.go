@@ -40,8 +40,7 @@ func newDocumentWithText(filename DocumentFilename, content string) *Document {
 // This constructor is internal to this module,
 // call (TikiBase).CreateDocument() to create new documents in production.
 func newDocumentWithSections(filename DocumentFilename, sections SectionCollection) *Document {
-	doc := Document{filename: filename}
-	doc.sections = sections
+	doc := Document{filename, sections}
 	return &doc
 }
 
