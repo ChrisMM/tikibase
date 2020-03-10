@@ -49,8 +49,8 @@ func ScaffoldDocument(data DocumentScaffold) *Document {
 
 // AllSections returns all the TikiSections that make up this document,
 // including the title section.
-func (doc *Document) AllSections() (result *SectionCollection) {
-	return &doc.sections
+func (doc *Document) AllSections() (result SectionCollection) {
+	return doc.sections
 }
 
 // AppendSection provides a new Document with the given Section appended.
@@ -70,9 +70,8 @@ func (doc *Document) Content() string {
 }
 
 // ContentSections provides the content sections of this document.
-func (doc *Document) ContentSections() *SectionCollection {
-	result := doc.sections[1:]
-	return &result
+func (doc *Document) ContentSections() SectionCollection {
+	return doc.sections[1:]
 }
 
 // FindSectionWithTitle provides the section with the given title,
@@ -94,15 +93,13 @@ func (doc *Document) ID() string {
 
 // RemoveSection provides a copy of this Document that contains all its sections except the given one.
 func (doc *Document) RemoveSection(section *Section) *Document {
-	newSections := doc.AllSections().Remove(section)
-	return newDocument(doc.filename, newSections.Text())
+	return newDocument(doc.filename, doc.AllSections().Remove(section).Text())
 }
 
 // ReplaceSection provides a new Document that is like this one
 // and has the given old section replaced with the given new section.
 func (doc *Document) ReplaceSection(oldSection *Section, newSection *Section) *Document {
-	newSections := doc.AllSections().Replace(oldSection, newSection)
-	return newDocument(doc.filename, newSections.Text())
+	return newDocument(doc.filename, doc.AllSections().Replace(oldSection, newSection).Text())
 }
 
 // TikiLinks returns the TikiLinks in this Document.

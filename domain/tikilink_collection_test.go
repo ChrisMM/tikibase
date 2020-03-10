@@ -14,8 +14,8 @@ func TestTikiLinkCollection_CombineLinksFromSameDocuments(t *testing.T) {
 	})
 	doc0sections := docs[0].AllSections()
 	links := domain.ScaffoldTikiLinkCollection([]domain.TikiLinkScaffold{
-		{Title: "0a-1", SourceSection: (*doc0sections)[0], TargetDocument: docs[1]},
-		{Title: "0b-1", SourceSection: (*doc0sections)[1], TargetDocument: docs[1]},
+		{Title: "0a-1", SourceSection: (doc0sections)[0], TargetDocument: docs[1]},
+		{Title: "0b-1", SourceSection: (doc0sections)[1], TargetDocument: docs[1]},
 	})
 	actual := links.CombineLinksFromSameDocuments()
 	assert.Len(t, actual, 1)
