@@ -33,7 +33,7 @@ func (tikiBase *TikiBase) CreateDocument(filename DocumentFilename, content stri
 	if !strings.HasSuffix(string(filename), ".md") {
 		filename += ".md"
 	}
-	doc := newDocument(filename, content)
+	doc := newDocumentWithText(filename, content)
 	filePath := path.Join(tikiBase.dir, string(doc.FileName()))
 	err = ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
 	if err != nil {
@@ -71,7 +71,7 @@ func (tikiBase *TikiBase) LoadDocument(filename DocumentFilename) (result *Docum
 	if err != nil {
 		return result, fmt.Errorf("cannot load TikiBase document %q: %w", path, err)
 	}
-	return newDocument(filename, string(contentData)), nil
+	return newDocumentWithText(filename, string(contentData)), nil
 }
 
 // SaveDocument stores the given Document in this TikiBase.

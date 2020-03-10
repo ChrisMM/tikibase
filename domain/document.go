@@ -27,12 +27,21 @@ type DocumentScaffold struct {
 	Content  string
 }
 
-// newDocument creates a new Document instance.
+// newDocumentWithText creates a new Document instance with the given textual content.
 // This constructor is internal to this module,
 // call (TikiBase).CreateDocument() to create new documents in production.
-func newDocument(filename DocumentFilename, content string) *Document {
+func newDocumentWithText(filename DocumentFilename, content string) *Document {
 	doc := Document{filename: filename}
 	doc.sections = newSectionCollection(content, &doc)
+	return &doc
+}
+
+// newDocumentWithSections creates a new Document instance with the given pre-parsed sections.
+// This constructor is internal to this module,
+// call (TikiBase).CreateDocument() to create new documents in production.
+func newDocumentWithSections(filename DocumentFilename, sections SectionCollection) *Document {
+	doc := Document{filename: filename}
+	doc.sections = sections
 	return &doc
 }
 
@@ -44,7 +53,7 @@ func ScaffoldDocument(data DocumentScaffold) *Document {
 	if data.Content == "" {
 		data.Content = "# Title\ndefault content"
 	}
-	return newDocument(DocumentFilename(data.FileName), data.Content)
+	return newDocumentWithText(DocumentFilename(data.FileName), data.Content)
 }
 
 // AllSections returns all the TikiSections that make up this document,
@@ -61,7 +70,7 @@ func (doc *Document) AppendSection(section *Section) *Document {
 	replacedSections := doc.sections.Replace(lastSection, &newLastSection)
 	// add the new section
 	newSections := append(replacedSections, section)
-	return newDocument(doc.filename, newSections.Text())
+	return newDocumentWithSections(doc.filename, newSections)
 }
 
 // Content returns the content of this document.
@@ -93,13 +102,13 @@ func (doc *Document) ID() string {
 
 // RemoveSection provides a copy of this Document that contains all its sections except the given one.
 func (doc *Document) RemoveSection(section *Section) *Document {
-	return newDocument(doc.filename, doc.AllSections().Remove(section).Text())
+	return newDocumentWithSections(doc.filename, doc.AllSections().Remove(section))
 }
 
 // ReplaceSection provides a new Document that is like this one
 // and has the given old section replaced with the given new section.
 func (doc *Document) ReplaceSection(oldSection *Section, newSection *Section) *Document {
-	return newDocument(doc.filename, doc.AllSections().Replace(oldSection, newSection).Text())
+	return newDocumentWithSections(doc.filename, doc.AllSections().Replace(oldSection, newSection))
 }
 
 // TikiLinks returns the TikiLinks in this Document.
