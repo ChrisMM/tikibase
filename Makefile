@@ -30,7 +30,7 @@ stats:  # shows code statistics
 
 test:  # runs all tests
 	@go test ./... &
-	@golangci-lint run --enable-all -D lll -D godox -D wsl &
+	@golangci-lint run --enable-all -D lll -D godox -D wsl -D dogsled &
 	@godog --concurrency=$(shell nproc --all) --format=progress
 .PHONY: test
 

@@ -80,7 +80,8 @@ func (w *workspaceFeature) listing(argument string) error {
 }
 
 func (w *workspaceFeature) runOccurrences() error {
-	return occurrences.Run(w.root)
+	_, _, _, _, err := occurrences.Run(w.root)
+	return err
 }
 
 func (w *workspaceFeature) shouldContainFileWithContent(filename string, content *gherkin.DocString) error {

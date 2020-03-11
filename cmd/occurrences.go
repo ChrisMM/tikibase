@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/kevgo/tikibase/helpers"
 
 	"github.com/kevgo/tikibase/occurrences"
@@ -15,8 +18,12 @@ var occurrencesCmd = &cobra.Command{
 	Long: `Updates the 'occurrences' section of all documents,
 which contains backlinks to the current documents.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := occurrences.Run(".")
-		helpers.PrintErrors(err)
+		docsCount, createdCount, updatedCount, deletedCount, err := occurrences.Run(".")
+		if err != nil {
+			helpers.PrintErrors(err)
+			os.Exit(1)
+		}
+		fmt.Printf("%d documents, %d created, %d updated, %d deleted\n", docsCount, createdCount, updatedCount, deletedCount)
 	},
 }
 
