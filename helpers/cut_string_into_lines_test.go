@@ -1,9 +1,8 @@
 package helpers_test
 
 import (
+	"reflect"
 	"testing"
-
-	"github.com/google/go-cmp/cmp"
 
 	"github.com/kevgo/tikibase/helpers"
 )
@@ -17,8 +16,7 @@ func TestCutStringIntoLines(t *testing.T) {
 	for input, expected := range tests {
 		t.Run(input, func(t *testing.T) {
 			actual := helpers.CutStringIntoLines(input)
-			diff := cmp.Diff(expected, actual)
-			if diff != "" {
+			if !reflect.DeepEqual(expected, actual) {
 				t.Fatalf("expected %q, got %q", expected, actual)
 			}
 		})
