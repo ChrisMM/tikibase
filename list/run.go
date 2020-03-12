@@ -3,9 +3,9 @@ package list
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/kevgo/tikibase/domain"
-	"github.com/kevgo/tikibase/helpers"
 )
 
 // Run performs the search.
@@ -21,15 +21,14 @@ func Run(dir string, types []string) (result []string, err error) {
 	i := 0
 	for _, doc := range docs {
 		section, err := doc.FindSectionWithTitle("what is it")
-		if err != nil {
-			continue
-		}
-		if section == nil {
+		if err != nil || section == nil {
 			continue
 		}
 		sectionContent := string(section.Content())
-		if !helpers.ContainsStrings(sectionContent, types) {
-			continue
+		for i := range types {
+			if !strings.Contains(sectionContent, types[i]) {
+				continue
+			}
 		}
 		i++
 		title, err := doc.TitleSection().Title()
