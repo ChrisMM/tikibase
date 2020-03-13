@@ -69,7 +69,7 @@ func ScaffoldSection(data SectionScaffold) *Section {
 func (section *Section) Anchor() (string, error) {
 	sectionTitle, err := section.Title()
 	if err != nil {
-		return "", fmt.Errorf("cannot determine the section anchor: %w", err)
+		return "", fmt.Errorf("cannot determine the anchor of a section: %w\n\n%s", err, section.content)
 	}
 	return strcase.ToKebab(sectionTitle), nil
 }
@@ -106,6 +106,15 @@ func (section *Section) Links() (result []Link) {
 		result = append(result, Link{title: title, sourceSection: section, target: target})
 	}
 	return result
+}
+
+// LinkTarget provides the relative URL of this section within this TikiBase.
+func (section *Section) LinkTarget() (result string, err error) {
+	anchor, err := section.Anchor()
+	if err != nil {
+		return "", fmt.Errorf("cannot determine the link targets for a section: %w\n\n%s", err, section.content)
+	}
+	return fmt.Sprintf("%s#%s", section.Document().FileName(), anchor), nil
 }
 
 // TikiLinks returns all TikiLinks in this section.

@@ -99,6 +99,14 @@ func (doc *Document) ID() string {
 	return strings.TrimSuffix(filename, path.Ext(filename))
 }
 
+// Links provides all Links in this document.
+func (doc *Document) Links() (result []Link) {
+	for i := range doc.sections {
+		result = append(result, doc.sections[i].Links()...)
+	}
+	return result
+}
+
 // RemoveSection provides a copy of this Document that contains all its sections except the given one.
 func (doc *Document) RemoveSection(section *Section) *Document {
 	return newDocumentWithSections(doc.filename, doc.AllSections().Remove(section))

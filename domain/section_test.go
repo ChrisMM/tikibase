@@ -26,6 +26,14 @@ func TestSection_Content(t *testing.T) {
 	assert.Equal(t, domain.SectionContent(expectedContent), section.Content())
 }
 
+func TestSection_LinkTarget(t *testing.T) {
+	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "doc.md"})
+	section := domain.ScaffoldSection(domain.SectionScaffold{"### Section 3", doc})
+	actual, err := section.LinkTarget()
+	assert.Nil(t, err)
+	assert.Equal(t, "doc.md#section-3", actual)
+}
+
 func TestSection_TikiLinks(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "one.md", Content: "# One"},

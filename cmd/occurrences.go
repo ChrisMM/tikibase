@@ -11,7 +11,7 @@ import (
 )
 
 //nolint:gochecknoglobals
-// occurrencesCmd represents the occurrences command
+// occurrencesCmd defines the "occurrences" command
 var occurrencesCmd = &cobra.Command{
 	Use:   "occurrences",
 	Short: "Updates the 'occurrences' section of all documents",

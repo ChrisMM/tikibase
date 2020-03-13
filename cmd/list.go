@@ -12,7 +12,7 @@ import (
 var typeFlag *[]string
 
 //nolint:gochecknoglobals
-// listCmd represents the list command
+// listCmd defines the "list" command
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "lists entries within the database",

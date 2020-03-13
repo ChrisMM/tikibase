@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// PrintErrors prints the given error including all nested errors.
 func PrintErrors(err error) {
 	errors := strings.Split(err.Error(), ":")
 	fmt.Printf("Error: %s:\n", errors[0])

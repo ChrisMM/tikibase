@@ -17,7 +17,7 @@ help:   # prints all make targets
 	@cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
 lint:  # runs all linters
-	@golangci-lint run --enable-all -D lll -D godox -D wsl
+	@golangci-lint run --enable-all -D lll -D godox -D wsl -D dogsled -D whitespace
 
 occurrences:  # runs the 'occurrences' command
 	@go run main.go occurrences
@@ -30,7 +30,7 @@ stats:  # shows code statistics
 
 test:  # runs all tests
 	@go test ./... &
-	@golangci-lint run --enable-all -D lll -D godox -D wsl -D dogsled &
+	@golangci-lint run --enable-all -D lll -D godox -D wsl -D dogsled -D whitespace &
 	@godog --concurrency=$(shell nproc --all) --format=progress
 .PHONY: test
 

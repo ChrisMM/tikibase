@@ -8,7 +8,7 @@ import (
 )
 
 //nolint:gochecknoglobals
-// rootCmd represents the base command when called without any subcommands
+// rootCmd defines the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "tikibase",
 	Short: "A timeless wiki-like knowledge base",
