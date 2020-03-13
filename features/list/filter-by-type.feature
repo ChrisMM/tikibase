@@ -1,4 +1,4 @@
-Feature: List items filtered by type
+Feature: Find entries by type
 
   Scenario: type in plain text
     Given the workspace contains file "markdown-it.md" with content:
@@ -9,7 +9,7 @@ Feature: List items filtered by type
       - a Markdown parser
       - in JavaScript
       """
-    When listing "parser"
+    When finding "parser"
     Then it finds:
       | Markdown-It |
 
@@ -22,7 +22,7 @@ Feature: List items filtered by type
       - a Markdown [parser](parser.md)
       - in JavaScript
       """
-    When listing "parser"
+    When finding "parser"
     Then it finds:
       | Markdown-It |
 
@@ -35,6 +35,6 @@ Feature: List items filtered by type
       - a Markdown parser
       - in JavaScript
       """
-    When listing "markdown"
+    When finding "markdown"
     Then it finds:
       | Markdown-It |

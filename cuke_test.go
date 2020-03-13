@@ -11,8 +11,8 @@ import (
 	"github.com/cucumber/godog/gherkin"
 	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/check"
+	"github.com/kevgo/tikibase/find"
 	"github.com/kevgo/tikibase/fix"
-	"github.com/kevgo/tikibase/list"
 	"github.com/kevgo/tikibase/test"
 )
 
@@ -25,7 +25,7 @@ type workspaceFeature struct {
 	// cache of the file contents
 	fileContents map[string]string
 
-	listResult []string
+	findResult []string
 
 	brokenLinks []check.BrokenLink
 
@@ -71,12 +71,12 @@ func (w *workspaceFeature) fileIsUnchanged(filename string) error {
 }
 
 func (w *workspaceFeature) itFinds(table *gherkin.DataTable) error {
-	if len(table.Rows) != len(w.listResult) {
-		return fmt.Errorf("expected %d results, got %d", len(table.Rows), len(w.listResult))
+	if len(table.Rows) != len(w.findResult) {
+		return fmt.Errorf("expected %d results, got %d", len(table.Rows), len(w.findResult))
 	}
 	for i := range table.Rows {
 		expected := table.Rows[i].Cells[0].Value
-		actual := w.listResult[i]
+		actual := w.findResult[i]
 		if actual != expected {
 			return fmt.Errorf("mismatching entry %d: expected %s, got %s", i, expected, actual)
 		}
@@ -122,9 +122,9 @@ func (w *workspaceFeature) itFindsTheBrokenLinks(expected *gherkin.DataTable) er
 	return nil
 }
 
-func (w *workspaceFeature) listing(argument string) error {
+func (w *workspaceFeature) finding(argument string) error {
 	var err error
-	w.listResult, err = list.Run(w.root, []string{argument})
+	w.findResult, err = find.Run(w.root, []string{argument})
 	return err
 }
 
@@ -156,7 +156,7 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^it finds no errors$`, workspace.itFindsNoErrors)
 	s.Step(`^it finds the broken links:$`, workspace.itFindsTheBrokenLinks)
 	s.Step(`^it finds the duplicates:$`, workspace.itFindsTheDuplicates)
-	s.Step(`^listing "([^"]+)"$`, workspace.listing)
+	s.Step(`^finding "([^"]+)"$`, workspace.finding)
 	s.Step(`^running Fix$`, workspace.runFix)
 	s.Step(`^the workspace contains a binary file "([^"]*)"$`, workspace.containsBinaryFile)
 	s.Step(`^the workspace contains file "([^"]*)" with content:$`, workspace.containsFileWithContent)

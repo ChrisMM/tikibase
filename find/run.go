@@ -1,4 +1,4 @@
-package list
+package find
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
-// Run performs the search.
+// Run performs the "find" command.
 func Run(dir string, types []string) (result []string, err error) {
 	tikibase, err := domain.NewTikiBase(dir)
 	if err != nil {
