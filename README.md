@@ -12,14 +12,13 @@ This repository provides automation to make working with a
 
 The `tikibase` tool in this repository provides these commands:
 
-- **occurrences:** adds an `occurrences` section to each document that lists the
-  documents that link to this document. This section only only contains
-  documents that aren't otherwise mentioned in this document already.
+- **occurrences:** adds an `occurrences` section to documents with unmentioned
+  backlinks
 - **list:** lists entries in this Tikibase
   - list all parsers: `tikibase list --is parser`
   - list all Markdown parsers: `tikibase list --is parser,markdown` or
     `tikibase list --is parser --is markdown`
-- **check:** lists dead internal links in this Tikibase
+- **check:** lists broken internal links in this Tikibase
 
 You can run these commands using the CLI, on a CI server, or bundle them into a
 bot to run them automatically on each change.
