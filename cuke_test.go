@@ -148,17 +148,17 @@ func (w *workspaceFeature) shouldContainFileWithContent(filename string, content
 
 //nolint:deadcode,unused
 func FeatureContext(s *godog.Suite) {
-	workspace := &workspaceFeature{fileContents: make(map[string]string)}
-	s.BeforeScenario(workspace.createWorkspace)
-	s.Step(`^checking the links$`, workspace.checkingTheLinks)
-	s.Step(`^file "([^"]*)" is unchanged$`, workspace.fileIsUnchanged)
-	s.Step(`^it finds:$`, workspace.itFinds)
-	s.Step(`^it finds no errors$`, workspace.itFindsNoErrors)
-	s.Step(`^it finds the broken links:$`, workspace.itFindsTheBrokenLinks)
-	s.Step(`^it finds the duplicates:$`, workspace.itFindsTheDuplicates)
-	s.Step(`^finding "([^"]+)"$`, workspace.finding)
-	s.Step(`^running Fix$`, workspace.runFix)
-	s.Step(`^the workspace contains a binary file "([^"]*)"$`, workspace.containsBinaryFile)
-	s.Step(`^the workspace contains file "([^"]*)" with content:$`, workspace.containsFileWithContent)
-	s.Step(`^the workspace should contain the file "([^"]*)" with content:$`, workspace.shouldContainFileWithContent)
+	wf := &workspaceFeature{fileContents: make(map[string]string)}
+	s.BeforeScenario(wf.createWorkspace)
+	s.Step(`^checking the links$`, wf.checkingTheLinks)
+	s.Step(`^file "([^"]*)" is unchanged$`, wf.fileIsUnchanged)
+	s.Step(`^it finds:$`, wf.itFinds)
+	s.Step(`^it finds no errors$`, wf.itFindsNoErrors)
+	s.Step(`^it finds the broken links:$`, wf.itFindsTheBrokenLinks)
+	s.Step(`^it finds the duplicates:$`, wf.itFindsTheDuplicates)
+	s.Step(`^finding "([^"]+)"$`, wf.finding)
+	s.Step(`^running Fix$`, wf.runFix)
+	s.Step(`^the workspace contains a binary file "([^"]*)"$`, wf.containsBinaryFile)
+	s.Step(`^the workspace contains file "([^"]*)" with content:$`, wf.containsFileWithContent)
+	s.Step(`^the workspace should contain the file "([^"]*)" with content:$`, wf.shouldContainFileWithContent)
 }
