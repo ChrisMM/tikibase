@@ -2,7 +2,6 @@ package find
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/kevgo/tikibase/domain"
@@ -18,9 +17,8 @@ func Run(dir string, types []string) (result []string, err error) {
 	if err != nil {
 		return result, fmt.Errorf("cannot get documents of TikiBase: %w", err)
 	}
-	i := 0
-	for _, doc := range docs {
-		section, err := doc.FindSectionWithTitle("what is it")
+	for i := range docs {
+		section, err := docs[i].FindSectionWithTitle("what is it")
 		if err != nil || section == nil {
 			continue
 		}
@@ -30,11 +28,9 @@ func Run(dir string, types []string) (result []string, err error) {
 				continue
 			}
 		}
-		i++
-		title, err := doc.TitleSection().Title()
+		title, err := docs[i].TitleSection().Title()
 		if err != nil {
-			fmt.Printf("Error getting the title of document %s: %v\n", doc.ID(), err)
-			os.Exit(1)
+			return result, fmt.Errorf("error getting the title of a document, please run \"tikibase check\" to investigate")
 		}
 		result = append(result, title)
 	}
