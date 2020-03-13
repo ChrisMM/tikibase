@@ -11,8 +11,8 @@ import (
 	"github.com/cucumber/godog/gherkin"
 	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/check"
+	"github.com/kevgo/tikibase/fix"
 	"github.com/kevgo/tikibase/list"
-	"github.com/kevgo/tikibase/occurrences"
 	"github.com/kevgo/tikibase/test"
 )
 
@@ -128,8 +128,8 @@ func (w *workspaceFeature) listing(argument string) error {
 	return err
 }
 
-func (w *workspaceFeature) runOccurrences() error {
-	_, _, _, _, err := occurrences.Run(w.root)
+func (w *workspaceFeature) runFix() error {
+	_, _, _, _, err := fix.Run(w.root)
 	return err
 }
 
@@ -157,7 +157,7 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^it finds the broken links:$`, workspace.itFindsTheBrokenLinks)
 	s.Step(`^it finds the duplicates:$`, workspace.itFindsTheDuplicates)
 	s.Step(`^listing "([^"]+)"$`, workspace.listing)
-	s.Step(`^running Occurrences$`, workspace.runOccurrences)
+	s.Step(`^running Fix$`, workspace.runFix)
 	s.Step(`^the workspace contains a binary file "([^"]*)"$`, workspace.containsBinaryFile)
 	s.Step(`^the workspace contains file "([^"]*)" with content:$`, workspace.containsFileWithContent)
 	s.Step(`^the workspace should contain the file "([^"]*)" with content:$`, workspace.shouldContainFileWithContent)

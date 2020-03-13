@@ -1,4 +1,4 @@
-build: clean    # builds for the current platform
+build:   # builds for the current platform
 	@go install
 
 clean:   # Removes all build artifacts
@@ -18,12 +18,6 @@ help:   # prints all make targets
 
 lint:  # runs all linters
 	@golangci-lint run --enable-all -D lll -D godox -D wsl -D dogsled -D whitespace
-
-occurrences:  # runs the 'occurrences' command
-	@go run main.go occurrences
-
-run:  # runs the command
-	@go run main.go
 
 stats:  # shows code statistics
 	@find . -type f | grep -v 'node_modules' | grep -v '\./.git/' | grep -v '\./vendor/' | xargs scc

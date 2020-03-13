@@ -1,4 +1,4 @@
-package occurrences
+package fix
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
-// Run executes the "occurrences" command in the given directory.
+// Run executes the fix" command in the given directory.
 //nolint:funlen
 func Run(dir string) (docsCount, createdCount, updatedCount, deletedCount int, err error) {
 	tikibase, err := domain.NewTikiBase(dir)

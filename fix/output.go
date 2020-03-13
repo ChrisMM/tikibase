@@ -1,4 +1,4 @@
-package occurrences
+package fix
 
 // Output defines the methods to call when signaling output to the CLI.
 type Output interface {

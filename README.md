@@ -12,8 +12,8 @@ This repository provides automation to make working with a
 
 The `tikibase` tool in this repository provides these commands:
 
-- **occurrences:** adds an `occurrences` section to documents with unmentioned
-  backlinks
+- **fix:** fixes all auto-fixable issues
+  - adds an `occurrences` section to documents containing unmentioned backlinks
 - **list:** lists entries in this Tikibase
   - list all parsers: `tikibase list --is parser`
   - list all Markdown parsers: `tikibase list --is parser,markdown` or

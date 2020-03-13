@@ -1,4 +1,4 @@
-package occurrences_test
+package fix_test
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 
 	"github.com/kevgo/tikibase/domain"
-	"github.com/kevgo/tikibase/occurrences"
+	"github.com/kevgo/tikibase/fix"
 )
 
 func TestRenderOccurrencesSection(t *testing.T) {
@@ -18,7 +18,7 @@ func TestRenderOccurrencesSection(t *testing.T) {
 		{Title: "programming language", SourceSection: tsDoc.ContentSections()[0], TargetDocument: targetDoc},
 	})
 
-	renderedSection, err := occurrences.CreateOccurrencesSection(linksToDoc, targetDoc)
+	renderedSection, err := fix.CreateOccurrencesSection(linksToDoc, targetDoc)
 
 	if err != nil {
 		t.Fatal(err)
@@ -42,7 +42,7 @@ func TestRenderOccurrencesSection_LinkToTitleSection(t *testing.T) {
 		{Title: "programming language", SourceSection: &(*goDoc.TitleSection()), TargetDocument: targetDoc},
 	})
 
-	renderedSection, err := occurrences.CreateOccurrencesSection(linksToDoc, targetDoc)
+	renderedSection, err := fix.CreateOccurrencesSection(linksToDoc, targetDoc)
 
 	if err != nil {
 		t.Fatal(err)

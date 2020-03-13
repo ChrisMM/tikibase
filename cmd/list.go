@@ -15,8 +15,8 @@ var typeFlag *[]string
 // listCmd defines the "list" command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "lists entries within the database",
-	Long:  `Lists entries within the database, filtered by conditions.`,
+	Short: "Lists entries in this TikiBase",
+	Long:  `Lists entries within the TikiBase, filtered by conditions.`,
 	// Args:  cobra.NoArgs(),
 	Run: func(cmd *cobra.Command, args []string) {
 		results, err := list.Run(".", *typeFlag)

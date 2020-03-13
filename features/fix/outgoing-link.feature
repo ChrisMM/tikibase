@@ -8,5 +8,5 @@ Feature: Ignore outgoing links
 
       <a href="http://google.com">Google again</a>
       """
-    When running Occurrences
+    When running Fix
     Then file "1.md" is unchanged

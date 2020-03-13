@@ -1,4 +1,4 @@
-package occurrences
+package fix
 
 import (
 	"fmt"

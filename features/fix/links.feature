@@ -12,7 +12,7 @@ Feature: Links
       # Two
       ### benefits
       """
-    When running Occurrences
+    When running Fix
     Then file "1.md" is unchanged
     And the workspace should contain the file "2.md" with content:
       """
@@ -34,7 +34,7 @@ Feature: Links
       """
       # Two
       """
-    When running Occurrences
+    When running Fix
     Then file "1.md" is unchanged
     And the workspace should contain the file "2.md" with content:
       """
@@ -58,7 +58,7 @@ Feature: Links
       # Two
       ### benefits
       """
-    When running Occurrences
+    When running Fix
     Then file "1.md" is unchanged
     And the workspace should contain the file "2.md" with content:
       """
@@ -78,7 +78,7 @@ Feature: Links
       ### advantages
       See also the many [benefits](#benefits)
       """
-    When running Occurrences
+    When running Fix
     Then file "1.md" is unchanged
 
   Scenario: a document already contains a link to a file in which it occurs
@@ -94,7 +94,7 @@ Feature: Links
       ### examples
       - [1](1.md)
       """
-    When running Occurrences
+    When running Fix
     Then file "1.md" is unchanged
     And file "number.md" is unchanged
 
@@ -113,7 +113,7 @@ Feature: Links
       """
       # Number
       """
-    When running Occurrences
+    When running Fix
     Then file "1.md" is unchanged
     And the workspace should contain the file "number.md" with content:
       """
