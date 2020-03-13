@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/kevgo/tikibase/find"
+	"github.com/kevgo/tikibase/helpers"
 	"github.com/spf13/cobra"
 )
 
@@ -17,12 +18,11 @@ var findCmd = &cobra.Command{
 	Use:   "find",
 	Short: "Searches for entries in this TikiBase",
 	Long:  `Searches for entries within the TikiBase, filtered by conditions.`,
-	// Args:  cobra.NoArgs(),
 	Run: func(cmd *cobra.Command, args []string) {
 		results, err := find.Run(".", *typeFlag)
 		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-			os.Exit(1)
+			helpers.PrintErrors(err)
+			os.Exit(255)
 		}
 		for _, result := range results {
 			fmt.Println(result)

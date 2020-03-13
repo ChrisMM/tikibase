@@ -23,7 +23,7 @@ var fixCmd = &cobra.Command{
 		docsCount, createdCount, updatedCount, deletedCount, err := fix.Run(".")
 		if err != nil {
 			helpers.PrintErrors(err)
-			os.Exit(1)
+			os.Exit(255)
 		}
 		fmt.Printf("%d documents, %d created, %d updated, %d deleted\n", docsCount, createdCount, updatedCount, deletedCount)
 	},
