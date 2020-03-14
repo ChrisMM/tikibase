@@ -38,10 +38,9 @@ func Run(dir string) (brokenLinks []BrokenLink, duplicates []string, nonLinkedRe
 	}
 
 	// determine non-linked resources
-	resourceFileNames := resourceFiles.FileNames()
-	for f := range resourceFileNames {
-		if !internalLinks.HasLinkTo(resourceFileNames[f]) {
-			nonLinkedResources = append(nonLinkedResources, resourceFileNames[f])
+	for _, fileName := range resourceFiles.FileNames() {
+		if !internalLinks.HasLinkTo(fileName) {
+			nonLinkedResources = append(nonLinkedResources, fileName)
 		}
 	}
 
