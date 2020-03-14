@@ -44,33 +44,28 @@ func (tikiBase *TikiBase) CreateDocument(filename DocumentFilename, content stri
 
 // Documents returns all Documents in this TikiBase.
 func (tikiBase *TikiBase) Documents() (result DocumentCollection, err error) {
-	fileNames, err := tikiBase.FileNames()
+	docFiles, _, err := tikiBase.Files()
 	if err != nil {
 		return result, fmt.Errorf("cannot determine documents: %w", err)
 	}
-	for i := range fileNames {
-		if !strings.HasSuffix(fileNames[i], ".md") {
-			continue
-		}
-		doc, err := tikiBase.LoadDocument(DocumentFilename(fileNames[i]))
-		if err != nil {
-			return result, fmt.Errorf("cannot get all documents in TikiBase %q: %w", tikiBase.dir, err)
-		}
-		result = append(result, doc)
-	}
-	return result, nil
+	return docFiles.Documents()
 }
 
-// FileNames provides the names of all files stored in this TikiBase.
-func (tikiBase *TikiBase) FileNames() (result []string, err error) {
+// Files provides the names of all files stored in this TikiBase.
+func (tikiBase *TikiBase) Files() (docs DocumentFiles, resources ResourceFiles, err error) {
 	fileInfos, err := ioutil.ReadDir(tikiBase.dir)
 	if err != nil {
-		return result, fmt.Errorf("cannot read TikiBase directory %q: %w", tikiBase.dir, err)
+		return docs, resources, fmt.Errorf("cannot read TikiBase directory %q: %w", tikiBase.dir, err)
 	}
-	for i := range fileInfos {
-		result = append(result, fileInfos[i].Name())
+	for f := range fileInfos {
+		if strings.HasSuffix(fileInfos[f].Name(), ".md") {
+			docs.fileNames = append(docs.fileNames, fileInfos[f].Name())
+		} else {
+			resources.fileNames = append(resources.fileNames, fileInfos[f].Name())
+		}
 	}
-	return result, nil
+	docs.tikiBase = tikiBase
+	return docs, resources, nil
 }
 
 // LoadDocument provides the Document with the given filename, or an error if one doesn't exist.

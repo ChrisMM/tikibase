@@ -12,7 +12,8 @@ func TestFindLinkTargets(t *testing.T) {
 		{FileName: "1.md", Content: "# One\n\n### alpha\n\ntext here\n\n### beta\n\ntext\n"},
 		{FileName: "2.md", Content: "# Two\n\n### gamma\n\n### delta\n"},
 	})
-	ltc, duplicates, err := findLinkTargets([]string{"photo.jpg"}, docs)
+	resources := domain.ScaffoldResourceFiles([]string{"photo.jpg"})
+	ltc, duplicates, err := findLinkTargets(docs, resources)
 	assert.Nil(t, err)
 	assert.Len(t, duplicates, 0)
 	assert.Len(t, ltc, 9)
@@ -32,7 +33,8 @@ func TestLinkTargets_duplicates(t *testing.T) {
 		{FileName: "1.md", Content: "# One\n\n### alpha\n\ntext here\n\n### alpha\n\ntext\n"},
 		{FileName: "2.md", Content: "# Two\n\n### gamma\n\n### gamma\n"},
 	})
-	_, duplicates, err := findLinkTargets([]string{"photo.jpg"}, docs)
+	files := domain.ScaffoldResourceFiles([]string{"photo.jpg"})
+	_, duplicates, err := findLinkTargets(docs, files)
 	assert.Nil(t, err)
 	assert.EqualValues(t, []string{"1.md#alpha", "2.md#gamma"}, duplicates)
 }

@@ -23,18 +23,13 @@ func Run(dir string) (result Result, err error) {
 	if err != nil {
 		return
 	}
-	files, err := tikibase.FileNames()
+	docFiles, resourceFiles, err := tikibase.Files()
 	if err != nil {
 		return
 	}
-	for i := range files {
-		if strings.HasSuffix(files[i], ".md") {
-			result.DocsCount++
-		} else {
-			result.ResourcesCount++
-		}
-	}
-	docs, err := tikibase.Documents()
+	result.DocsCount = len(docFiles.FileNames())
+	result.ResourcesCount = len(resourceFiles.FileNames())
+	docs, err := docFiles.Documents()
 	if err != nil {
 		return
 	}

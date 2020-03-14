@@ -13,15 +13,15 @@ func Run(dir string) (brokenLinks []BrokenLink, duplicates []string, nonLinkedRe
 	if err != nil {
 		return
 	}
-	docs, err := tikibase.Documents()
+	docFiles, resourceFiles, err := tikibase.Files()
 	if err != nil {
 		return
 	}
-	fileNames, err := tikibase.FileNames()
+	docs, err := docFiles.Documents()
 	if err != nil {
 		return
 	}
-	linkTargets, duplicates, err := findLinkTargets(fileNames, docs)
+	linkTargets, duplicates, err := findLinkTargets(docs, resourceFiles)
 	if err != nil {
 		return
 	}
@@ -49,16 +49,15 @@ func Run(dir string) (brokenLinks []BrokenLink, duplicates []string, nonLinkedRe
 	}
 
 	// determine non-linked resources
-	for f := range fileNames {
-		if strings.HasSuffix(fileNames[f], ".md") {
-			continue
-		}
+	resourceFileNames := resourceFiles.FileNames()
+	for f := range resourceFileNames {
 		for l := range links {
-			if links[l].Target() == fileNames[f] {
+			if links[l].Target() == resourceFileNames[f] {
+				// TODO: this is wrong, make better feature and use LinkCollection.Contains here
 				continue
 			}
 		}
-		nonLinkedResources = append(nonLinkedResources, fileNames[f])
+		nonLinkedResources = append(nonLinkedResources, resourceFileNames[f])
 	}
 
 	return brokenLinks, duplicates, nonLinkedResources, err

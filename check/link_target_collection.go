@@ -13,7 +13,7 @@ import (
 // Examples: `1.md`, `1.md#foo`
 type linkTargetCollection map[string]struct{}
 
-func findLinkTargets(fileNames []string, docs domain.DocumentCollection) (result linkTargetCollection, duplicates []string, err error) {
+func findLinkTargets(docs domain.DocumentCollection, resources domain.ResourceFiles) (result linkTargetCollection, duplicates []string, err error) {
 	result = make(linkTargetCollection)
 
 	// add links targets for documents
@@ -27,8 +27,8 @@ func findLinkTargets(fileNames []string, docs domain.DocumentCollection) (result
 
 		// add target for the sections in the document
 		sections := docs[i].AllSections()
-		for k := range sections {
-			linkTarget, err := sections[k].LinkTarget()
+		for s := range sections {
+			linkTarget, err := sections[s].LinkTarget()
 			if err != nil {
 				return result, duplicates, fmt.Errorf("cannot determine link targets in document %q: %w", docs[i].FileName(), err)
 			}
@@ -40,12 +40,10 @@ func findLinkTargets(fileNames []string, docs domain.DocumentCollection) (result
 	}
 
 	// add link targets for resources
-	for i := range fileNames {
-		if !strings.HasSuffix(fileNames[i], ".md") {
-			err := result.Add(fileNames[i])
-			if err != nil {
-				duplicates = append(duplicates, fileNames[i])
-			}
+	for _, fileName := range resources.FileNames() {
+		err := result.Add(fileName)
+		if err != nil {
+			duplicates = append(duplicates, fileName)
 		}
 	}
 	return result, duplicates, nil
