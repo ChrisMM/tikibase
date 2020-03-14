@@ -5,10 +5,10 @@ clean:   # Removes all build artifacts
 	@go clean -i
 
 cuke:  # runs the feature specs
-	env GOFLAGS=-mod=vendor godog --format=progress
+	@env GOFLAGS=-mod=vendor godog --format=progress
 
 cuke-parallel:  # runs the feature specs
-	godog --concurrency=$(shell nproc --all) --format=progress
+	@godog --concurrency=$(shell nproc --all) --format=progress
 
 fix:   # fixes all auto-correctable issues
 	find . -name '*.go' | grep -v vendor | xargs gofmt -l -s -w
