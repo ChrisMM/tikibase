@@ -14,11 +14,12 @@ The `tikibase` tool in this repository provides these commands:
 
 - **fix:** fixes all auto-fixable issues
   - adds an `occurrences` section to documents containing unmentioned backlinks
-- **find:** searches for entries in this Tikibase
+- **find:** searches for entries in this TikiBase
   - find all parsers: `tikibase find --is parser`
   - find all Markdown parsers: `tikibase find --is parser,markdown` or
     `tikibase find --is parser --is markdown`
-- **check:** lists broken internal links in this Tikibase
+- **check:** lists broken internal links in this TikiBase
+- **stats:** shows statistics about this TikiBase
 
 You can run these commands using the CLI, on a CI server, or bundle them into a
 bot to run them automatically on each change.

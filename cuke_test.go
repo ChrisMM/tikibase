@@ -6,6 +6,7 @@ import (
 	"log"
 	"path"
 	"reflect"
+	"strconv"
 
 	"github.com/cucumber/godog"
 	"github.com/cucumber/godog/gherkin"
@@ -13,6 +14,7 @@ import (
 	"github.com/kevgo/tikibase/check"
 	"github.com/kevgo/tikibase/find"
 	"github.com/kevgo/tikibase/fix"
+	"github.com/kevgo/tikibase/stats"
 	"github.com/kevgo/tikibase/test"
 )
 
@@ -30,6 +32,8 @@ type workspaceFeature struct {
 	brokenLinks []check.BrokenLink
 
 	duplicates []string
+
+	statisticsResult stats.Result
 }
 
 func (w *workspaceFeature) checkingTheLinks() (err error) {
@@ -52,6 +56,12 @@ func (w *workspaceFeature) createWorkspace(arg interface{}) {
 	if err != nil {
 		log.Fatalf("cannot create workspace: %s", err.Error())
 	}
+}
+
+func (w *workspaceFeature) finding(argument string) error {
+	var err error
+	w.findResult, err = find.Run(w.root, []string{argument})
+	return err
 }
 
 func (w *workspaceFeature) fileIsUnchanged(filename string) error {
@@ -122,14 +132,61 @@ func (w *workspaceFeature) itFindsTheBrokenLinks(expected *gherkin.DataTable) er
 	return nil
 }
 
-func (w *workspaceFeature) finding(argument string) error {
-	var err error
-	w.findResult, err = find.Run(w.root, []string{argument})
-	return err
+func (w *workspaceFeature) itFindsTheSectionTypes(table *gherkin.DataTable) error {
+	expected := make([]string, len(table.Rows))
+	for i := range table.Rows {
+		expected[i] = table.Rows[i].Cells[0].Value
+	}
+	if !reflect.DeepEqual(expected, w.statisticsResult.SectionTypes) {
+		return fmt.Errorf("expected %s, got %s", expected, w.statisticsResult.SectionTypes)
+	}
+	return nil
+}
+
+func (w *workspaceFeature) itProvidesTheStatistics(table *gherkin.DataTable) error {
+	// check docs count
+	expectedDocsCount, err := strconv.Atoi(table.Rows[0].Cells[1].Value)
+	if err != nil {
+		return fmt.Errorf("expected docs count is not a number: %w", err)
+	}
+	if w.statisticsResult.DocsCount != expectedDocsCount {
+		return fmt.Errorf("expected %d docs, got %d", expectedDocsCount, w.statisticsResult.DocsCount)
+	}
+	// check sections count
+	expectedSectionsCount, err := strconv.Atoi(table.Rows[1].Cells[1].Value)
+	if err != nil {
+		return fmt.Errorf("expected sections count is not a number: %w", err)
+	}
+	if w.statisticsResult.SectionsCount != expectedSectionsCount {
+		return fmt.Errorf("expected %d sections, got %d", expectedSectionsCount, w.statisticsResult.SectionsCount)
+	}
+	// check links count
+	expectedLinksCount, err := strconv.Atoi(table.Rows[2].Cells[1].Value)
+	if err != nil {
+		return fmt.Errorf("expected links count is not a number: %w", err)
+	}
+	if w.statisticsResult.LinksCount != expectedLinksCount {
+		return fmt.Errorf("expected %d links, got %d", expectedLinksCount, w.statisticsResult.LinksCount)
+	}
+	// check resources count
+	expectedResourcesCount, err := strconv.Atoi(table.Rows[3].Cells[1].Value)
+	if err != nil {
+		return fmt.Errorf("expected resources count is not a number: %w", err)
+	}
+	if w.statisticsResult.ResourcesCount != expectedResourcesCount {
+		return fmt.Errorf("expected %d links, got %d", expectedResourcesCount, w.statisticsResult.ResourcesCount)
+	}
+	return nil
 }
 
 func (w *workspaceFeature) runFix() error {
 	_, _, _, _, err := fix.Run(w.root)
+	return err
+}
+
+func (w *workspaceFeature) runningStatistics() error {
+	var err error
+	w.statisticsResult, err = stats.Run(w.root)
 	return err
 }
 
@@ -156,8 +213,11 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^it finds no errors$`, wf.itFindsNoErrors)
 	s.Step(`^it finds the broken links:$`, wf.itFindsTheBrokenLinks)
 	s.Step(`^it finds the duplicates:$`, wf.itFindsTheDuplicates)
+	s.Step(`^it finds the section types:$`, wf.itFindsTheSectionTypes)
+	s.Step(`^it provides the statistics:$`, wf.itProvidesTheStatistics)
 	s.Step(`^finding "([^"]+)"$`, wf.finding)
 	s.Step(`^running Fix$`, wf.runFix)
+	s.Step(`^running Statistics$`, wf.runningStatistics)
 	s.Step(`^the workspace contains a binary file "([^"]*)"$`, wf.containsBinaryFile)
 	s.Step(`^the workspace contains file "([^"]*)" with content:$`, wf.containsFileWithContent)
 	s.Step(`^the workspace should contain the file "([^"]*)" with content:$`, wf.shouldContainFileWithContent)
