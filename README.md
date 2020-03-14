@@ -18,7 +18,9 @@ The `tikibase` tool in this repository provides these commands:
   - find all parsers: `tikibase find --is parser`
   - find all Markdown parsers: `tikibase find --is parser,markdown` or
     `tikibase find --is parser --is markdown`
-- **check:** lists broken internal links in this TikiBase
+- **check:** verifies the consistency of this TikiBase:
+  - broken internal links
+  - non-markdown files that aren't linked to
 - **stats:** shows statistics about this TikiBase
 
 You can run these commands using the CLI, on a CI server, or bundle them into a

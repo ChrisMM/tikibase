@@ -8,7 +8,7 @@ import (
 )
 
 // Run executes the "check" command.
-func Run(dir string) (brokenLinks []BrokenLink, duplicates []string, err error) {
+func Run(dir string) (brokenLinks []BrokenLink, duplicates []string, nonLinkedResources []string, err error) {
 	tikibase, err := domain.NewTikiBase(dir)
 	if err != nil {
 		return
@@ -25,25 +25,43 @@ func Run(dir string) (brokenLinks []BrokenLink, duplicates []string, err error) 
 	if err != nil {
 		return
 	}
-	for i := range docs {
-		brokenLinks = append(brokenLinks, checkDocLinks(docs[i], linkTargets)...)
-	}
-	return brokenLinks, duplicates, err
-}
 
-func checkDocLinks(doc *domain.Document, linkTargets linkTargetCollection) (brokenLinks []BrokenLink) {
-	links := doc.Links()
-	for i := range links {
-		target := links[i].Target()
-		// ignore external links
-		if helpers.IsURL(target) {
+	// determine all links
+	links := []domain.Link{}
+	for d := range docs {
+		docLinks := docs[d].Links()
+		for l := range docLinks {
+			// ignore external links
+			if helpers.IsURL(docLinks[l].Target()) {
+				continue
+			}
+			links = append(links, docLinks[l])
+		}
+	}
+
+	// determine broken links
+	for l := range links {
+		target := links[l].Target()
+		docFileName := links[l].SourceSection().Document().FileName()
+		if isBrokenLink(target, docFileName, linkTargets) {
+			brokenLinks = append(brokenLinks, BrokenLink{docFileName, target})
+		}
+	}
+
+	// determine non-linked resources
+	for f := range fileNames {
+		if strings.HasSuffix(fileNames[f], ".md") {
 			continue
 		}
-		if isBrokenLink(target, doc.FileName(), linkTargets) {
-			brokenLinks = append(brokenLinks, BrokenLink{doc.FileName(), target})
+		for l := range links {
+			if links[l].Target() == fileNames[f] {
+				continue
+			}
 		}
+		nonLinkedResources = append(nonLinkedResources, fileNames[f])
 	}
-	return brokenLinks
+
+	return brokenLinks, duplicates, nonLinkedResources, err
 }
 
 func isBrokenLink(target string, filename domain.DocumentFilename, targets linkTargetCollection) bool {

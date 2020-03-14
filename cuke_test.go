@@ -33,11 +33,13 @@ type workspaceFeature struct {
 
 	duplicates []string
 
+	nonLinkedResources []string
+
 	statisticsResult stats.Result
 }
 
 func (w *workspaceFeature) checkingTheTikiBase() (err error) {
-	w.brokenLinks, w.duplicates, err = check.Run(w.root)
+	w.brokenLinks, w.duplicates, w.nonLinkedResources, err = check.Run(w.root)
 	return err
 }
 
@@ -132,6 +134,17 @@ func (w *workspaceFeature) itFindsTheBrokenLinks(expected *gherkin.DataTable) er
 	return nil
 }
 
+func (w *workspaceFeature) itFindsTheNonlinkedResources(table *gherkin.DataTable) error {
+	expected := make([]string, len(table.Rows))
+	for i := range table.Rows {
+		expected[i] = table.Rows[i].Cells[0].Value
+	}
+	if !reflect.DeepEqual(expected, w.nonLinkedResources) {
+		return fmt.Errorf("expected %s, got %s", expected, w.nonLinkedResources)
+	}
+	return nil
+}
+
 func (w *workspaceFeature) itFindsTheSectionTypes(table *gherkin.DataTable) error {
 	expected := make([]string, len(table.Rows))
 	for i := range table.Rows {
@@ -212,6 +225,7 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^it finds no errors$`, wf.itFindsNoErrors)
 	s.Step(`^it finds the broken links:$`, wf.itFindsTheBrokenLinks)
 	s.Step(`^it finds the duplicates:$`, wf.itFindsTheDuplicates)
+	s.Step(`^it finds the non-linked resources:$`, wf.itFindsTheNonlinkedResources)
 	s.Step(`^it finds the section types:$`, wf.itFindsTheSectionTypes)
 	s.Step(`^it provides the statistics:$`, wf.itProvidesTheStatistics)
 	s.Step(`^finding "([^"]+)"$`, wf.finding)
