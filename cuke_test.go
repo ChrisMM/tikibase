@@ -180,8 +180,7 @@ func (w *workspaceFeature) itProvidesTheStatistics(table *gherkin.DataTable) err
 }
 
 func (w *workspaceFeature) runFix() error {
-	_, _, _, _, err := fix.Run(w.root)
-	return err
+	return fix.Run(w.root)
 }
 
 func (w *workspaceFeature) runningStatistics() error {

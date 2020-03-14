@@ -29,16 +29,16 @@ Please report internal errors at https://github.com/kevgo/tikibase/issues/new`,
 			os.Exit(255)
 		}
 		if len(duplicates) > 0 {
-			fmt.Printf("\nFound %d duplicate link targets:\n", len(duplicates))
+			fmt.Printf("\n%d duplicate link targets:\n", len(duplicates))
 			for i := range duplicates {
 				fmt.Printf("- %s\n", duplicates[i])
 			}
 			fmt.Println()
 		}
 		if len(brokenLinks) > 0 {
-			fmt.Printf("\nFound %d problems:\n", len(brokenLinks))
+			fmt.Printf("\n%d broken links:\n", len(brokenLinks))
 			for i := range brokenLinks {
-				fmt.Printf("- file %q contains broken link %q\n", brokenLinks[i].Filename, brokenLinks[i].Link)
+				fmt.Printf("- %s: %q\n", brokenLinks[i].Filename, brokenLinks[i].Link)
 			}
 			os.Exit(len(brokenLinks))
 		}

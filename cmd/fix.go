@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/kevgo/tikibase/fix"
@@ -20,12 +19,11 @@ var fixCmd = &cobra.Command{
 - adds an 'occurrences' sections to documents
   containing unmentioned backlinks`,
 	Run: func(cmd *cobra.Command, args []string) {
-		docsCount, createdCount, updatedCount, deletedCount, err := fix.Run(".")
+		err := fix.Run(".")
 		if err != nil {
 			helpers.PrintErrors(err)
 			os.Exit(255)
 		}
-		fmt.Printf("%d documents, %d created, %d updated, %d deleted\n", docsCount, createdCount, updatedCount, deletedCount)
 	},
 }
 

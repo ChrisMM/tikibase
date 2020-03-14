@@ -17,14 +17,14 @@ help:   # prints all make targets
 	@cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
 lint:  # runs all linters
-	@golangci-lint run --enable-all -D lll -D godox -D wsl -D dogsled -D whitespace
+	@golangci-lint run --enable-all -D lll -D godox -D wsl -D whitespace
 
 stats:  # shows code statistics
 	@find . -type f | grep -v 'node_modules' | grep -v '\./.git/' | grep -v '\./vendor/' | xargs scc
 
 test:  # runs all tests
 	@go test ./... &
-	@golangci-lint run --enable-all -D lll -D godox -D wsl -D dogsled -D whitespace &
+	@golangci-lint run --enable-all -D lll -D godox -D wsl -D whitespace &
 	@godog --concurrency=$(shell nproc --all) --format=progress
 .PHONY: test
 
