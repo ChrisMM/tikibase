@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLinkCollection_HasTarget(t *testing.T) {
+func TestLinkCollection_HasLinkTo(t *testing.T) {
 	links := domain.ScaffoldLinkCollection([]string{"one.md", "two.md"})
-	assert.True(t, links.HasTarget("one.md"))
-	assert.True(t, links.HasTarget("two.md"))
-	assert.False(t, links.HasTarget("zonk.md"))
+	assert.True(t, links.HasLinkTo("one.md"))
+	assert.True(t, links.HasLinkTo("two.md"))
+	assert.False(t, links.HasLinkTo("zonk.md"))
 }

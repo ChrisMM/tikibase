@@ -27,6 +27,7 @@ func (link *Link) Title() string {
 	return link.title
 }
 
+// ScaffoldLink provides Link instances for testing.
 func ScaffoldLink(target string) Link {
 	return Link{target: target, title: "scaffolded link"}
 }
