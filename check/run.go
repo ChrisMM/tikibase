@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/kevgo/tikibase/domain"
-	"github.com/kevgo/tikibase/helpers"
 )
 
 // Run executes the "check" command.
@@ -27,22 +26,12 @@ func Run(dir string) (brokenLinks []BrokenLink, duplicates []string, nonLinkedRe
 	}
 
 	// determine all links
-	links := []domain.Link{}
-	for d := range docs {
-		docLinks := docs[d].Links()
-		for l := range docLinks {
-			// ignore external links
-			if helpers.IsURL(docLinks[l].Target()) {
-				continue
-			}
-			links = append(links, docLinks[l])
-		}
-	}
+	internalLinks, _ := docs.Links()
 
 	// determine broken links
-	for l := range links {
-		target := links[l].Target()
-		docFileName := links[l].SourceSection().Document().FileName()
+	for l := range internalLinks {
+		target := internalLinks[l].Target()
+		docFileName := internalLinks[l].SourceSection().Document().FileName()
 		if isBrokenLink(target, docFileName, linkTargets) {
 			brokenLinks = append(brokenLinks, BrokenLink{docFileName, target})
 		}
@@ -51,13 +40,9 @@ func Run(dir string) (brokenLinks []BrokenLink, duplicates []string, nonLinkedRe
 	// determine non-linked resources
 	resourceFileNames := resourceFiles.FileNames()
 	for f := range resourceFileNames {
-		for l := range links {
-			if links[l].Target() == resourceFileNames[f] {
-				// TODO: this is wrong, make better feature and use LinkCollection.Contains here
-				continue
-			}
+		if !internalLinks.HasTarget(resourceFileNames[f]) {
+			nonLinkedResources = append(nonLinkedResources, resourceFileNames[f])
 		}
-		nonLinkedResources = append(nonLinkedResources, resourceFileNames[f])
 	}
 
 	return brokenLinks, duplicates, nonLinkedResources, err

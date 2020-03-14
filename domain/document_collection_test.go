@@ -24,6 +24,22 @@ func TestDocumentCollection_Find(t *testing.T) {
 	assert.Equal(t, domain.DocumentFilename("two.md"), actual.FileName())
 }
 
+func TestDocumentCollection_Links(t *testing.T) {
+	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+		{FileName: "one.md", Content: "# The one\n[The other](two.md)"},
+		{FileName: "two.md", Content: "# The other\n[Google](http://google.com)"},
+	})
+	internalLinks, externalLinks := docs.Links()
+	assert.Len(t, internalLinks, 1)
+	assert.Equal(t, internalLinks[0].Title(), "The other")
+	assert.Same(t, internalLinks[0].SourceSection(), docs[0].TitleSection())
+	assert.Equal(t, internalLinks[0].Target(), "two.md")
+	assert.Len(t, externalLinks, 1)
+	assert.Equal(t, externalLinks[0].Title(), "Google")
+	assert.Same(t, externalLinks[0].SourceSection(), docs[1].TitleSection())
+	assert.Equal(t, externalLinks[0].Target(), "http://google.com")
+}
+
 func TestDocumentCollection_TikiLinks(t *testing.T) {
 	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
 		{FileName: "one.md", Content: "# The one\n[The other](two.md)"},

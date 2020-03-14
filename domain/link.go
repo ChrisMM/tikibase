@@ -26,3 +26,7 @@ func (link *Link) Target() string {
 func (link *Link) Title() string {
 	return link.title
 }
+
+func ScaffoldLink(target string) Link {
+	return Link{target: target, title: "scaffolded link"}
+}

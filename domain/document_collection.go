@@ -2,6 +2,8 @@ package domain
 
 import (
 	"fmt"
+
+	"github.com/kevgo/tikibase/helpers"
 )
 
 // DocumentCollection is a collection of Documents.
@@ -23,6 +25,21 @@ func (docs DocumentCollection) Contains(doc *Document) bool {
 		}
 	}
 	return false
+}
+
+// Links provides the links in this document collection.
+func (docs DocumentCollection) Links() (internal, external LinkCollection) {
+	for d := range docs {
+		links := docs[d].Links()
+		for l := range links {
+			if helpers.IsURL(links[l].Target()) {
+				external = append(external, links[l])
+			} else {
+				internal = append(internal, links[l])
+			}
+		}
+	}
+	return internal, external
 }
 
 // FindByFilename returns the Document with the given filename.
