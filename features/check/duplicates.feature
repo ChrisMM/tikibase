@@ -15,7 +15,7 @@ Feature: Listing duplicates
       ### bar
       ### bar
       """
-    When checking the links
+    When checking the TikiBase
     Then it finds the duplicates:
       | 1.md#foo |
       | 2.md#bar |

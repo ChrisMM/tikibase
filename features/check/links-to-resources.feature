@@ -7,7 +7,7 @@ Feature: Checking links to internal resources
       <DESC>: <LINK>
       """
     And the workspace contains a binary file "photo.jpg"
-    When checking the links
+    When checking the TikiBase
     Then it finds no errors
 
     Examples:
@@ -21,7 +21,7 @@ Feature: Checking links to internal resources
       # One
       <DESC>: <LINK>
       """
-    When checking the links
+    When checking the TikiBase
     Then it finds the broken links:
       | FILE | LINK      |
       | 1.md | photo.jpg |

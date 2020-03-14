@@ -12,7 +12,7 @@ Feature: Checking internal links to documents
       # Two
       ### Hello
       """
-    When checking the links
+    When checking the TikiBase
     Then it finds no errors
 
     Examples:
@@ -34,7 +34,7 @@ Feature: Checking internal links to documents
       """
       # Two
       """
-    When checking the links
+    When checking the TikiBase
     Then it finds the broken links:
       | FILE | LINK            |
       | 1.md | <REPORTED HREF> |

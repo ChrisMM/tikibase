@@ -22,7 +22,7 @@ Feature: Updating existing "occurrences" sections
 
       - an example of [one](1.md)
       """
-    When running Fix
+    When fixing the TikiBase
     Then the workspace should contain the file "1.md" with content:
       """
       # One

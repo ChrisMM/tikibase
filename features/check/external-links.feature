@@ -7,7 +7,7 @@ Feature: Ignore external links
 
       <LINK>
       """
-    When checking the links
+    When checking the TikiBase
     Then it finds no errors
 
     Examples:

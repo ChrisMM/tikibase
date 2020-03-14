@@ -8,5 +8,5 @@ Feature: Ignore outgoing links
 
       <a href="http://google.com">Google again</a>
       """
-    When running Fix
+    When fixing the TikiBase
     Then file "1.md" is unchanged

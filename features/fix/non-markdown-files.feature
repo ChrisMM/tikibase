@@ -12,7 +12,7 @@ Feature: Ignore non-Markdown files
       - an example of [one](1.md)
       """
     And the workspace contains a binary file "1.png"
-    When running Fix
+    When fixing the TikiBase
     Then the workspace should contain the file "1.md" with content:
       """
       # One
@@ -31,5 +31,5 @@ Feature: Ignore non-Markdown files
       ### advantages
       ![benefits](benefits.jpg)
       """
-    When running Fix
+    When fixing the TikiBase
     Then file "1.md" is unchanged

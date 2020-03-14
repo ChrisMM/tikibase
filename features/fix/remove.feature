@@ -26,7 +26,7 @@ Feature: Removing obsolete "occurrences" sections
 
       Obsolete occurrences content.
       """
-    When running Fix
+    When fixing the TikiBase
     Then file "1.md" is unchanged
     And the workspace should contain the file "2.md" with content:
       """

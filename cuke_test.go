@@ -36,7 +36,7 @@ type workspaceFeature struct {
 	statisticsResult stats.Result
 }
 
-func (w *workspaceFeature) checkingTheLinks() (err error) {
+func (w *workspaceFeature) checkingTheTikiBase() (err error) {
 	w.brokenLinks, w.duplicates, err = check.Run(w.root)
 	return err
 }
@@ -179,7 +179,7 @@ func (w *workspaceFeature) itProvidesTheStatistics(table *gherkin.DataTable) err
 	return nil
 }
 
-func (w *workspaceFeature) runFix() error {
+func (w *workspaceFeature) fixingTheTikiBase() error {
 	return fix.Run(w.root)
 }
 
@@ -206,7 +206,7 @@ func (w *workspaceFeature) shouldContainFileWithContent(filename string, content
 func FeatureContext(s *godog.Suite) {
 	wf := &workspaceFeature{fileContents: make(map[string]string)}
 	s.BeforeScenario(wf.createWorkspace)
-	s.Step(`^checking the links$`, wf.checkingTheLinks)
+	s.Step(`^checking the TikiBase$`, wf.checkingTheTikiBase)
 	s.Step(`^file "([^"]*)" is unchanged$`, wf.fileIsUnchanged)
 	s.Step(`^it finds:$`, wf.itFinds)
 	s.Step(`^it finds no errors$`, wf.itFindsNoErrors)
@@ -215,7 +215,7 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^it finds the section types:$`, wf.itFindsTheSectionTypes)
 	s.Step(`^it provides the statistics:$`, wf.itProvidesTheStatistics)
 	s.Step(`^finding "([^"]+)"$`, wf.finding)
-	s.Step(`^running Fix$`, wf.runFix)
+	s.Step(`^fixing the TikiBase$`, wf.fixingTheTikiBase)
 	s.Step(`^running Statistics$`, wf.runningStatistics)
 	s.Step(`^the workspace contains a binary file "([^"]*)"$`, wf.containsBinaryFile)
 	s.Step(`^the workspace contains file "([^"]*)" with content:$`, wf.containsFileWithContent)
