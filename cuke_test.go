@@ -29,17 +29,13 @@ type workspaceFeature struct {
 
 	findResult []string
 
-	brokenLinks []check.BrokenLink
-
-	duplicates []string
-
-	nonLinkedResources []string
+	checkResult check.Result
 
 	statisticsResult stats.Result
 }
 
 func (w *workspaceFeature) checkingTheTikiBase() (err error) {
-	w.brokenLinks, w.duplicates, w.nonLinkedResources, err = check.Run(w.root)
+	w.checkResult, err = check.Run(w.root)
 	return err
 }
 
@@ -101,32 +97,32 @@ func (w *workspaceFeature) itFindsTheDuplicates(table *gherkin.DataTable) error 
 	for i := range table.Rows {
 		expected = append(expected, table.Rows[i].Cells[0].Value)
 	}
-	if !reflect.DeepEqual(w.duplicates, expected) {
-		return fmt.Errorf("expected %v, got %v", expected, w.duplicates)
+	if !reflect.DeepEqual(w.checkResult.Duplicates, expected) {
+		return fmt.Errorf("expected %v, got %v", expected, w.checkResult.Duplicates)
 	}
 	return nil
 }
 
 func (w *workspaceFeature) itFindsNoErrors() error {
-	if len(w.brokenLinks) == 0 {
+	if len(w.checkResult.BrokenLinks) == 0 {
 		return nil
 	}
-	msg := fmt.Sprintf("Found %d errors: \n", len(w.brokenLinks))
-	for i := range w.brokenLinks {
-		msg += fmt.Sprintf("- file %q contains broken link %q", w.brokenLinks[i].Filename, w.brokenLinks[i].Link)
+	msg := fmt.Sprintf("Found %d errors: \n", len(w.checkResult.BrokenLinks))
+	for i := range w.checkResult.BrokenLinks {
+		msg += fmt.Sprintf("- file %q contains broken link %q", w.checkResult.BrokenLinks[i].Filename, w.checkResult.BrokenLinks[i].Link)
 	}
 	return fmt.Errorf(msg)
 }
 
 func (w *workspaceFeature) itFindsTheBrokenLinks(expected *gherkin.DataTable) error {
-	if len(w.brokenLinks) != len(expected.Rows)-1 {
-		return fmt.Errorf("expected %d broken links but got %d", len(expected.Rows)-1, len(w.brokenLinks))
+	if len(w.checkResult.BrokenLinks) != len(expected.Rows)-1 {
+		return fmt.Errorf("expected %d broken links but got %d", len(expected.Rows)-1, len(w.checkResult.BrokenLinks))
 	}
-	for i := 0; i < len(w.brokenLinks); i++ {
+	for i := 0; i < len(w.checkResult.BrokenLinks); i++ {
 		expectedFile := expected.Rows[i+1].Cells[0].Value
 		expectedLink := expected.Rows[i+1].Cells[1].Value
-		actualFile := w.brokenLinks[i].Filename
-		actualLink := w.brokenLinks[i].Link
+		actualFile := w.checkResult.BrokenLinks[i].Filename
+		actualLink := w.checkResult.BrokenLinks[i].Link
 		if expectedFile != actualFile || expectedLink != actualLink {
 			return fmt.Errorf("expected file %q to contain broken link %q, instead got file %q with broken link %q", expectedFile, expectedLink, actualFile, actualLink)
 		}
@@ -139,8 +135,8 @@ func (w *workspaceFeature) itFindsTheNonlinkedResources(table *gherkin.DataTable
 	for i := range table.Rows {
 		expected[i] = table.Rows[i].Cells[0].Value
 	}
-	if !reflect.DeepEqual(expected, w.nonLinkedResources) {
-		return fmt.Errorf("expected %s, got %s", expected, w.nonLinkedResources)
+	if !reflect.DeepEqual(expected, w.checkResult.NonLinkedResources) {
+		return fmt.Errorf("expected %s, got %s", expected, w.checkResult.NonLinkedResources)
 	}
 	return nil
 }

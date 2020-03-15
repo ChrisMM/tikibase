@@ -21,6 +21,7 @@ The `tikibase` tool in this repository provides these commands:
 - **check:** verifies the consistency of this TikiBase:
   - broken internal links
   - non-markdown files that aren't linked to
+- **checkfix:** runs the checks and fixes
 - **stats:** shows statistics about this TikiBase
 
 You can run these commands using the CLI, on a CI server, or bundle them into a

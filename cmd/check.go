@@ -23,43 +23,47 @@ The exit status indicates the number of problems.
 An exit status of 255 indicates an internal error.
 Please report internal errors at https://github.com/kevgo/tikibase/issues/new`,
 	Run: func(cmd *cobra.Command, args []string) {
-		brokenLinks, duplicates, nonLinkedResources, err := check.Run(".")
+		result, err := check.Run(".")
 		if err != nil {
 			helpers.PrintErrors(err)
 			os.Exit(255)
 		}
-		exitCode := 0
-
-		if len(duplicates) > 0 {
-			exitCode += len(duplicates)
-			fmt.Printf("\n%d duplicate link targets:\n", len(duplicates))
-			for i := range duplicates {
-				fmt.Printf("- %s\n", duplicates[i])
-			}
-			fmt.Println()
-		}
-
-		if len(brokenLinks) > 0 {
-			exitCode += len(brokenLinks)
-			fmt.Printf("\n%d broken links:\n", len(brokenLinks))
-			for i := range brokenLinks {
-				fmt.Printf("- %s: %q\n", brokenLinks[i].Filename, brokenLinks[i].Link)
-			}
-		}
-
-		if len(nonLinkedResources) > 0 {
-			exitCode += len(nonLinkedResources)
-			fmt.Printf("\n%d non-linked resources:\n", len(nonLinkedResources))
-			for i := range nonLinkedResources {
-				fmt.Printf("- %s\n", nonLinkedResources[i])
-			}
-		}
-
-		os.Exit(exitCode)
+		handleCheckResults(result)
 	},
 }
 
 //nolint:gochecknoinits
 func init() {
 	rootCmd.AddCommand(checkCmd)
+}
+
+func handleCheckResults(result check.Result) {
+	exitCode := 0
+
+	if len(result.Duplicates) > 0 {
+		exitCode += len(result.Duplicates)
+		fmt.Printf("\n%d duplicate link targets:\n", len(result.Duplicates))
+		for i := range result.Duplicates {
+			fmt.Printf("- %s\n", result.Duplicates[i])
+		}
+		fmt.Println()
+	}
+
+	if len(result.BrokenLinks) > 0 {
+		exitCode += len(result.BrokenLinks)
+		fmt.Printf("\n%d broken links:\n", len(result.BrokenLinks))
+		for i := range result.BrokenLinks {
+			fmt.Printf("- %s: %q\n", result.BrokenLinks[i].Filename, result.BrokenLinks[i].Link)
+		}
+	}
+
+	if len(result.NonLinkedResources) > 0 {
+		exitCode += len(result.NonLinkedResources)
+		fmt.Printf("\n%d non-linked resources:\n", len(result.NonLinkedResources))
+		for i := range result.NonLinkedResources {
+			fmt.Printf("- %s\n", result.NonLinkedResources[i])
+		}
+	}
+
+	os.Exit(exitCode)
 }
