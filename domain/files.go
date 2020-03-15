@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// DocumentFiles describes all Markdown files in a TikiBase.
+// DocumentFiles describes the Markdown files in a TikiBase.
 type DocumentFiles struct {
 	fileNames []string
 
@@ -13,7 +13,7 @@ type DocumentFiles struct {
 }
 
 // Documents provides the documents contained in theses files.
-func (df DocumentFiles) Documents() (result DocumentCollection, err error) {
+func (df DocumentFiles) Documents() (result Documents, err error) {
 	for f := range df.fileNames {
 		doc, err := df.tikiBase.LoadDocument(df.fileNames[f])
 		if err != nil {
@@ -29,7 +29,8 @@ func (df DocumentFiles) FileNames() []string {
 	return df.fileNames
 }
 
-// ResourceFiles describes all resource files in a TikiBase.
+// ResourceFiles describes the non-Markdown files in a TikiBase,
+// typically images and PDFs.
 type ResourceFiles struct {
 	fileNames []string
 }

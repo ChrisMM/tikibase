@@ -8,13 +8,13 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
-// linkTargetCollection contains all possible link targets within this Tikibase.
+// linkTargets contains all possible link targets within this Tikibase.
 //
 // Examples: `1.md`, `1.md#foo`
-type linkTargetCollection map[string]struct{}
+type linkTargets map[string]struct{}
 
-func findLinkTargets(docs domain.DocumentCollection, resources domain.ResourceFiles) (result linkTargetCollection, duplicates []string, err error) {
-	result = make(linkTargetCollection)
+func findLinkTargets(docs domain.Documents, resources domain.ResourceFiles) (result linkTargets, duplicates []string, err error) {
+	result = make(linkTargets)
 
 	// add links targets for documents
 	for i := range docs {
@@ -49,7 +49,7 @@ func findLinkTargets(docs domain.DocumentCollection, resources domain.ResourceFi
 	return result, duplicates, nil
 }
 
-func (ltc linkTargetCollection) Add(linkTarget string) error {
+func (ltc linkTargets) Add(linkTarget string) error {
 	if ltc.Contains(linkTarget) {
 		return fmt.Errorf("duplicate link target: %s", linkTarget)
 	}
@@ -57,12 +57,12 @@ func (ltc linkTargetCollection) Add(linkTarget string) error {
 	return nil
 }
 
-func (ltc linkTargetCollection) Contains(linkTarget string) bool {
+func (ltc linkTargets) Contains(linkTarget string) bool {
 	_, ok := ltc[linkTarget]
 	return ok
 }
 
-func (ltc linkTargetCollection) String() (result string) {
+func (ltc linkTargets) String() (result string) {
 	values := []string{}
 	for value := range ltc {
 		values = append(values, value)

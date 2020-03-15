@@ -35,7 +35,7 @@ func TestSection_LinkTarget(t *testing.T) {
 }
 
 func TestSection_TikiLinks(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
 		{FileName: "one.md", Content: "# One"},
 		{FileName: "two.md", Content: `# Title\ntext [MD link to doc1](one.md)\n text [MD link to doc2](two.md) text\ntext <a href="one.md">HTML link to doc1</a> text <a textrun="dope">not a link</a>`},
 	})
@@ -55,7 +55,7 @@ func TestSection_TikiLinks(t *testing.T) {
 }
 
 func TestSection_TikiLinks_IgnoresHtmlLinks(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
 		{Content: "# Title\ntext [HTML link](http://google.com)"},
 	})
 	actual, err := docs[0].TitleSection().TikiLinks(docs)

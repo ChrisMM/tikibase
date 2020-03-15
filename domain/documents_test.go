@@ -7,15 +7,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDocumentCollection_Contains(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{{}})
+func TestDocuments_Contains(t *testing.T) {
+	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{{}})
 	otherDoc := domain.ScaffoldDocument(domain.DocumentScaffold{})
 	assert.True(t, docs.Contains(docs[0]), "looking contain existing doc")
 	assert.False(t, docs.Contains(otherDoc), "should not contain otherDoc")
 }
 
-func TestDocumentCollection_Find(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+func TestDocuments_Find(t *testing.T) {
+	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
 		{FileName: "one.md"},
 		{FileName: "two.md"},
 	})
@@ -24,8 +24,8 @@ func TestDocumentCollection_Find(t *testing.T) {
 	assert.Equal(t, "two.md", actual.FileName())
 }
 
-func TestDocumentCollection_Links(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+func TestDocuments_Links(t *testing.T) {
+	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
 		{FileName: "one.md", Content: "# The one\n[The other](two.md)"},
 		{FileName: "two.md", Content: "# The other\n[Google](http://google.com)"},
 	})
@@ -40,8 +40,8 @@ func TestDocumentCollection_Links(t *testing.T) {
 	assert.Equal(t, externalLinks[0].Target(), "http://google.com")
 }
 
-func TestDocumentCollection_TikiLinks(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+func TestDocuments_TikiLinks(t *testing.T) {
+	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
 		{FileName: "one.md", Content: "# The one\n[The other](two.md)"},
 		{FileName: "two.md", Content: "# The other\n[The one](one.md)"},
 	})

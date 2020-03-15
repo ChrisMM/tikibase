@@ -7,10 +7,10 @@ import (
 	"github.com/kevgo/tikibase/helpers"
 )
 
-// SectionCollection is a collection of Sections.
-type SectionCollection []*Section
+// Sections is a collection of Sections.
+type Sections []*Section
 
-func newSectionCollection(content string, doc *Document) (result SectionCollection) {
+func newSectionCollection(content string, doc *Document) (result Sections) {
 	sb := NewSectionBuilder("", doc)
 	lines := helpers.CutStringIntoLines(content)
 	for i := range lines {
@@ -27,8 +27,8 @@ func newSectionCollection(content string, doc *Document) (result SectionCollecti
 	return result
 }
 
-// ScaffoldSectionCollection creates new SectionCollection instances for testing.
-func ScaffoldSectionCollection(data []SectionScaffold) (result SectionCollection) {
+// ScaffoldSections creates new Sections instances for testing.
+func ScaffoldSections(data []SectionScaffold) (result Sections) {
 	for i := range data {
 		result = append(result, ScaffoldSection(data[i]))
 	}
@@ -37,7 +37,7 @@ func ScaffoldSectionCollection(data []SectionScaffold) (result SectionCollection
 
 // FindByTitle provides the section with the given title
 // or nil if none was found
-func (sections SectionCollection) FindByTitle(title string) (*Section, error) {
+func (sections Sections) FindByTitle(title string) (*Section, error) {
 	for i := range sections {
 		section := sections[i]
 		sectionTitle, err := section.Title()
@@ -52,7 +52,7 @@ func (sections SectionCollection) FindByTitle(title string) (*Section, error) {
 }
 
 // Remove provides a copy of this SectionCollection with the given sections removed.
-func (sections SectionCollection) Remove(section *Section) (result SectionCollection) {
+func (sections Sections) Remove(section *Section) (result Sections) {
 	for i := range sections {
 		if sections[i] != section {
 			result = append(result, sections[i])
@@ -62,7 +62,7 @@ func (sections SectionCollection) Remove(section *Section) (result SectionCollec
 }
 
 // Replace provides a new SectionCollection where the given old section is replaced with the given new section.
-func (sections SectionCollection) Replace(oldSection *Section, newSection *Section) (result SectionCollection) {
+func (sections Sections) Replace(oldSection *Section, newSection *Section) (result Sections) {
 	for i := range sections {
 		if sections[i] == oldSection {
 			result = append(result, newSection)
@@ -74,7 +74,7 @@ func (sections SectionCollection) Replace(oldSection *Section, newSection *Secti
 }
 
 // Text provides the full text of this SectionCollection.
-func (sections SectionCollection) Text() (result string) {
+func (sections Sections) Text() (result string) {
 	for i := range sections {
 		result += string(sections[i].Content())
 	}

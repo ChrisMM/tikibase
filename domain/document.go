@@ -14,7 +14,7 @@ type Document struct {
 	filename string
 
 	// the textual content of the document
-	sections SectionCollection
+	sections Sections
 }
 
 // DocumentScaffold is for easy scaffolding of Documents in tests.
@@ -36,7 +36,7 @@ func newDocumentWithText(filename string, content string) *Document {
 // newDocumentWithSections creates a new Document instance with the given pre-parsed sections.
 // This constructor is internal to this module,
 // call (TikiBase).CreateDocument() to create new documents in production.
-func newDocumentWithSections(filename string, sections SectionCollection) *Document {
+func newDocumentWithSections(filename string, sections Sections) *Document {
 	doc := Document{filename, sections}
 	return &doc
 }
@@ -54,7 +54,7 @@ func ScaffoldDocument(data DocumentScaffold) *Document {
 
 // AllSections returns all the TikiSections that make up this document,
 // including the title section.
-func (doc *Document) AllSections() (result SectionCollection) {
+func (doc *Document) AllSections() (result Sections) {
 	return doc.sections
 }
 
@@ -75,7 +75,7 @@ func (doc *Document) Content() string {
 }
 
 // ContentSections provides the content sections of this document.
-func (doc *Document) ContentSections() SectionCollection {
+func (doc *Document) ContentSections() Sections {
 	return doc.sections[1:]
 }
 
@@ -115,7 +115,7 @@ func (doc *Document) ReplaceSection(oldSection *Section, newSection *Section) *D
 }
 
 // TikiLinks returns the TikiLinks in this Document.
-func (doc *Document) TikiLinks(dc DocumentCollection) (result TikiLinkCollection, err error) {
+func (doc *Document) TikiLinks(dc Documents) (result TikiLinks, err error) {
 	for i := range doc.sections {
 		section := doc.sections[i]
 		sectionTitle, err := section.Title()

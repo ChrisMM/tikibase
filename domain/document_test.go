@@ -70,7 +70,7 @@ func TestDocumentReplaceSection(t *testing.T) {
 }
 
 func TestDocumentTikiLinks(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
 		{FileName: "doc1.md", Content: "### One\n"},
 		{FileName: "doc2.md", Content: "### Two\n[one](doc1.md)"},
 	})

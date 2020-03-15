@@ -118,7 +118,7 @@ func (section *Section) LinkTarget() (result string, err error) {
 }
 
 // TikiLinks returns all TikiLinks in this section.
-func (section *Section) TikiLinks(dc DocumentCollection) (result TikiLinkCollection, err error) {
+func (section *Section) TikiLinks(dc Documents) (result TikiLinks, err error) {
 	sectionTitle, err := section.Title()
 	if err != nil {
 		return result, err

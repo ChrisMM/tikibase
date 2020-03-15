@@ -8,7 +8,7 @@ import (
 )
 
 func TestFindLinkTargets(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
 		{FileName: "1.md", Content: "# One\n\n### alpha\n\ntext here\n\n### beta\n\ntext\n"},
 		{FileName: "2.md", Content: "# Two\n\n### gamma\n\n### delta\n"},
 	})
@@ -29,7 +29,7 @@ func TestFindLinkTargets(t *testing.T) {
 }
 
 func TestLinkTargets_duplicates(t *testing.T) {
-	docs := domain.ScaffoldDocumentCollection([]domain.DocumentScaffold{
+	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
 		{FileName: "1.md", Content: "# One\n\n### alpha\n\ntext here\n\n### alpha\n\ntext\n"},
 		{FileName: "2.md", Content: "# Two\n\n### gamma\n\n### gamma\n"},
 	})
@@ -39,8 +39,8 @@ func TestLinkTargets_duplicates(t *testing.T) {
 	assert.EqualValues(t, []string{"1.md#alpha", "2.md#gamma"}, duplicates)
 }
 
-func TestLinkTargetCollection(t *testing.T) {
-	ltc := make(linkTargetCollection)
+func TestLinkTargets(t *testing.T) {
+	ltc := make(linkTargets)
 	err := ltc.Add("1.md")
 	assert.Nil(t, err)
 	err = ltc.Add("1.md#foo")
@@ -51,16 +51,16 @@ func TestLinkTargetCollection(t *testing.T) {
 	assert.False(t, ltc.Contains("2.md"))
 }
 
-func TestLinkTargetCollection_AddDuplicate(t *testing.T) {
-	ltc := make(linkTargetCollection)
+func TestLinkTargets_AddDuplicate(t *testing.T) {
+	ltc := make(linkTargets)
 	err := ltc.Add("1.md")
 	assert.Nil(t, err)
 	err = ltc.Add("1.md")
 	assert.NotNil(t, err)
 }
 
-func TestLinkTargetCollection_String(t *testing.T) {
-	ltc := linkTargetCollection{}
+func TestLinkTargets_String(t *testing.T) {
+	ltc := linkTargets{}
 	err := ltc.Add("one")
 	assert.Nil(t, err)
 	err = ltc.Add("two")
@@ -68,7 +68,7 @@ func TestLinkTargetCollection_String(t *testing.T) {
 	assert.Equal(t, "[one, two]", ltc.String())
 }
 
-func assertContains(t *testing.T, targets linkTargetCollection, target string) {
+func assertContains(t *testing.T, targets linkTargets, target string) {
 	if _, exists := targets[target]; !exists {
 		t.Errorf("expected %q in %s", target, targets)
 	}

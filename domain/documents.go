@@ -6,11 +6,11 @@ import (
 	"github.com/kevgo/tikibase/helpers"
 )
 
-// DocumentCollection is a collection of Documents.
-type DocumentCollection []*Document
+// Documents is a collection of Documents.
+type Documents []*Document
 
-// ScaffoldDocumentCollection provides new DocumentCollections for testing.
-func ScaffoldDocumentCollection(data []DocumentScaffold) (result DocumentCollection) {
+// ScaffoldDocuments provides new DocumentCollections for testing.
+func ScaffoldDocuments(data []DocumentScaffold) (result Documents) {
 	for i := range data {
 		result = append(result, ScaffoldDocument(data[i]))
 	}
@@ -18,7 +18,7 @@ func ScaffoldDocumentCollection(data []DocumentScaffold) (result DocumentCollect
 }
 
 // Contains indicates whether this DocumentCollection contains the given document.
-func (docs DocumentCollection) Contains(doc *Document) bool {
+func (docs Documents) Contains(doc *Document) bool {
 	for i := range docs {
 		if docs[i] == doc {
 			return true
@@ -28,7 +28,7 @@ func (docs DocumentCollection) Contains(doc *Document) bool {
 }
 
 // Links provides the links in this document collection.
-func (docs DocumentCollection) Links() (internal, external LinkCollection) {
+func (docs Documents) Links() (internal, external Links) {
 	for d := range docs {
 		links := docs[d].Links()
 		for l := range links {
@@ -43,7 +43,7 @@ func (docs DocumentCollection) Links() (internal, external LinkCollection) {
 }
 
 // FindByFilename returns the Document with the given filename.
-func (docs DocumentCollection) FindByFilename(filename string) (result *Document, err error) {
+func (docs Documents) FindByFilename(filename string) (result *Document, err error) {
 	for i := range docs {
 		if docs[i].FileName() == filename {
 			return docs[i], nil
@@ -53,7 +53,7 @@ func (docs DocumentCollection) FindByFilename(filename string) (result *Document
 }
 
 // TikiLinks provides all TikiLinks in all Documents within this TikiBase.
-func (docs DocumentCollection) TikiLinks() (result TikiLinkCollection, err error) {
+func (docs Documents) TikiLinks() (result TikiLinks, err error) {
 	for i := range docs {
 		links, err := docs[i].TikiLinks(docs)
 		if err != nil {

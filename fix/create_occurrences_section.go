@@ -7,7 +7,7 @@ import (
 )
 
 // CreateOccurrencesSection provides a domain.Section containing the given occurrences of a document.
-func CreateOccurrencesSection(links domain.TikiLinkCollection, doc *domain.Document) (result *domain.Section, err error) {
+func CreateOccurrencesSection(links domain.TikiLinks, doc *domain.Document) (result *domain.Section, err error) {
 	builder := domain.NewSectionBuilder("### occurrences\n\n", doc)
 	for i := range links {
 		sourceSection := links[i].SourceSection()

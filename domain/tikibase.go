@@ -43,7 +43,7 @@ func (tikiBase *TikiBase) CreateDocument(filename string, content string) (resul
 }
 
 // Documents returns all Documents in this TikiBase.
-func (tikiBase *TikiBase) Documents() (result DocumentCollection, err error) {
+func (tikiBase *TikiBase) Documents() (result Documents, err error) {
 	docFiles, _, err := tikiBase.Files()
 	if err != nil {
 		return result, fmt.Errorf("cannot determine documents: %w", err)
