@@ -57,9 +57,9 @@ func TestTikiLinkCollection_GroupByTarget(t *testing.T) {
 		{Title: "2-1", SourceSection: docs[2].TitleSection(), TargetDocument: docs[1]},
 	})
 	actual := links.GroupByTarget()
-	assert.Equal(t, actual[domain.DocumentFilename("0.md")], domain.TikiLinkCollection{links[2], links[4]})
-	assert.Equal(t, actual[domain.DocumentFilename("1.md")], domain.TikiLinkCollection{links[0], links[5]})
-	assert.Equal(t, actual[domain.DocumentFilename("2.md")], domain.TikiLinkCollection{links[1], links[3]})
+	assert.Equal(t, actual["0.md"], domain.TikiLinkCollection{links[2], links[4]})
+	assert.Equal(t, actual["1.md"], domain.TikiLinkCollection{links[0], links[5]})
+	assert.Equal(t, actual["2.md"], domain.TikiLinkCollection{links[1], links[3]})
 }
 
 func TestTikiLinkCollection_ReferencedDocs(t *testing.T) {

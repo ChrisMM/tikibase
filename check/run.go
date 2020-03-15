@@ -47,9 +47,9 @@ func Run(dir string) (brokenLinks []BrokenLink, duplicates []string, nonLinkedRe
 	return brokenLinks, duplicates, nonLinkedResources, err
 }
 
-func isBrokenLink(target string, filename domain.DocumentFilename, targets linkTargetCollection) bool {
+func isBrokenLink(target string, filename string, targets linkTargetCollection) bool {
 	if strings.HasPrefix(target, "#") {
-		return !targets.Contains(string(filename) + target)
+		return !targets.Contains(filename + target)
 	}
 	return !targets.Contains(target)
 }

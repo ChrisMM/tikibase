@@ -15,7 +15,7 @@ type DocumentFiles struct {
 // Documents provides the documents contained in theses files.
 func (df DocumentFiles) Documents() (result DocumentCollection, err error) {
 	for f := range df.fileNames {
-		doc, err := df.tikiBase.LoadDocument(DocumentFilename(df.fileNames[f]))
+		doc, err := df.tikiBase.LoadDocument(df.fileNames[f])
 		if err != nil {
 			return result, fmt.Errorf("cannot get documents: %w", err)
 		}

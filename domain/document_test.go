@@ -23,7 +23,7 @@ func TestDocumentAppendSection(t *testing.T) {
 	newSection := domain.ScaffoldSection(domain.SectionScaffold{Content: "### new section\n"})
 	newDoc := oldDoc.AppendSection(newSection)
 	assert.Equal(t, "existing document content\n\n### new section\n", newDoc.Content())
-	assert.Equal(t, domain.DocumentFilename("one.md"), newDoc.FileName(), "didn't bring the filename over to the new doc")
+	assert.Equal(t, "one.md", newDoc.FileName(), "didn't bring the filename over to the new doc")
 }
 
 func TestDocumentContentSections(t *testing.T) {
@@ -38,7 +38,7 @@ func TestDocumentContentSections(t *testing.T) {
 
 func TestDocumentFileName(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md"})
-	assert.Equal(t, domain.DocumentFilename("one.md"), doc.FileName())
+	assert.Equal(t, "one.md", doc.FileName())
 }
 
 func TestDocumentId(t *testing.T) {

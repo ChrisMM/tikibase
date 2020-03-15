@@ -43,7 +43,7 @@ func (docs DocumentCollection) Links() (internal, external LinkCollection) {
 }
 
 // FindByFilename returns the Document with the given filename.
-func (docs DocumentCollection) FindByFilename(filename DocumentFilename) (result *Document, err error) {
+func (docs DocumentCollection) FindByFilename(filename string) (result *Document, err error) {
 	for i := range docs {
 		if docs[i].FileName() == filename {
 			return docs[i], nil

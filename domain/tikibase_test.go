@@ -36,8 +36,8 @@ func TestTikiBase_Documents(t *testing.T) {
 	docs, err := tikiBase.Documents()
 	assert.Nil(t, err)
 	assert.Len(t, docs, 2)
-	assert.Equal(t, domain.DocumentFilename("one.md"), docs[0].FileName())
-	assert.Equal(t, domain.DocumentFilename("two.md"), docs[1].FileName())
+	assert.Equal(t, "one.md", docs[0].FileName())
+	assert.Equal(t, "two.md", docs[1].FileName())
 }
 
 func TestTikiBase_Documents_IgnoresNonMarkdown(t *testing.T) {
@@ -49,7 +49,7 @@ func TestTikiBase_Documents_IgnoresNonMarkdown(t *testing.T) {
 	docs, err := tikiBase.Documents()
 	assert.Nil(t, err, "cannot call tb.Documents()")
 	assert.Len(t, docs, 1)
-	assert.Equal(t, domain.DocumentFilename("one.md"), docs[0].FileName())
+	assert.Equal(t, "one.md", docs[0].FileName())
 }
 
 func TestTikiBase_Load(t *testing.T) {
@@ -58,7 +58,7 @@ func TestTikiBase_Load(t *testing.T) {
 	assert.Nil(t, err)
 	doc, err := tikiBase.LoadDocument("one.md")
 	assert.Nil(t, err)
-	assert.Equal(t, domain.DocumentFilename("one.md"), doc.FileName())
+	assert.Equal(t, "one.md", doc.FileName())
 }
 
 func TestTikiBase_SaveDocument(t *testing.T) {

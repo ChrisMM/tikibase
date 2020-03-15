@@ -31,7 +31,7 @@ func (links TikiLinkCollection) Contains(link *TikiLink) bool {
 func (links TikiLinkCollection) CombineLinksFromSameDocuments() (result TikiLinkCollection) {
 	referencedDocs := make(map[string]TikiLinkCollection)
 	for i := range links {
-		fileName := string(links[i].SourceSection().Document().FileName())
+		fileName := links[i].SourceSection().Document().FileName()
 		referencedDocs[fileName] = append(referencedDocs[fileName], links[i])
 	}
 	for _, links := range referencedDocs {
@@ -58,8 +58,8 @@ func (links TikiLinkCollection) Filter(filter func(link *TikiLink) bool) (result
 }
 
 // GroupByTarget determines which links in the given TikiLink list point to which Document.
-func (links TikiLinkCollection) GroupByTarget() map[DocumentFilename]TikiLinkCollection {
-	result := make(map[DocumentFilename]TikiLinkCollection)
+func (links TikiLinkCollection) GroupByTarget() map[string]TikiLinkCollection {
+	result := make(map[string]TikiLinkCollection)
 	for i := range links {
 		targetFileName := links[i].TargetDocument().FileName()
 		result[targetFileName] = append(result[targetFileName], links[i])

@@ -125,7 +125,7 @@ func (w *workspaceFeature) itFindsTheBrokenLinks(expected *gherkin.DataTable) er
 	for i := 0; i < len(w.brokenLinks); i++ {
 		expectedFile := expected.Rows[i+1].Cells[0].Value
 		expectedLink := expected.Rows[i+1].Cells[1].Value
-		actualFile := string(w.brokenLinks[i].Filename)
+		actualFile := w.brokenLinks[i].Filename
 		actualLink := w.brokenLinks[i].Link
 		if expectedFile != actualFile || expectedLink != actualLink {
 			return fmt.Errorf("expected file %q to contain broken link %q, instead got file %q with broken link %q", expectedFile, expectedLink, actualFile, actualLink)

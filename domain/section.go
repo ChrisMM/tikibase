@@ -137,7 +137,7 @@ func (section *Section) TikiLinks(dc DocumentCollection) (result TikiLinkCollect
 			// we can ignore links to non-Markdown files here
 			continue
 		}
-		targetDocument, err := dc.FindByFilename(DocumentFilename(filename))
+		targetDocument, err := dc.FindByFilename(filename)
 		if err != nil {
 			return result, fmt.Errorf("cannot find target document (%q) for link %q in Section %q: %w", filename, link.Title(), sectionTitle, err)
 		}

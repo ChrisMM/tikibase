@@ -11,14 +11,11 @@ import (
 type Document struct {
 
 	// fileame is the unique identifier for this document.
-	filename DocumentFilename
+	filename string
 
 	// the textual content of the document
 	sections SectionCollection
 }
-
-// DocumentFilename is the filename of a Document.
-type DocumentFilename string
 
 // DocumentScaffold is for easy scaffolding of Documents in tests.
 // Don't use this in production code.
@@ -30,7 +27,7 @@ type DocumentScaffold struct {
 // newDocumentWithText creates a new Document instance with the given textual content.
 // This constructor is internal to this module,
 // call (TikiBase).CreateDocument() to create new documents in production.
-func newDocumentWithText(filename DocumentFilename, content string) *Document {
+func newDocumentWithText(filename string, content string) *Document {
 	doc := Document{filename: filename}
 	doc.sections = newSectionCollection(content, &doc)
 	return &doc
@@ -39,7 +36,7 @@ func newDocumentWithText(filename DocumentFilename, content string) *Document {
 // newDocumentWithSections creates a new Document instance with the given pre-parsed sections.
 // This constructor is internal to this module,
 // call (TikiBase).CreateDocument() to create new documents in production.
-func newDocumentWithSections(filename DocumentFilename, sections SectionCollection) *Document {
+func newDocumentWithSections(filename string, sections SectionCollection) *Document {
 	doc := Document{filename, sections}
 	return &doc
 }
@@ -52,7 +49,7 @@ func ScaffoldDocument(data DocumentScaffold) *Document {
 	if data.Content == "" {
 		data.Content = "# Title\ndefault content"
 	}
-	return newDocumentWithText(DocumentFilename(data.FileName), data.Content)
+	return newDocumentWithText(data.FileName, data.Content)
 }
 
 // AllSections returns all the TikiSections that make up this document,
@@ -89,14 +86,13 @@ func (doc *Document) FindSectionWithTitle(title string) (*Section, error) {
 }
 
 // FileName returns the file path (handle + extension) of this Document.
-func (doc *Document) FileName() DocumentFilename {
+func (doc *Document) FileName() string {
 	return doc.filename
 }
 
 // ID provides the unique ID of this document.
 func (doc *Document) ID() string {
-	filename := string(doc.filename)
-	return strings.TrimSuffix(filename, path.Ext(filename))
+	return strings.TrimSuffix(doc.filename, path.Ext(doc.filename))
 }
 
 // Links provides all Links in this document.
@@ -146,5 +142,5 @@ func (doc *Document) TitleSection() *Section {
 
 // URL provides the URL of this Document within its TikiBase.
 func (doc *Document) URL() string {
-	return string(doc.filename)
+	return doc.filename
 }

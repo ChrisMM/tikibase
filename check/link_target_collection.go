@@ -20,9 +20,9 @@ func findLinkTargets(docs domain.DocumentCollection, resources domain.ResourceFi
 	for i := range docs {
 
 		// add target for the document itself
-		err := result.Add(string(docs[i].FileName()))
+		err := result.Add(docs[i].FileName())
 		if err != nil {
-			duplicates = append(duplicates, string(docs[i].FileName()))
+			duplicates = append(duplicates, docs[i].FileName())
 		}
 
 		// add target for the sections in the document
