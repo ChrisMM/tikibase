@@ -21,6 +21,8 @@ The `tikibase` tool in this repository provides these commands:
 - **check:** verifies the consistency of this TikiBase:
   - broken internal links
   - non-markdown files that aren't linked to
+  - multiple occurrences of the same section in a file
+  - inconsistent capitalization of sections
 - **checkfix:** runs the checks and fixes
 - **stats:** shows statistics about this TikiBase
 

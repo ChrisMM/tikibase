@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/kevgo/tikibase/check"
 	"github.com/kevgo/tikibase/helpers"
@@ -65,5 +66,12 @@ func handleCheckResults(result check.Result) {
 		}
 	}
 
+	if len(result.MixedCapSections) > 0 {
+		exitCode += len(result.MixedCapSections)
+		fmt.Printf("\n%d sections with inconsistent capitalization:\n", len(result.MixedCapSections))
+		for i := range result.MixedCapSections {
+			fmt.Printf("- %v\n", strings.Join(result.MixedCapSections[i], ", "))
+		}
+	}
 	os.Exit(exitCode)
 }

@@ -14,6 +14,23 @@ func TestDocuments_Contains(t *testing.T) {
 	assert.False(t, docs.Contains(otherDoc), "should not contain otherDoc")
 }
 
+func TestDocuments_ContentSections(t *testing.T) {
+	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
+		{Content: "# One\n### section 1\n### section 2"},
+		{Content: "# Two\n### section 3\n### section 4"}})
+	sections := docs.ContentSections()
+	assert.Len(t, sections, 4)
+	titles := []string{}
+	for s := range sections {
+		title, err := sections[s].Title()
+		if err != nil {
+			t.Errorf("cannot determine section title: %w", err)
+		}
+		titles = append(titles, title)
+	}
+	assert.Equal(t, titles, []string{"section 1", "section 2", "section 3", "section 4"})
+}
+
 func TestDocuments_Find(t *testing.T) {
 	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
 		{FileName: "one.md"},

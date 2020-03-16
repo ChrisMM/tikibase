@@ -1,15 +1,18 @@
 package check
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/kevgo/tikibase/domain"
+	"github.com/kevgo/tikibase/helpers"
 )
 
 // Result contains the outcome of a TikiBase check.
 type Result struct {
 	BrokenLinks        []BrokenLink
 	Duplicates         []string
+	MixedCapSections   [][]string
 	NonLinkedResources []string
 }
 
@@ -32,8 +35,6 @@ func Run(dir string) (result Result, err error) {
 	if err != nil {
 		return
 	}
-
-	// determine all links
 	internalLinks, _ := docs.Links()
 
 	// determine broken links
@@ -52,6 +53,19 @@ func Run(dir string) (result Result, err error) {
 		}
 	}
 
+	// determine mixed cap sections
+	titles := []string{}
+	sections := docs.ContentSections()
+	for s := range sections {
+		title, err := sections[s].Title()
+		if err != nil {
+			return result, fmt.Errorf("cannot determine mixed cap sections: %w", err)
+		}
+		titles = append(titles, title)
+	}
+	titles = helpers.UniqueStrings(titles)
+	helpers.SortCaseInsensitive(titles)
+	result.MixedCapSections = FindGroups(titles)
 	return result, err
 }
 

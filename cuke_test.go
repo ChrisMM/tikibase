@@ -7,6 +7,7 @@ import (
 	"path"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/cucumber/godog"
 	"github.com/cucumber/godog/gherkin"
@@ -152,6 +153,16 @@ func (w *workspaceFeature) itFindsTheSectionTypes(table *gherkin.DataTable) erro
 	return nil
 }
 
+func (w *workspaceFeature) itFindsTheseSectionsWithMixedCapitalization(table *gherkin.DataTable) error {
+	for r := range table.Rows {
+		expected := strings.Split(table.Rows[r].Cells[0].Value, ", ")
+		if !reflect.DeepEqual(w.checkResult.MixedCapSections[r], expected) {
+			return fmt.Errorf("expected [%s], found [%s]", strings.Join(expected, ","), strings.Join(w.checkResult.MixedCapSections[r], ","))
+		}
+	}
+	return nil
+}
+
 func (w *workspaceFeature) itProvidesTheStatistics(table *gherkin.DataTable) error {
 	// check docs count
 	expectedDocsCount, err := strconv.Atoi(table.Rows[0].Cells[1].Value)
@@ -223,6 +234,7 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^it finds the duplicates:$`, wf.itFindsTheDuplicates)
 	s.Step(`^it finds the non-linked resources:$`, wf.itFindsTheNonlinkedResources)
 	s.Step(`^it finds the section types:$`, wf.itFindsTheSectionTypes)
+	s.Step(`^it finds these sections with mixed capitalization:$`, wf.itFindsTheseSectionsWithMixedCapitalization)
 	s.Step(`^it provides the statistics:$`, wf.itProvidesTheStatistics)
 	s.Step(`^finding "([^"]+)"$`, wf.finding)
 	s.Step(`^fixing the TikiBase$`, wf.fixingTheTikiBase)

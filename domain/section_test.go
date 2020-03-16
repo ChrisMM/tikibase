@@ -64,10 +64,16 @@ func TestSection_TikiLinks_IgnoresHtmlLinks(t *testing.T) {
 }
 
 func TestSection_Title(t *testing.T) {
-	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "### What is it\n"})
-	actual, err := section.Title()
-	assert.Nil(t, err)
-	assert.Equal(t, "What is it", actual, "mismatching section title")
+	tests := [][]string{
+		{"### what is it\n", "what is it"},
+		{"###    hello   \n", "hello"},
+	}
+	for tt := range tests {
+		section := domain.ScaffoldSection(domain.SectionScaffold{Content: tests[tt][0]})
+		actual, err := section.Title()
+		assert.Nil(t, err)
+		assert.Equal(t, tests[tt][1], actual, "mismatching section title")
+	}
 }
 
 func TestSection_URL(t *testing.T) {

@@ -27,6 +27,14 @@ func (docs Documents) Contains(doc *Document) bool {
 	return false
 }
 
+// ContentSections provides all content sections in this document collection.
+func (docs Documents) ContentSections() (result Sections) {
+	for d := range docs {
+		result = append(result, docs[d].ContentSections()...)
+	}
+	return result
+}
+
 // Links provides the links in this document collection.
 func (docs Documents) Links() (internal, external Links) {
 	for d := range docs {

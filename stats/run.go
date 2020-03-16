@@ -2,10 +2,9 @@ package stats
 
 import (
 	"fmt"
-	"sort"
-	"strings"
 
 	"github.com/kevgo/tikibase/domain"
+	"github.com/kevgo/tikibase/helpers"
 )
 
 // Result contains statistics about a TikiBase.
@@ -49,8 +48,6 @@ func Run(dir string) (result Result, err error) {
 	for sectionType := range sectionTypes {
 		result.SectionTypes = append(result.SectionTypes, sectionType)
 	}
-	sort.Slice(result.SectionTypes, func(i, j int) bool {
-		return strings.ToLower(result.SectionTypes[i]) < strings.ToLower(result.SectionTypes[j])
-	})
+	helpers.SortCaseInsensitive(result.SectionTypes)
 	return result, nil
 }

@@ -155,7 +155,7 @@ func (section *Section) Title() (string, error) {
 	if len(matches) == 0 {
 		return "", fmt.Errorf("malformatted section title: %q", titleLine)
 	}
-	return matches[1], nil
+	return strings.TrimSpace(matches[1]), nil
 }
 
 // URL provides the full URL to this Section (link to document that contains this section + anchor of the section.
