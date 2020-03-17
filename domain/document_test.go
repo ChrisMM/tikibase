@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDocumentAllSections(t *testing.T) {
+func TestDocument_AllSections(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{
 		Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nThe other.\n",
 	})
@@ -18,7 +18,7 @@ func TestDocumentAllSections(t *testing.T) {
 	assert.Equal(t, domain.SectionContent("### Two\n\nThe other.\n"), (sections)[2].Content())
 }
 
-func TestDocumentAppendSection(t *testing.T) {
+func TestDocument_AppendSection(t *testing.T) {
 	oldDoc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md", Content: "existing document content\n"})
 	newSection := domain.ScaffoldSection(domain.SectionScaffold{Content: "### new section\n"})
 	newDoc := oldDoc.AppendSection(newSection)
@@ -26,7 +26,7 @@ func TestDocumentAppendSection(t *testing.T) {
 	assert.Equal(t, "one.md", newDoc.FileName(), "didn't bring the filename over to the new doc")
 }
 
-func TestDocumentContentSections(t *testing.T) {
+func TestDocument_ContentSections(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{
 		Content: "# Title\nmy doc\n### One\nThe one.\n### Two\nThe other.\n",
 	})
@@ -36,12 +36,12 @@ func TestDocumentContentSections(t *testing.T) {
 	assert.Equal(t, domain.SectionContent("### Two\nThe other.\n"), (sections)[1].Content())
 }
 
-func TestDocumentFileName(t *testing.T) {
+func TestDocument_FileName(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md"})
 	assert.Equal(t, "one.md", doc.FileName())
 }
 
-func TestDocumentId(t *testing.T) {
+func TestDocument_Id(t *testing.T) {
 	tests := map[string]string{
 		"foo.md":         "foo",
 		"markdown-it.md": "markdown-it",
@@ -54,7 +54,7 @@ func TestDocumentId(t *testing.T) {
 	}
 }
 
-func TestDocumentReplaceSection(t *testing.T) {
+func TestDocument_ReplaceSection(t *testing.T) {
 	td := domain.ScaffoldDocument(domain.DocumentScaffold{
 		Content: "# Title\n\nmy doc\n\n### One\n\nThe one.\n\n### Two\n\nOld section 2.\n",
 	})
@@ -69,7 +69,7 @@ func TestDocumentReplaceSection(t *testing.T) {
 	assert.Equal(t, domain.SectionContent("### Two\n\nNew section 2.\n"), (newSections)[2].Content(), "unexpected content section 2")
 }
 
-func TestDocumentTikiLinks(t *testing.T) {
+func TestDocument_TikiLinks(t *testing.T) {
 	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
 		{FileName: "doc1.md", Content: "### One\n"},
 		{FileName: "doc2.md", Content: "### Two\n[one](doc1.md)"},
@@ -82,7 +82,7 @@ func TestDocumentTikiLinks(t *testing.T) {
 	assert.Equal(t, docs[0], actual[0].TargetDocument())
 }
 
-func TestDocumentTitleSection(t *testing.T) {
+func TestDocument_TitleSection(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{Content: "# My Title\n\nTitle section content.\n\n### Content Section\n Content section content.\n"})
 	section := doc.TitleSection()
 	assert.Equal(t, domain.SectionContent("# My Title\n\nTitle section content.\n\n"), section.Content())
