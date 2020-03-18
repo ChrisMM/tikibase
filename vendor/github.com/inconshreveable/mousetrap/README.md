@@ -2,8 +2,8 @@
 
 mousetrap is a tiny library that answers a single question.
 
-On a Windows machine, was the process invoked by someone double clicking on the
-executable file while browsing in explorer?
+On a Windows machine, was the process invoked by someone double clicking on
+the executable file while browsing in explorer?
 
 ### Motivation
 

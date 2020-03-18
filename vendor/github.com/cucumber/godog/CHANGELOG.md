@@ -4,10 +4,9 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org).
 
-This document is formatted according to the principles of
-[Keep A CHANGELOG](http://keepachangelog.com).
+This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
----
+----
 
 ## [Unreleased]
 
@@ -25,16 +24,12 @@ This document is formatted according to the principles of
 
 ### Added
 
-- Link in Readme to the Slack community.
-  ([210](https://github.com/cucumber/godog/pull/210) [smikulcik])
-- Added run tests for Cucumber formatting.
-  ([214](https://github.com/cucumber/godog/pull/214),
-  [216](https://github.com/cucumber/godog/pull/216) [lonnblad])
+- Link in Readme to the Slack community. ([210](https://github.com/cucumber/godog/pull/210) [smikulcik])
+- Added run tests for Cucumber formatting. ([214](https://github.com/cucumber/godog/pull/214), [216](https://github.com/cucumber/godog/pull/216) [lonnblad])
 
 ### Changed
 
-- Renamed the `examples` directory to `_examples`, removing dependencies from
-  the Go module ([218](https://github.com/cucumber/godog/pull/218) [axw])
+- Renamed the `examples` directory to `_examples`, removing dependencies from the Go module ([218](https://github.com/cucumber/godog/pull/218) [axw])
 
 ### Deprecated
 
@@ -42,8 +37,7 @@ This document is formatted according to the principles of
 
 ### Fixed
 
-- Find/Replaced references to DATA-DOG/godog -> cucumber/godog for docs.
-  ([209](https://github.com/cucumber/godog/pull/209) [smikulcik])
+- Find/Replaced references to DATA-DOG/godog -> cucumber/godog for docs. ([209](https://github.com/cucumber/godog/pull/209) [smikulcik])
 - Fixed missing links in changelog to be correctly included! ([jaysonesmith])
 
 ## [0.8.0]
@@ -55,8 +49,7 @@ This document is formatted according to the principles of
 
 ### Changed
 
-- Changed code references to DATA-DOG/godog to cucumber/godog to help get things
-  building correctly. ([jaysonesmith])
+- Changed code references to DATA-DOG/godog to cucumber/godog to help get things building correctly. ([jaysonesmith])
 
 ### Deprecated
 
@@ -65,16 +58,13 @@ This document is formatted according to the principles of
 ### Fixed
 
 <!-- Releases -->
-
-[unreleased]: https://github.com/cucumber/cucumber/compare/godog/v0.8.1...master
-[0.8.0]:
-  https://github.com/cucumber/cucumber/compare/godog/v0.8.0...godog/v0.8.1
-[0.8.0]:
-  https://github.com/cucumber/cucumber/compare/godog/v0.7.13...godog/v0.8.0
+[Unreleased]: https://github.com/cucumber/cucumber/compare/godog/v0.8.1...master
+[0.8.0]:      https://github.com/cucumber/cucumber/compare/godog/v0.8.0...godog/v0.8.1
+[0.8.0]:      https://github.com/cucumber/cucumber/compare/godog/v0.7.13...godog/v0.8.0
 
 <!-- Contributors -->
+[axw]:              https://github.com/axw
+[jaysonesmith]:     https://github.com/jaysonesmith
+[lonnblad]:         https://github.com/lonnblad
+[smikulcik]:        https://github.com/smikulcik
 
-[axw]: https://github.com/axw
-[jaysonesmith]: https://github.com/jaysonesmith
-[lonnblad]: https://github.com/lonnblad
-[smikulcik]: https://github.com/smikulcik
