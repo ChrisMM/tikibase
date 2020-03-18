@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/cucumber/godog/tree/master.svg?style=svg)](https://circleci.com/gh/cucumber/godog/tree/master)
-[![GoDoc](https://godoc.org/github.com/DATA-DOG/godog?status.svg)](https://godoc.org/github.com/DATA-DOG/godog)
-[![codecov.io](https://codecov.io/github/DATA-DOG/godog/branch/master/graph/badge.svg)](https://codecov.io/github/DATA-DOG/godog)
+[![GoDoc](https://godoc.org/github.com/cucumber/godog?status.svg)](https://godoc.org/github.com/cucumber/godog)
+[![codecov](https://codecov.io/gh/cucumber/godog/branch/master/graph/badge.svg)](https://codecov.io/gh/cucumber/godog)
 
 # Godog
 
@@ -12,7 +12,7 @@
 
 Please read all the README, you may find it very useful. And do not forget to
 peek into the
-[CHANGELOG](https://github.com/DATA-DOG/godog/blob/master/CHANGELOG.md) from
+[CHANGELOG](https://github.com/cucumber/godog/blob/master/CHANGELOG.md) from
 time to time.
 
 Package godog is the official Cucumber BDD framework for Golang, it merges
@@ -63,11 +63,11 @@ from costly regressions.
 
 ## Install
 
-    go get github.com/DATA-DOG/godog/cmd/godog
+    go get github.com/cucumber/godog/cmd/godog
 
 ## Example
 
-The following example can be [found here](/examples/godogs).
+The following example can be [found here](/_examples/godogs).
 
 ### Step 1
 
@@ -105,7 +105,7 @@ If godog is installed in your GOPATH. We can run `godog` inside the
 If we wish to vendor godog dependency, we can do it as usual, using tools you
 prefer:
 
-    git clone https://github.com/DATA-DOG/godog.git $GOPATH/src/godogs/vendor/github.com/DATA-DOG/godog
+    git clone https://github.com/cucumber/godog.git $GOPATH/src/godogs/vendor/github.com/cucumber/godog
 
 It gives you undefined step snippets to implement in your test context. You may
 copy these snippets into your `godogs_test.go` file.
@@ -151,7 +151,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/DATA-DOG/godog"
+	"github.com/cucumber/godog"
 )
 
 func thereAreGodogs(available int) error {
@@ -209,7 +209,7 @@ Unix tools. Look how to simplify or remove ones, which can be composed.
   [following docker image](https://github.com/myie/cucumber-html-reporter) for
   usage details.
 - [how to use godog by semaphoreci](https://semaphoreci.com/community/tutorials/how-to-use-godog-for-behavior-driven-development-in-go)
-- see [examples](https://github.com/DATA-DOG/godog/tree/master/examples)
+- see [examples](https://github.com/cucumber/godog/tree/master/_examples)
 - see extension [AssistDog](https://github.com/hellomd/assistdog), which may
   have useful **gherkin.DataTable** transformations or comparison methods for
   assertions.
@@ -221,9 +221,9 @@ See [godoc][godoc] for general API details. See **.travis.yml** for supported
 
 See implementation examples:
 
-- [rest API server](/examples/api)
-- [rest API with Database](/examples/db)
-- [godogs](/examples/godogs)
+- [rest API server](/_examples/api)
+- [rest API with Database](/_examples/db)
+- [godogs](/_examples/godogs)
 
 ## FAQ
 
@@ -357,12 +357,25 @@ to public (exported methods or types) - please open an issue before to discuss
 whether these changes can be accepted. All backward incompatible changes are and
 will be treated cautiously.
 
+Reach out to the community on our
+[Cucumber Slack Community](https://cucumberbdd.slack.com/). Join
+[here](https://cucumberbdd-slack-invite.herokuapp.com/).
+
+### Popular Cucumber Slack channels for Godog:
+
+- [#help-godog](https://cucumberbdd.slack.com/archives/CTNL1JCVA) - General
+  Godog Adoption Help
+- [#committers-go](https://cucumberbdd.slack.com/archives/CA5NJPDJ4) - Golang
+  focused Cucumber Contributors
+- [#committers](https://cucumberbdd.slack.com/archives/C62D0FK0E) - General
+  Cucumber Contributors
+
 ## License
 
 **Godog** is licensed under the [MIT][license] **Gherkin** is licensed under the
 [MIT][license] and developed as a part of the [cucumber project][cucumber]
 
-[godoc]: http://godoc.org/github.com/DATA-DOG/godog "Documentation on godoc"
+[godoc]: http://godoc.org/github.com/cucumber/godog "Documentation on godoc"
 [golang]: https://golang.org/ "GO programming language"
 [behat]: http://docs.behat.org/ "Behavior driven development framework for PHP"
 [cucumber]: https://cucumber.io/ "Behavior driven development framework"
