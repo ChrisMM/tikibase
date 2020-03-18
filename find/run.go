@@ -22,7 +22,7 @@ func Run(dir string, types []string) (result []string, err error) {
 		if err != nil || section == nil {
 			continue
 		}
-		sectionContent := string(section.Content())
+		sectionContent := section.Content()
 		for i := range types {
 			if !strings.Contains(sectionContent, types[i]) {
 				continue

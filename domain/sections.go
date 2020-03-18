@@ -76,7 +76,7 @@ func (sections Sections) Replace(oldSection *Section, newSection *Section) (resu
 // Text provides the full text of this SectionCollection.
 func (sections Sections) Text() (result string) {
 	for i := range sections {
-		result += string(sections[i].Content())
+		result += sections[i].Content()
 	}
 	return result
 }

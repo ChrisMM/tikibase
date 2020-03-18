@@ -13,9 +13,9 @@ func TestDocument_AllSections(t *testing.T) {
 	})
 	sections := doc.AllSections()
 	assert.Len(t, sections, 3)
-	assert.Equal(t, domain.SectionContent("# Title\n\nmy doc\n\n"), (sections)[0].Content())
-	assert.Equal(t, domain.SectionContent("### One\n\nThe one.\n\n"), (sections)[1].Content())
-	assert.Equal(t, domain.SectionContent("### Two\n\nThe other.\n"), (sections)[2].Content())
+	assert.Equal(t, "# Title\n\nmy doc\n\n", (sections)[0].Content())
+	assert.Equal(t, "### One\n\nThe one.\n\n", (sections)[1].Content())
+	assert.Equal(t, "### Two\n\nThe other.\n", (sections)[2].Content())
 }
 
 func TestDocument_AppendSection(t *testing.T) {
@@ -32,8 +32,8 @@ func TestDocument_ContentSections(t *testing.T) {
 	})
 	sections := doc.ContentSections()
 	assert.Len(t, sections, 2, "unexpected sections length")
-	assert.Equal(t, domain.SectionContent("### One\nThe one.\n"), (sections)[0].Content())
-	assert.Equal(t, domain.SectionContent("### Two\nThe other.\n"), (sections)[1].Content())
+	assert.Equal(t, "### One\nThe one.\n", (sections)[0].Content())
+	assert.Equal(t, "### Two\nThe other.\n", (sections)[1].Content())
 }
 
 func TestDocument_FileName(t *testing.T) {
@@ -64,9 +64,9 @@ func TestDocument_ReplaceSection(t *testing.T) {
 	newdoc := td.ReplaceSection(twoSection, newSection)
 	newSections := newdoc.AllSections()
 	assert.Len(t, newSections, 3, "unexpected newSections length")
-	assert.Equal(t, domain.SectionContent("# Title\n\nmy doc\n\n"), (newSections)[0].Content(), "unexpected title section")
-	assert.Equal(t, domain.SectionContent("### One\n\nThe one.\n\n"), (newSections)[1].Content(), "unexpected content section 1")
-	assert.Equal(t, domain.SectionContent("### Two\n\nNew section 2.\n"), (newSections)[2].Content(), "unexpected content section 2")
+	assert.Equal(t, "# Title\n\nmy doc\n\n", (newSections)[0].Content(), "unexpected title section")
+	assert.Equal(t, "### One\n\nThe one.\n\n", (newSections)[1].Content(), "unexpected content section 1")
+	assert.Equal(t, "### Two\n\nNew section 2.\n", (newSections)[2].Content(), "unexpected content section 2")
 }
 
 func TestDocument_TikiLinks(t *testing.T) {
@@ -85,7 +85,7 @@ func TestDocument_TikiLinks(t *testing.T) {
 func TestDocument_TitleSection(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{Content: "# My Title\n\nTitle section content.\n\n### Content Section\n Content section content.\n"})
 	section := doc.TitleSection()
-	assert.Equal(t, domain.SectionContent("# My Title\n\nTitle section content.\n\n"), section.Content())
+	assert.Equal(t, "# My Title\n\nTitle section content.\n\n", section.Content())
 }
 
 func TestScaffoldDocument(t *testing.T) {

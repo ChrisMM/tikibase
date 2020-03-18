@@ -28,5 +28,5 @@ func (sb *SectionBuilder) Len() int {
 
 // Section provides the TikiSection that has been built up so far.
 func (sb *SectionBuilder) Section() *Section {
-	return &Section{content: SectionContent(sb.content.String()), document: sb.document}
+	return &Section{content: sb.content.String(), document: sb.document}
 }

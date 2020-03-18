@@ -28,7 +28,7 @@ func TestRenderOccurrencesSection(t *testing.T) {
 - [Go (what is it)](go.md#what-is-it)
 - [TypeScript (what is it)](typescript.md#what-is-it)
 `
-	actual := string(renderedSection.Content())
+	actual := renderedSection.Content()
 	diff := cmp.Diff(expected, actual)
 	if diff != "" {
 		t.Fatal(diff)
@@ -51,7 +51,7 @@ func TestRenderOccurrencesSection_LinkToTitleSection(t *testing.T) {
 
 - [Go](go.md)
 `
-	actual := string(renderedSection.Content())
+	actual := renderedSection.Content()
 	diff := cmp.Diff(expected, actual)
 	if diff != "" {
 		t.Fatal(diff)

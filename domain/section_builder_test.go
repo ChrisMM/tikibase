@@ -15,6 +15,6 @@ func TestSectionBuilder(t *testing.T) {
 	tsb.AddLine("content 2\n")
 	tsb.AddLine("\n")
 	section := tsb.Section()
-	assert.Equal(t, domain.SectionContent("# Title\n\ncontent 1\ncontent 2\n\n"), section.Content(), "TikiSectionBuilder didn't build the right content")
+	assert.Equal(t, "# Title\n\ncontent 1\ncontent 2\n\n", section.Content(), "TikiSectionBuilder didn't build the right content")
 	assert.Same(t, doc, section.Document(), "Created section doesn't contain a link to its containing document")
 }

@@ -17,13 +17,13 @@ func TestSection_Anchor(t *testing.T) {
 func TestSection_AppendLine(t *testing.T) {
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: "existing content\n"})
 	newSection := section.AppendText("new line\n")
-	assert.Equal(t, domain.SectionContent("existing content\nnew line\n"), newSection.Content())
+	assert.Equal(t, "existing content\nnew line\n", newSection.Content())
 }
 
 func TestSection_Content(t *testing.T) {
 	expectedContent := "### title\nthe content\n"
 	section := domain.ScaffoldSection(domain.SectionScaffold{Content: expectedContent})
-	assert.Equal(t, domain.SectionContent(expectedContent), section.Content())
+	assert.Equal(t, expectedContent, section.Content())
 }
 
 func TestSection_LinkTarget(t *testing.T) {

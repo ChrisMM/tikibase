@@ -14,7 +14,7 @@ import (
 type Section struct {
 	// the textual content of this TikiSection
 	// including the title line
-	content SectionContent
+	content string
 
 	// document links to the Document that contains this Section.
 	document *Document
@@ -25,10 +25,6 @@ type SectionScaffold struct {
 	Content string
 	Doc     *Document
 }
-
-// SectionContent represents the full content of a TikiSection,
-// including heading tag and body.
-type SectionContent string
 
 // This is a global constant that doesn't need to be stubbed in tests.
 //nolint:gochecknoglobals
@@ -62,7 +58,7 @@ func ScaffoldSection(data SectionScaffold) *Section {
 	if data.Doc == nil {
 		data.Doc = ScaffoldDocument(DocumentScaffold{})
 	}
-	return &Section{content: SectionContent(data.Content), document: data.Doc}
+	return &Section{content: data.Content, document: data.Doc}
 }
 
 // Anchor provides the URL anchor for this TikiSection.
@@ -76,11 +72,11 @@ func (section *Section) Anchor() (string, error) {
 
 // AppendText provides a new Section that is this Section with the given line appended.
 func (section *Section) AppendText(line string) Section {
-	return Section{content: section.content + SectionContent(line), document: section.document}
+	return Section{content: section.content + line, document: section.document}
 }
 
 // Content returns the complete content of the entire section.
-func (section *Section) Content() SectionContent {
+func (section *Section) Content() string {
 	return section.content
 }
 
@@ -92,14 +88,14 @@ func (section *Section) Document() *Document {
 // Links returns all links in this section.
 func (section *Section) Links() (result []Link) {
 	mdLinkOnce.Do(func() { mdLinkRE = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`) })
-	matches := mdLinkRE.FindAllStringSubmatch(string(section.content), 9999)
+	matches := mdLinkRE.FindAllStringSubmatch(section.content, 9999)
 	for i := range matches {
 		title := matches[i][1]
 		target := matches[i][2]
 		result = append(result, Link{title: title, sourceSection: section, target: target})
 	}
 	htmlLinkOnce.Do(func() { htmlLinkRE = regexp.MustCompile(`<a[^>]* href="(.*?)"[^>]*>(.*?)</a>`) })
-	matches = htmlLinkRE.FindAllStringSubmatch(string(section.content), 9999)
+	matches = htmlLinkRE.FindAllStringSubmatch(section.content, 9999)
 	for _, match := range matches {
 		title := match[2]
 		target := match[1]
@@ -149,7 +145,7 @@ func (section *Section) TikiLinks(dc Documents) (result TikiLinks, err error) {
 // Title returns the human-friendly title of this TikiSection,
 // i.e. its title tag without the "###"" in front
 func (section *Section) Title() (string, error) {
-	titleLine := strings.SplitN(string(section.content), "\n", 1)[0]
+	titleLine := strings.SplitN(section.content, "\n", 1)[0]
 	stripTitleTagOnce.Do(func() { stripTitleTagRE = regexp.MustCompile(`#+\s*(.*)`) })
 	matches := stripTitleTagRE.FindStringSubmatch(titleLine)
 	if len(matches) == 0 {
