@@ -105,14 +105,35 @@ func (w *workspaceFeature) itFindsTheDuplicates(table *gherkin.DataTable) error 
 }
 
 func (w *workspaceFeature) itFindsNoErrors() error {
-	if len(w.checkResult.BrokenLinks) == 0 {
-		return nil
+	if len(w.checkResult.BrokenLinks) > 0 {
+		msg := fmt.Sprintf("Found %d broken links: \n", len(w.checkResult.BrokenLinks))
+		for i := range w.checkResult.BrokenLinks {
+			msg += fmt.Sprintf("- %s: %q", w.checkResult.BrokenLinks[i].Filename, w.checkResult.BrokenLinks[i].Link)
+		}
+		return fmt.Errorf(msg)
 	}
-	msg := fmt.Sprintf("Found %d errors: \n", len(w.checkResult.BrokenLinks))
-	for i := range w.checkResult.BrokenLinks {
-		msg += fmt.Sprintf("- file %q contains broken link %q", w.checkResult.BrokenLinks[i].Filename, w.checkResult.BrokenLinks[i].Link)
+	if len(w.checkResult.NonLinkedResources) > 0 {
+		msg := fmt.Sprintf("Found %d non-linked resources: \n", len(w.checkResult.NonLinkedResources))
+		for i := range w.checkResult.NonLinkedResources {
+			msg += fmt.Sprintf("- %s", w.checkResult.NonLinkedResources[i])
+		}
+		return fmt.Errorf(msg)
 	}
-	return fmt.Errorf(msg)
+	if len(w.checkResult.Duplicates) > 0 {
+		msg := fmt.Sprintf("Found %d duplicates: \n", len(w.checkResult.Duplicates))
+		for i := range w.checkResult.Duplicates {
+			msg += fmt.Sprintf("- %s", w.checkResult.Duplicates[i])
+		}
+		return fmt.Errorf(msg)
+	}
+	if len(w.checkResult.MixedCapSections) > 0 {
+		msg := fmt.Sprintf("Found %d mixed cap sections: \n", len(w.checkResult.MixedCapSections))
+		for i := range w.checkResult.MixedCapSections {
+			msg += fmt.Sprintf("- %v", w.checkResult.MixedCapSections[i])
+		}
+		return fmt.Errorf(msg)
+	}
+	return nil
 }
 
 func (w *workspaceFeature) itFindsTheBrokenLinks(expected *gherkin.DataTable) error {

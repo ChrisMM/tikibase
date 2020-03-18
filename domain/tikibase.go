@@ -58,6 +58,9 @@ func (tikiBase *TikiBase) Files() (docs DocumentFiles, resources ResourceFiles, 
 		return docs, resources, fmt.Errorf("cannot read TikiBase directory %q: %w", tikiBase.dir, err)
 	}
 	for f := range fileInfos {
+		if strings.HasPrefix(fileInfos[f].Name(), ".") {
+			continue
+		}
 		if strings.HasSuffix(fileInfos[f].Name(), ".md") {
 			docs.fileNames = append(docs.fileNames, fileInfos[f].Name())
 		} else {
