@@ -1,33 +1,27 @@
 <img src="tikibase.jpg" width="92" height="216" align="right">
 
-# TikiBase Tools
+# Tikibase Tools
 
 [![CircleCI](https://circleci.com/gh/kevgo/tikibase.svg?style=shield)](https://circleci.com/gh/kevgo/tikibase)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kevgo/tikibase)](https://goreportcard.com/report/github.com/kevgo/tikibase)
 
-This repository provides automation to make working with a
-[TikiBase](documentation/tikibase.md) more convenient.
+The `tikibase` tool provides these commands:
 
-### functionality
-
-The `tikibase` tool in this repository provides these commands:
-
-- **fix:** fixes all auto-fixable issues
-  - adds an `occurrences` section to documents containing unmentioned backlinks
-- **find:** searches for entries in this TikiBase
+- **check:** verifies the consistency of this Tikibase:
+  - broken internal links
+  - resources (non-markdown files) that aren't linked to from a markdown file
+  - multiple occurrences of the same section in a file
+  - inconsistent capitalization of sections
+- **checkfix:** runs the checks and fixes. Run this after making changes to a
+  Tikibase.
+- **find:** semantic search
   - find all parsers: `tikibase find --is parser`
   - find all Markdown parsers: `tikibase find --is parser,markdown` or
     `tikibase find --is parser --is markdown`
-- **check:** verifies the consistency of this TikiBase:
-  - broken internal links
-  - non-markdown files that aren't linked to
-  - multiple occurrences of the same section in a file
-  - inconsistent capitalization of sections
-- **checkfix:** runs the checks and fixes
-- **stats:** shows statistics about this TikiBase
-
-You can run these commands using the CLI, on a CI server, or bundle them into a
-bot to run them automatically on each change.
+- **fix:** fixes all auto-fixable issues
+  - adds `occurrences` sections containing unmentioned backlinks
+- **stats:** shows statistics about this Tikibase
+- **version:** shows the version of the installed tool
 
 ### development
 
