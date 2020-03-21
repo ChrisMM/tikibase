@@ -1,10 +1,13 @@
 package domain_test
 
 import (
+	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
 	"testing"
 
+	"github.com/kevgo/tikibase/config"
 	"github.com/kevgo/tikibase/domain"
 	"github.com/kevgo/tikibase/test"
 	"github.com/stretchr/testify/assert"
@@ -50,6 +53,43 @@ func TestTikiBase_Documents_IgnoresNonMarkdown(t *testing.T) {
 	assert.Nil(t, err, "cannot call tb.Documents()")
 	assert.Len(t, docs, 1)
 	assert.Equal(t, "one.md", docs[0].FileName())
+}
+
+func TestTikiBase_Files_noConfig(t *testing.T) {
+	tmp, err := ioutil.TempDir("", "")
+	assert.Nil(t, err)
+	_, err = os.Create(path.Join(tmp, "one.md"))
+	assert.Nil(t, err)
+	_, err = os.Create(path.Join(tmp, "two.md"))
+	assert.Nil(t, err)
+	_, err = os.Create(path.Join(tmp, "img.png"))
+	assert.Nil(t, err)
+	tb, err := domain.NewTikiBase(tmp)
+	assert.Nil(t, err)
+	docs, resources, err := tb.Files()
+	assert.Nil(t, err)
+	assert.Equal(t, []string{"one.md", "two.md"}, docs.FileNames())
+	assert.Equal(t, []string{"img.png"}, resources.FileNames())
+}
+
+func TestTikiBase_Files_withConfig(t *testing.T) {
+	dir, err := ioutil.TempDir("", "")
+	assert.Nil(t, err)
+	_, err = os.Create(path.Join(dir, "one.md"))
+	assert.Nil(t, err)
+	_, err = os.Create(path.Join(dir, "Makefile"))
+	assert.Nil(t, err)
+	_, err = os.Create(path.Join(dir, "img.png"))
+	assert.Nil(t, err)
+	err = ioutil.WriteFile(path.Join(dir, config.FileName()), []byte("ignore:\n  - Makefile\n"), 0644)
+	assert.Nil(t, err)
+	tb, err := domain.NewTikiBase(dir)
+	assert.Nil(t, err)
+	fmt.Println(tb)
+	docs, resources, err := tb.Files()
+	assert.Nil(t, err)
+	assert.Equal(t, []string{"one.md"}, docs.FileNames())
+	assert.Equal(t, []string{"img.png"}, resources.FileNames())
 }
 
 func TestTikiBase_Load(t *testing.T) {

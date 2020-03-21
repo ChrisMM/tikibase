@@ -6,6 +6,8 @@ import (
 	"os"
 	"path"
 	"strings"
+
+	"github.com/kevgo/tikibase/config"
 )
 
 // TikiBase represents a collection of Documents stored in a filesystem directory
@@ -13,6 +15,9 @@ import (
 type TikiBase struct {
 	// the full path of the storage directory of this TikiBase
 	dir string
+
+	// the configuration for this TikiBase
+	config config.Schema
 }
 
 // NewTikiBase creates a new TikiBase instance using the given directory path as its storage directory.
@@ -25,7 +30,11 @@ func NewTikiBase(dir string) (result *TikiBase, err error) {
 	if !info.IsDir() {
 		return result, fmt.Errorf("%s must be a directory to contain a TikiBase", dir)
 	}
-	return &TikiBase{dir}, nil
+	config, err := config.Load(dir)
+	if err != nil {
+		return result, fmt.Errorf("cannot load tikibase configuration: %w", err)
+	}
+	return &TikiBase{dir, config}, nil
 }
 
 // CreateDocument creates a new Document with the given content.
@@ -58,13 +67,18 @@ func (tikiBase *TikiBase) Files() (docs DocumentFiles, resources ResourceFiles, 
 		return docs, resources, fmt.Errorf("cannot read TikiBase directory %q: %w", tikiBase.dir, err)
 	}
 	for f := range fileInfos {
-		if strings.HasPrefix(fileInfos[f].Name(), ".") {
+		filename := fileInfos[f].Name()
+		ignores, err := tikiBase.config.Ignores(filename)
+		if err != nil {
+			return docs, resources, fmt.Errorf("cannot determine if file %q should be ignored: %w", filename, err)
+		}
+		if ignores {
 			continue
 		}
-		if strings.HasSuffix(fileInfos[f].Name(), ".md") {
-			docs.fileNames = append(docs.fileNames, fileInfos[f].Name())
+		if strings.HasSuffix(filename, ".md") {
+			docs.fileNames = append(docs.fileNames, filename)
 		} else {
-			resources.fileNames = append(resources.fileNames, fileInfos[f].Name())
+			resources.fileNames = append(resources.fileNames, filename)
 		}
 	}
 	docs.tikiBase = tikiBase

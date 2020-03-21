@@ -23,6 +23,21 @@ The `tikibase` tool provides these commands:
 - **stats:** shows statistics about this Tikibase
 - **version:** shows the version of the installed tool
 
+### configuration
+
+Create a file **tikibase.yml** in your Tikibase directory to configure this
+tool. Here is the default configuration:
+
+```yml
+ignore:
+  - node_modules
+  - vendor
+```
+
+This supports simple path matching for now, please
+[reach out](https://github.com/kevgo/tikibase/issues/new) if you need more
+sophisticated globbing.
+
 ### development
 
 - **make dev:** run after making changes to the code base
