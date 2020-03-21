@@ -11,7 +11,8 @@ cuke-parallel:  # runs the feature specs
 	@godog --concurrency=$(shell nproc --all) --format=progress
 
 fix:   # fixes all auto-correctable issues
-	find . -name '*.go' | grep -v vendor | xargs gofmt -l -s -w
+	@find . -name '*.go' | grep -v vendor | xargs gofmt -l -s -w
+.PHONY: fix
 
 help:   # prints all make targets
 	@cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
@@ -34,5 +35,5 @@ unit:  # runs the unit tests
 update:  # updates dependencies
 	go get -u -t ./...
 
-vendor:  # create/sync the vendor infrastructure
+vendor:  # create/fix the vendor infrastructure
 	go mod vendor

@@ -34,4 +34,5 @@ bot to run them automatically on each change.
 - **make test:** run all tests
 - **make help:** see all available tasks in the [Makefile](Makefile)
 
-Install [scc](https://github.com/boyter/scc) to see code statistics.
+Install [scc](https://github.com/boyter/scc) to see code statistics via
+`make stats`.
