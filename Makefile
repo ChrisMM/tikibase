@@ -30,3 +30,9 @@ test:  # runs all tests
 
 unit:  # runs the unit tests
 	@go test ./...
+
+update:  # updates dependencies
+	go get -u -t ./...
+
+vendor:  # create/sync the vendor infrastructure
+	go mod vendor
