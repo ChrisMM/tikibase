@@ -31,7 +31,7 @@ bot to run them automatically on each change.
 
 ### development
 
-- **make test:** run all tests
+- **make dev:** run after making changes to the code base
 - **make help:** see all available tasks in the [Makefile](Makefile)
 
 Install [scc](https://github.com/boyter/scc) to see code statistics via

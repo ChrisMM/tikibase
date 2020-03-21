@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := dev
+
 build:   # builds for the current platform
 	@go install
 
@@ -9,6 +11,8 @@ cuke:  # runs the feature specs
 
 cuke-parallel:  # runs the feature specs
 	@godog --concurrency=$(shell nproc --all) --format=progress
+
+dev: fix test # run after making changes to the code
 
 fix:   # fixes all auto-correctable issues
 	@find . -name '*.go' | grep -v vendor | xargs gofmt -l -s -w
