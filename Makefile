@@ -1,7 +1,9 @@
 .DEFAULT_GOAL := dev
 
 build:   # builds for the current platform
-	@go install
+	@env CGO_ENABLED=0 go install
+# Need to disable CGO here so that the binary is statically linked
+# and will work on CI servers without having to install ld.so.
 
 clean:   # Removes all build artifacts
 	@go clean -i
