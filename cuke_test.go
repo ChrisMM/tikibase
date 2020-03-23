@@ -15,6 +15,7 @@ import (
 	"github.com/kevgo/tikibase/check"
 	"github.com/kevgo/tikibase/find"
 	"github.com/kevgo/tikibase/fix"
+	"github.com/kevgo/tikibase/linkify"
 	"github.com/kevgo/tikibase/stats"
 	"github.com/kevgo/tikibase/test"
 )
@@ -224,6 +225,10 @@ func (w *workspaceFeature) itProvidesTheStatistics(table *messages.PickleStepArg
 	return nil
 }
 
+func (w *workspaceFeature) linkify() (err error) {
+	return linkify.Run(w.root)
+}
+
 func (w *workspaceFeature) runningStatistics() error {
 	var err error
 	w.statisticsResult, err = stats.Run(w.root)
@@ -249,6 +254,7 @@ func FeatureContext(s *godog.Suite) {
 	s.BeforeScenario(wf.createWorkspace)
 	s.Step(`^checking the TikiBase$`, wf.checkingTheTikiBase)
 	s.Step(`^file "([^"]*)" is unchanged$`, wf.fileIsUnchanged)
+	s.Step(`^linkifying$`, wf.linkify)
 	s.Step(`^it finds:$`, wf.itFinds)
 	s.Step(`^it finds no errors$`, wf.itFindsNoErrors)
 	s.Step(`^it finds the broken links:$`, wf.itFindsTheBrokenLinks)

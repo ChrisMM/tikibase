@@ -1,6 +1,7 @@
 package domain_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/kevgo/tikibase/domain"
@@ -51,6 +52,39 @@ func TestDocument_Id(t *testing.T) {
 			doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: give})
 			assert.Equal(t, want, doc.ID())
 		})
+	}
+}
+
+func TestDocument_Names(t *testing.T) {
+	tests := []struct {
+		filename string
+		content  string
+		want     []string
+	}{
+		{
+			// normal document
+			filename: "amazon-web-services.md",
+			content:  "# Amazon Web Services\n",
+			want:     []string{"Amazon Web Services"},
+		},
+		{
+			// with abbreviation
+			filename: "amazon-web-services.md",
+			content:  "# Amazon Web Services (AWS)\n",
+			want:     []string{"Amazon Web Services", "AWS"},
+		},
+		{
+			// with different filename
+			filename: "amazon-web-services.md",
+			content:  "# AWS\n",
+			want:     []string{"AWS", "amazon web services"},
+		},
+	}
+	for tt := range tests {
+		doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: tests[tt].filename, Content: tests[tt].content})
+		names, err := doc.Names()
+		assert.Nil(t, err)
+		assert.Equal(t, tests[tt].want, names, fmt.Sprintf("TEST %d", tt))
 	}
 }
 

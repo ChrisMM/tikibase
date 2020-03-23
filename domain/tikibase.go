@@ -112,3 +112,12 @@ func (tikiBase *TikiBase) SaveDocument(doc *Document) error {
 func (tikiBase *TikiBase) StorageDir() string {
 	return tikiBase.dir
 }
+
+// UpdateDocument updates the content of this document with the given text.
+func (tikiBase *TikiBase) UpdateDocument(doc *Document, content string) error {
+	err := ioutil.WriteFile(filepath.Join(tikiBase.dir, doc.FileName()), []byte(content), 0644)
+	if err != nil {
+		return fmt.Errorf("cannot update content of document %q: %w", doc.filename, err)
+	}
+	return nil
+}

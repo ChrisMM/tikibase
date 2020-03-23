@@ -18,6 +18,7 @@ The `tikibase` tool provides these commands:
     `tikibase find --is parser --is markdown`
 - **fix:** fixes all auto-fixable issues
   - adds `occurrences` sections containing unmentioned backlinks
+- **linkify:** adds missing links to this Tikibase.
 - **pitstop:** runs all fixes and checks. Run this regularly while making
   changes to a Tikibase. Use the alias `ps` to type less.
 - **stats:** shows statistics about this Tikibase

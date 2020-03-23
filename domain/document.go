@@ -3,7 +3,9 @@ package domain
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"strings"
+	"sync"
 )
 
 // Document represents a MarkDown file in the document base.
@@ -102,6 +104,39 @@ func (doc *Document) Links() (result []Link) {
 	}
 	return result
 }
+
+// Names provides the human-readable names of this document.
+func (doc *Document) Names() (result []string, err error) {
+	title, err := doc.TitleSection().Title()
+	if err != nil {
+		return result, fmt.Errorf("cannot determine names: %w", err)
+	}
+
+	// add title
+	namesTitleOnce.Do(func() { namesTitleRE = regexp.MustCompile(`\(.*\)$`) })
+	abbreviations := namesTitleRE.FindStringSubmatch(title)
+	if len(abbreviations) > 0 {
+		result = []string{
+			strings.TrimSpace(strings.Replace(title, abbreviations[0], "", 1)),
+			strings.Replace(strings.Replace(abbreviations[0], "(", "", 1), ")", "", 1),
+		}
+	} else {
+		result = []string{title}
+	}
+
+	// add filename
+	filename := strings.Replace(strings.ReplaceAll(doc.filename, "-", " "), ".md", "", 1)
+	if !strings.EqualFold(filename, result[0]) {
+		result = append(result, filename)
+	}
+	return result, nil
+}
+
+//nolint:gochecknoglobals
+var namesTitleOnce sync.Once
+
+//nolint:gochecknoglobals
+var namesTitleRE *regexp.Regexp
 
 // RemoveSection provides a copy of this Document that contains all its sections except the given one.
 func (doc *Document) RemoveSection(section *Section) *Document {
