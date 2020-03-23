@@ -57,12 +57,6 @@ func (w *workspaceFeature) createWorkspace(arg *messages.Pickle) {
 	}
 }
 
-func (w *workspaceFeature) finding(argument string) error {
-	var err error
-	w.findResult, err = find.Run(w.root, []string{argument})
-	return err
-}
-
 func (w *workspaceFeature) fileIsUnchanged(filename string) error {
 	expected, exists := w.fileContents[filename]
 	if !exists {
@@ -79,6 +73,12 @@ func (w *workspaceFeature) fileIsUnchanged(filename string) error {
 	return nil
 }
 
+func (w *workspaceFeature) finding(argument string) error {
+	var err error
+	w.findResult, err = find.Run(w.root, []string{argument})
+	return err
+}
+
 func (w *workspaceFeature) itFinds(table *messages.PickleStepArgument_PickleTable) error {
 	if len(table.Rows) != len(w.findResult) {
 		return fmt.Errorf("expected %d results, got %d", len(table.Rows), len(w.findResult))
@@ -89,17 +89,6 @@ func (w *workspaceFeature) itFinds(table *messages.PickleStepArgument_PickleTabl
 		if actual != expected {
 			return fmt.Errorf("mismatching entry %d: expected %s, got %s", i, expected, actual)
 		}
-	}
-	return nil
-}
-
-func (w *workspaceFeature) itFindsTheDuplicates(table *messages.PickleStepArgument_PickleTable) error {
-	expected := []string{}
-	for i := range table.Rows {
-		expected = append(expected, table.Rows[i].Cells[0].Value)
-	}
-	if !reflect.DeepEqual(w.checkResult.Duplicates, expected) {
-		return fmt.Errorf("expected %v, got %v", expected, w.checkResult.Duplicates)
 	}
 	return nil
 }
@@ -148,6 +137,17 @@ func (w *workspaceFeature) itFindsTheBrokenLinks(expected *messages.PickleStepAr
 		if expectedFile != actualFile || expectedLink != actualLink {
 			return fmt.Errorf("expected file %q to contain broken link %q, instead got file %q with broken link %q", expectedFile, expectedLink, actualFile, actualLink)
 		}
+	}
+	return nil
+}
+
+func (w *workspaceFeature) itFindsTheDuplicates(table *messages.PickleStepArgument_PickleTable) error {
+	expected := []string{}
+	for i := range table.Rows {
+		expected = append(expected, table.Rows[i].Cells[0].Value)
+	}
+	if !reflect.DeepEqual(w.checkResult.Duplicates, expected) {
+		return fmt.Errorf("expected %v, got %v", expected, w.checkResult.Duplicates)
 	}
 	return nil
 }
