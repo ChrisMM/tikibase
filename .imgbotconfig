@@ -1,5 +1,5 @@
 {
     "ignoredFiles": [
-        "vender/**",
+        "vendor/**",
     ],
 }
