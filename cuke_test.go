@@ -79,6 +79,10 @@ func (w *workspaceFeature) finding(argument string) error {
 	return err
 }
 
+func (w *workspaceFeature) fixingTheTikiBase() error {
+	return fix.Run(w.root)
+}
+
 func (w *workspaceFeature) itFinds(table *messages.PickleStepArgument_PickleTable) error {
 	if len(table.Rows) != len(w.findResult) {
 		return fmt.Errorf("expected %d results, got %d", len(table.Rows), len(w.findResult))
@@ -218,10 +222,6 @@ func (w *workspaceFeature) itProvidesTheStatistics(table *messages.PickleStepArg
 		return fmt.Errorf("expected %d links, got %d", expectedResourcesCount, w.statisticsResult.ResourcesCount)
 	}
 	return nil
-}
-
-func (w *workspaceFeature) fixingTheTikiBase() error {
-	return fix.Run(w.root)
 }
 
 func (w *workspaceFeature) runningStatistics() error {
