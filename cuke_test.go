@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/cucumber/godog"
-	"github.com/cucumber/godog/gherkin"
+	"github.com/cucumber/messages-go/v10"
 	"github.com/google/go-cmp/cmp"
 	"github.com/kevgo/tikibase/check"
 	"github.com/kevgo/tikibase/find"
@@ -44,12 +44,12 @@ func (w *workspaceFeature) containsBinaryFile(filename string) error {
 	return test.CreateBinaryFile(path.Join(w.root, filename))
 }
 
-func (w *workspaceFeature) containsFileWithContent(filename string, content *gherkin.DocString) error {
+func (w *workspaceFeature) containsFileWithContent(filename string, content *messages.PickleStepArgument_PickleDocString) error {
 	w.fileContents[filename] = content.Content + "\n"
 	return ioutil.WriteFile(path.Join(w.root, filename), []byte(content.Content+"\n"), 0644)
 }
 
-func (w *workspaceFeature) createWorkspace(arg interface{}) {
+func (w *workspaceFeature) createWorkspace(arg *messages.Pickle) {
 	var err error
 	w.root, err = ioutil.TempDir("", "")
 	if err != nil {
@@ -79,7 +79,7 @@ func (w *workspaceFeature) fileIsUnchanged(filename string) error {
 	return nil
 }
 
-func (w *workspaceFeature) itFinds(table *gherkin.DataTable) error {
+func (w *workspaceFeature) itFinds(table *messages.PickleStepArgument_PickleTable) error {
 	if len(table.Rows) != len(w.findResult) {
 		return fmt.Errorf("expected %d results, got %d", len(table.Rows), len(w.findResult))
 	}
@@ -93,7 +93,7 @@ func (w *workspaceFeature) itFinds(table *gherkin.DataTable) error {
 	return nil
 }
 
-func (w *workspaceFeature) itFindsTheDuplicates(table *gherkin.DataTable) error {
+func (w *workspaceFeature) itFindsTheDuplicates(table *messages.PickleStepArgument_PickleTable) error {
 	expected := []string{}
 	for i := range table.Rows {
 		expected = append(expected, table.Rows[i].Cells[0].Value)
@@ -136,7 +136,7 @@ func (w *workspaceFeature) itFindsNoErrors() error {
 	return nil
 }
 
-func (w *workspaceFeature) itFindsTheBrokenLinks(expected *gherkin.DataTable) error {
+func (w *workspaceFeature) itFindsTheBrokenLinks(expected *messages.PickleStepArgument_PickleTable) error {
 	if len(w.checkResult.BrokenLinks) != len(expected.Rows)-1 {
 		return fmt.Errorf("expected %d broken links but got %d", len(expected.Rows)-1, len(w.checkResult.BrokenLinks))
 	}
@@ -152,7 +152,7 @@ func (w *workspaceFeature) itFindsTheBrokenLinks(expected *gherkin.DataTable) er
 	return nil
 }
 
-func (w *workspaceFeature) itFindsTheNonlinkedResources(table *gherkin.DataTable) error {
+func (w *workspaceFeature) itFindsTheNonlinkedResources(table *messages.PickleStepArgument_PickleTable) error {
 	expected := make([]string, len(table.Rows))
 	for i := range table.Rows {
 		expected[i] = table.Rows[i].Cells[0].Value
@@ -163,7 +163,7 @@ func (w *workspaceFeature) itFindsTheNonlinkedResources(table *gherkin.DataTable
 	return nil
 }
 
-func (w *workspaceFeature) itFindsTheSectionTypes(table *gherkin.DataTable) error {
+func (w *workspaceFeature) itFindsTheSectionTypes(table *messages.PickleStepArgument_PickleTable) error {
 	expected := make([]string, len(table.Rows))
 	for i := range table.Rows {
 		expected[i] = table.Rows[i].Cells[0].Value
@@ -174,7 +174,7 @@ func (w *workspaceFeature) itFindsTheSectionTypes(table *gherkin.DataTable) erro
 	return nil
 }
 
-func (w *workspaceFeature) itFindsTheseSectionsWithMixedCapitalization(table *gherkin.DataTable) error {
+func (w *workspaceFeature) itFindsTheseSectionsWithMixedCapitalization(table *messages.PickleStepArgument_PickleTable) error {
 	for r := range table.Rows {
 		expected := strings.Split(table.Rows[r].Cells[0].Value, ", ")
 		if !reflect.DeepEqual(w.checkResult.MixedCapSections[r], expected) {
@@ -184,7 +184,7 @@ func (w *workspaceFeature) itFindsTheseSectionsWithMixedCapitalization(table *gh
 	return nil
 }
 
-func (w *workspaceFeature) itProvidesTheStatistics(table *gherkin.DataTable) error {
+func (w *workspaceFeature) itProvidesTheStatistics(table *messages.PickleStepArgument_PickleTable) error {
 	// check docs count
 	expectedDocsCount, err := strconv.Atoi(table.Rows[0].Cells[1].Value)
 	if err != nil {
@@ -230,7 +230,7 @@ func (w *workspaceFeature) runningStatistics() error {
 	return err
 }
 
-func (w *workspaceFeature) shouldContainFileWithContent(filename string, content *gherkin.DocString) error {
+func (w *workspaceFeature) shouldContainFileWithContent(filename string, content *messages.PickleStepArgument_PickleDocString) error {
 	data, err := ioutil.ReadFile(path.Join(w.root, filename))
 	if err != nil {
 		return fmt.Errorf("Cannot find file %q in workspace: %w", filename, err)
