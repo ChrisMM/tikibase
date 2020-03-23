@@ -19,6 +19,7 @@ var statsCmd = &cobra.Command{
 - the number of documents, sections, links, resources
 - section types
 `,
+	Aliases: []string{"st"},
 	Run: func(cmd *cobra.Command, args []string) {
 		result, err := stats.Run(".")
 		if err != nil {

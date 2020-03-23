@@ -23,6 +23,7 @@ var checkCmd = &cobra.Command{
 The exit status indicates the number of problems.
 An exit status of 255 indicates an internal error.
 Please report internal errors at https://github.com/kevgo/tikibase/issues/new`,
+	Aliases: []string{"c"},
 	Run: func(cmd *cobra.Command, args []string) {
 		result, err := check.Run(".")
 		if err != nil {

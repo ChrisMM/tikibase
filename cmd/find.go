@@ -15,9 +15,10 @@ var typeFlag *[]string
 //nolint:gochecknoglobals
 // findCmd defines the "find" command
 var findCmd = &cobra.Command{
-	Use:   "find",
-	Short: "Searches for entries in this TikiBase",
-	Long:  `Searches for entries within the TikiBase, filtered by conditions.`,
+	Use:     "find",
+	Short:   "Searches for entries in this TikiBase",
+	Long:    `Searches for entries within the TikiBase, filtered by conditions.`,
+	Aliases: []string{"fd"},
 	Run: func(cmd *cobra.Command, args []string) {
 		results, err := find.Run(".", *typeFlag)
 		if err != nil {

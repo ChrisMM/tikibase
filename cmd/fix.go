@@ -18,6 +18,7 @@ var fixCmd = &cobra.Command{
 
 - adds an 'occurrences' sections to documents
   containing unmentioned backlinks`,
+	Aliases: []string{"fx"},
 	Run: func(cmd *cobra.Command, args []string) {
 		err := fix.Run(".")
 		if err != nil {
