@@ -230,15 +230,15 @@ func (w *workspaceFeature) runningStatistics() error {
 	return err
 }
 
-func (w *workspaceFeature) shouldContainFileWithContent(filename string, content *messages.PickleStepArgument_PickleDocString) error {
+func (w *workspaceFeature) shouldContainFileWithContent(filename string, text *messages.PickleStepArgument_PickleDocString) error {
 	data, err := ioutil.ReadFile(filepath.Join(w.root, filename))
 	if err != nil {
 		return fmt.Errorf("Cannot find file %q in workspace: %w", filename, err)
 	}
 	actual := string(data)
-	expected := content.Content + "\n"
-	if diff := cmp.Diff(expected, actual); diff != "" {
-		return fmt.Errorf("mismatching content for file %s: \n%s", filename, diff)
+	expected := text.Content + "\n"
+	if actual != expected {
+		return fmt.Errorf("mismatching content for file %s:\n- have: %s\n- want: %s", filename, actual, expected)
 	}
 	return nil
 }
