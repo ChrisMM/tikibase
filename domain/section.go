@@ -36,6 +36,14 @@ var mdLinkOnce sync.Once
 
 // This global variable is a constant and doesn't need to be stubbed in tests.
 //nolint:gochecknoglobals
+var htmlImageRE *regexp.Regexp
+
+// Helps initialize htmlLinkRE
+//nolint:gochecknoglobals
+var htmlImageOnce sync.Once
+
+// This global variable is a constant and doesn't need to be stubbed in tests.
+//nolint:gochecknoglobals
 var htmlLinkRE *regexp.Regexp
 
 // Helps initialize htmlLinkRE
@@ -100,6 +108,12 @@ func (section *Section) Links() (result []Link) {
 		title := match[2]
 		target := match[1]
 		result = append(result, Link{title: title, sourceSection: section, target: target})
+	}
+	htmlImageOnce.Do(func() { htmlImageRE = regexp.MustCompile(`<img[^>]* src="(.*?)"[^>]*>`) })
+	matches = htmlImageRE.FindAllStringSubmatch(section.content, 9999)
+	for _, match := range matches {
+		target := match[1]
+		result = append(result, Link{title: "<image>", sourceSection: section, target: target})
 	}
 	return result
 }

@@ -11,9 +11,11 @@ Feature: Checking links to internal resources
     Then it finds no errors
 
     Examples:
-      | DESC      | LINK                          |
-      | MD link   | [photo](photo.jpg)            |
-      | HTML link | <a href="photo.jpg">photo</a> |
+      | DESC       | LINK                             |
+      | MD link    | [photo](photo.jpg)               |
+      | HTML link  | <a href="photo.jpg">photo</a>    |
+      | MD image   | ![photo](photo.jpg)              |
+      | HTML image | <img src="photo.jpg">photo</img> |
 
   Scenario Outline: link to non-existing resource
     Given the workspace contains file "1.md" with content:
