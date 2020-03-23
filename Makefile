@@ -14,8 +14,6 @@ cuke:  # runs the feature specs
 cuke-parallel:  # runs the feature specs
 	@godog --concurrency=$(shell nproc --all) --format=progress
 
-dev: fix test # run after making changes to the code
-
 fix:   # fixes all auto-correctable issues
 	@find . -name '*.go' | grep -v vendor | xargs gofmt -l -s -w
 .PHONY: fix
@@ -25,6 +23,8 @@ help:   # prints all make targets
 
 lint:  # runs all linters
 	@golangci-lint run --enable-all -D lll -D godox -D wsl -D whitespace
+
+ps: fix test # "pitstop" command, run after making changes to the code
 
 stats:  # shows code statistics
 	@find . -type f | grep -v 'node_modules' | grep -v '\./.git/' | grep -v '\./vendor/' | xargs scc
