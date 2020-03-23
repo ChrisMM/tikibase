@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/kevgo/tikibase/config"
@@ -43,7 +43,7 @@ func (tikiBase *TikiBase) CreateDocument(filename string, content string) (resul
 		filename += ".md"
 	}
 	doc := newDocumentWithText(filename, content)
-	filePath := path.Join(tikiBase.dir, doc.FileName())
+	filePath := filepath.Join(tikiBase.dir, doc.FileName())
 	err = ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
 	if err != nil {
 		return result, fmt.Errorf("cannot create new document %q: %w", filename, err)
@@ -90,7 +90,7 @@ func (tikiBase *TikiBase) LoadDocument(filename string) (result *Document, err e
 	if !strings.HasSuffix(filename, ".md") {
 		filename += ".md"
 	}
-	path := path.Join(tikiBase.StorageDir(), filename)
+	path := filepath.Join(tikiBase.StorageDir(), filename)
 	contentData, err := ioutil.ReadFile(path)
 	if err != nil {
 		return result, fmt.Errorf("cannot load TikiBase document %q: %w", path, err)
@@ -100,7 +100,7 @@ func (tikiBase *TikiBase) LoadDocument(filename string) (result *Document, err e
 
 // SaveDocument stores the given Document in this TikiBase.
 func (tikiBase *TikiBase) SaveDocument(doc *Document) error {
-	filePath := path.Join(tikiBase.dir, doc.FileName())
+	filePath := filepath.Join(tikiBase.dir, doc.FileName())
 	err := ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
 	if err != nil {
 		return fmt.Errorf("cannot save document %q: %w", doc.FileName(), err)

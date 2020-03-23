@@ -2,7 +2,7 @@ package config_test
 
 import (
 	"io/ioutil"
-	"path"
+	"path/filepath"
 	"testing"
 
 	"github.com/kevgo/tikibase/config"
@@ -28,7 +28,7 @@ func TestIgnores(t *testing.T) {
 func TestLoad(t *testing.T) {
 	dir, err := ioutil.TempDir("", "")
 	assert.Nil(t, err)
-	err = ioutil.WriteFile(path.Join(dir, config.FileName()), []byte("ignore:\n  - Makefile\n"), 0644)
+	err = ioutil.WriteFile(filepath.Join(dir, config.FileName()), []byte("ignore:\n  - Makefile\n"), 0644)
 	assert.Nil(t, err)
 	conf, err := config.Load(dir)
 	assert.Nil(t, err)

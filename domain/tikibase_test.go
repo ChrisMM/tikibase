@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 	"testing"
 
 	"github.com/kevgo/tikibase/config"
@@ -22,7 +22,7 @@ func TestTikiBase_CreateDocument(t *testing.T) {
 	tb := test.NewTempTikiBase(t)
 	_, err := tb.CreateDocument("one", "The one.")
 	assert.Nil(t, err, "cannot create document")
-	filePath := path.Join(tb.StorageDir(), "one.md")
+	filePath := filepath.Join(tb.StorageDir(), "one.md")
 	fileInfo, err := os.Stat(filePath)
 	assert.Nil(t, err, "file not found:", filePath)
 	assert.False(t, fileInfo.IsDir(), "file should not be a directory")
@@ -47,7 +47,7 @@ func TestTikiBase_Documents_IgnoresNonMarkdown(t *testing.T) {
 	tikiBase := test.NewTempTikiBase(t)
 	_, err := tikiBase.CreateDocument("one.md", "")
 	assert.Nil(t, err)
-	err = test.CreateBinaryFile(path.Join(tikiBase.StorageDir(), "foo.png"))
+	err = test.CreateBinaryFile(filepath.Join(tikiBase.StorageDir(), "foo.png"))
 	assert.Nil(t, err)
 	docs, err := tikiBase.Documents()
 	assert.Nil(t, err, "cannot call tb.Documents()")
@@ -58,11 +58,11 @@ func TestTikiBase_Documents_IgnoresNonMarkdown(t *testing.T) {
 func TestTikiBase_Files_noConfig(t *testing.T) {
 	tmp, err := ioutil.TempDir("", "")
 	assert.Nil(t, err)
-	_, err = os.Create(path.Join(tmp, "one.md"))
+	_, err = os.Create(filepath.Join(tmp, "one.md"))
 	assert.Nil(t, err)
-	_, err = os.Create(path.Join(tmp, "two.md"))
+	_, err = os.Create(filepath.Join(tmp, "two.md"))
 	assert.Nil(t, err)
-	_, err = os.Create(path.Join(tmp, "img.png"))
+	_, err = os.Create(filepath.Join(tmp, "img.png"))
 	assert.Nil(t, err)
 	tb, err := domain.NewTikiBase(tmp)
 	assert.Nil(t, err)
@@ -75,13 +75,13 @@ func TestTikiBase_Files_noConfig(t *testing.T) {
 func TestTikiBase_Files_withConfig(t *testing.T) {
 	dir, err := ioutil.TempDir("", "")
 	assert.Nil(t, err)
-	_, err = os.Create(path.Join(dir, "one.md"))
+	_, err = os.Create(filepath.Join(dir, "one.md"))
 	assert.Nil(t, err)
-	_, err = os.Create(path.Join(dir, "Makefile"))
+	_, err = os.Create(filepath.Join(dir, "Makefile"))
 	assert.Nil(t, err)
-	_, err = os.Create(path.Join(dir, "img.png"))
+	_, err = os.Create(filepath.Join(dir, "img.png"))
 	assert.Nil(t, err)
-	err = ioutil.WriteFile(path.Join(dir, config.FileName()), []byte("ignore:\n  - Makefile\n"), 0644)
+	err = ioutil.WriteFile(filepath.Join(dir, config.FileName()), []byte("ignore:\n  - Makefile\n"), 0644)
 	assert.Nil(t, err)
 	tb, err := domain.NewTikiBase(dir)
 	assert.Nil(t, err)
@@ -106,7 +106,7 @@ func TestTikiBase_SaveDocument(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{FileName: "one.md", Content: "document content"})
 	err := tikiBase.SaveDocument(doc)
 	assert.Nil(t, err, "cannot save document")
-	filePath := path.Join(tikiBase.StorageDir(), "one.md")
+	filePath := filepath.Join(tikiBase.StorageDir(), "one.md")
 	fileInfo, err := os.Stat(filePath)
 	assert.Nil(t, err, "file not found")
 	assert.False(t, fileInfo.IsDir(), "file should not be a directory")

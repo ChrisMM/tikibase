@@ -2,7 +2,7 @@ package domain
 
 import (
 	"fmt"
-	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -92,7 +92,7 @@ func (doc *Document) FileName() string {
 
 // ID provides the unique ID of this document.
 func (doc *Document) ID() string {
-	return strings.TrimSuffix(doc.filename, path.Ext(doc.filename))
+	return strings.TrimSuffix(doc.filename, filepath.Ext(doc.filename))
 }
 
 // Links provides all Links in this document.

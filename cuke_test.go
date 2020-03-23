@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"path"
+	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
@@ -41,12 +41,12 @@ func (w *workspaceFeature) checkingTheTikiBase() (err error) {
 }
 
 func (w *workspaceFeature) containsBinaryFile(filename string) error {
-	return test.CreateBinaryFile(path.Join(w.root, filename))
+	return test.CreateBinaryFile(filepath.Join(w.root, filename))
 }
 
 func (w *workspaceFeature) containsFileWithContent(filename string, content *messages.PickleStepArgument_PickleDocString) error {
 	w.fileContents[filename] = content.Content + "\n"
-	return ioutil.WriteFile(path.Join(w.root, filename), []byte(content.Content+"\n"), 0644)
+	return ioutil.WriteFile(filepath.Join(w.root, filename), []byte(content.Content+"\n"), 0644)
 }
 
 func (w *workspaceFeature) createWorkspace(arg *messages.Pickle) {
@@ -68,7 +68,7 @@ func (w *workspaceFeature) fileIsUnchanged(filename string) error {
 	if !exists {
 		return fmt.Errorf("no cached content for file %q found", filename)
 	}
-	data, err := ioutil.ReadFile(path.Join(w.root, filename))
+	data, err := ioutil.ReadFile(filepath.Join(w.root, filename))
 	if err != nil {
 		return fmt.Errorf("Cannot find file %q in workspace: %w", filename, err)
 	}
@@ -231,7 +231,7 @@ func (w *workspaceFeature) runningStatistics() error {
 }
 
 func (w *workspaceFeature) shouldContainFileWithContent(filename string, content *messages.PickleStepArgument_PickleDocString) error {
-	data, err := ioutil.ReadFile(path.Join(w.root, filename))
+	data, err := ioutil.ReadFile(filepath.Join(w.root, filename))
 	if err != nil {
 		return fmt.Errorf("Cannot find file %q in workspace: %w", filename, err)
 	}
