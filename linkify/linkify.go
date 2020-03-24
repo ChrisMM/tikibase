@@ -3,8 +3,6 @@ package linkify
 import (
 	"fmt"
 	"regexp"
-
-	"github.com/kevgo/tikibase/helpers"
 )
 
 // Linkify replaces all occurrences of the given title
@@ -16,14 +14,10 @@ func Linkify(text, title, target string) string {
 		return text
 	}
 
-	// replace all existing links and sections
-	replacer := NewReplacer()
-	for _, link := range FindExistingLinks(text) {
-		replacer.Add(link, fmt.Sprintf("{{%s}}", helpers.RandomString(10)))
-	}
-	for _, section := range FindExistingSections(text) {
-		replacer.Add(section, fmt.Sprintf("{{%s}}", helpers.RandomString(10)))
-	}
+	// replace all existing links, sections, and URLs
+	replacer := NewUniqueReplacer()
+	replacer.AddMany(FindExistingLinks(text))
+	replacer.AddMany(FindExistingSections(text))
 	replacedText := replacer.Replace(text)
 
 	// return if there are no occurrences of title now

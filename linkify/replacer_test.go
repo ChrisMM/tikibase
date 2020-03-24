@@ -1,6 +1,7 @@
 package linkify_test
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/kevgo/tikibase/linkify"
@@ -9,10 +10,10 @@ import (
 
 func TestReplacer_Replace(t *testing.T) {
 	text := "one two three four"
-	r := linkify.NewReplacer()
-	r.Add("one", "eins")
-	r.Add("three", "drei")
-	replaced := r.Replace(text)
-	assert.Equal(t, "eins two drei four", replaced)
-	assert.Equal(t, text, r.Restore(replaced))
+	ur := linkify.NewUniqueReplacer()
+	ur.AddMany([]string{"one", "three"})
+	replaced := ur.Replace(text)
+	assert.NotEqual(t, text, replaced)
+	assert.Regexp(t, regexp.MustCompile(`\w+ two \w+ four`), replaced)
+	assert.Equal(t, text, ur.Restore(replaced))
 }
