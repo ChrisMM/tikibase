@@ -17,13 +17,21 @@ func Linkify(text, title, target string) string {
 		return text
 	}
 
-	// replace all existing links with placeholders.
+	// find all existing links
 	replacedText := text
 	replacements := make(map[string]string)
 	existingLinks := FindExistingLinks(text)
 	for e := range existingLinks {
 		replacements[existingLinks[e]] = fmt.Sprintf("{{%s}}", helpers.RandomString(10))
-		replacedText = strings.ReplaceAll(replacedText, existingLinks[e], replacements[existingLinks[e]])
+	}
+
+	// replace all section headers with placeholders
+	existingSections := FindExistingSections(text)
+	for e := range existingSections {
+		replacements[existingSections[e]] = fmt.Sprintf("{{%s}}", helpers.RandomString(10))
+	}
+	for r := range replacements {
+		replacedText = strings.ReplaceAll(replacedText, r, replacements[r])
 	}
 
 	// return if there are no occurrences of title now

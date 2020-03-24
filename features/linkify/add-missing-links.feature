@@ -56,3 +56,22 @@ Feature: Add missing links
 
       several [kilo-bytes](kilo-byte.md) of storage
       """
+
+  Scenario: match in document title
+    Given the workspace contains file "byte.md" with content:
+      """
+      # Byte
+      """
+    And the workspace contains file "kilo-byte.md" with content:
+      """
+      # Kilo Byte
+
+      roughly a thousand bytes
+      """
+    When linkifying
+    Then the workspace should contain the file "kilo-byte.md" with content:
+      """
+      # Kilo Byte
+
+      roughly a thousand bytes
+      """
