@@ -17,10 +17,10 @@ func Linkify(text, title, target string) string {
 		return text
 	}
 
-	// replace all existing linkified versions with placeholders.
+	// replace all existing links with placeholders.
 	replacedText := text
 	replacements := make(map[string]string)
-	existingLinks := FindExistingLinks(text, title)
+	existingLinks := FindExistingLinks(text)
 	for e := range existingLinks {
 		replacements[existingLinks[e]] = fmt.Sprintf("{{%s}}", helpers.RandomString(10))
 		replacedText = strings.ReplaceAll(replacedText, existingLinks[e], replacements[existingLinks[e]])

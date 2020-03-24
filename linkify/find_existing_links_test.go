@@ -11,6 +11,6 @@ func TestFindExistingLinks(t *testing.T) {
 	text := `[Amazon Web Services](aws.md) is a cloud provider.
 					 [Google Cloud](gcp.md) is another one.
 					 But [Amazon Web Services](aws.md) is bigger.`
-	have := linkify.FindExistingLinks(text, "Amazon Web Services")
-	assert.Equal(t, []string{"[Amazon Web Services](aws.md)"}, have)
+	have := linkify.FindExistingLinks(text)
+	assert.Equal(t, []string{"[Amazon Web Services](aws.md)", "[Google Cloud](gcp.md)"}, have)
 }
