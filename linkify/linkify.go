@@ -32,7 +32,7 @@ func Linkify(text, title, target string) string {
 	}
 
 	// replace all occurrences of title with a linkified version
-	re := regexp.MustCompile(fmt.Sprintf("(?i)%s", title))
+	re := regexp.MustCompile(fmt.Sprintf(`(?i)\b%s\b`, title))
 	replacedText = re.ReplaceAllString(replacedText, fmt.Sprintf("[%s](%s)", title, target))
 
 	// restore all placeholders
