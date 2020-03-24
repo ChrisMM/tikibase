@@ -32,7 +32,8 @@ func Run(dir string) (result Result, err error) {
 	if err != nil {
 		return
 	}
-	sectionTypes := make(map[string]struct{})
+
+	sectionTypes := helpers.NewStringDeduper()
 	for d := range docs {
 		sections := docs[d].ContentSections()
 		result.SectionsCount += len(sections)
@@ -42,12 +43,9 @@ func Run(dir string) (result Result, err error) {
 			if err != nil {
 				return result, fmt.Errorf("please run \"tikibase check\" to investigate: %w", err)
 			}
-			sectionTypes[title] = struct{}{}
+			sectionTypes.Add(title)
 		}
 	}
-	for sectionType := range sectionTypes {
-		result.SectionTypes = append(result.SectionTypes, sectionType)
-	}
-	helpers.SortCaseInsensitive(result.SectionTypes)
+	result.SectionTypes = sectionTypes.SortedCaseInsensitive()
 	return result, nil
 }

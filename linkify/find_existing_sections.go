@@ -2,8 +2,9 @@ package linkify
 
 import (
 	"regexp"
-	"sort"
 	"sync"
+
+	"github.com/kevgo/tikibase/helpers"
 )
 
 // This is a global constant that doesn't need to be stubbed in tests.
@@ -16,15 +17,5 @@ var sectionOnce sync.Once
 // findExistingSections provides the lines containing sections in the given text.
 func findExistingSections(text string) []string {
 	sectionOnce.Do(func() { sectionRE = regexp.MustCompile("(?m)^#+.*?\n") })
-	hits := sectionRE.FindAllString(text, -1)
-	deduper := make(map[string]struct{})
-	for h := range hits {
-		deduper[hits[h]] = struct{}{}
-	}
-	result := make([]string, 0, len(deduper))
-	for d := range deduper {
-		result = append(result, d)
-	}
-	sort.Strings(result)
-	return result
+	return helpers.DedupeStrings(sectionRE.FindAllString(text, -1))
 }

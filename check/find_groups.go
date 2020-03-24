@@ -30,14 +30,14 @@ func findGroups(list []string) (result [][]string) {
 			current++
 			continue
 		}
-		cluster := helpers.UniqueStrings(list[current:forward])
+		cluster := helpers.DedupeStrings(list[current:forward])
 		helpers.ReverseStringList(cluster)
 		result = append(result, cluster)
 		current = forward
 	}
 	// pick up the last cluster
 	if forward > current+1 {
-		cluster := helpers.UniqueStrings(list[current:forward])
+		cluster := helpers.DedupeStrings(list[current:forward])
 		helpers.ReverseStringList(cluster)
 		result = append(result, cluster)
 	}

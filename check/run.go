@@ -63,7 +63,7 @@ func Run(dir string) (result Result, err error) {
 		}
 		titles = append(titles, title)
 	}
-	titles = helpers.UniqueStrings(titles)
+	titles = helpers.DedupeStrings(titles)
 	helpers.SortCaseInsensitive(titles)
 	result.MixedCapSections = findGroups(titles)
 	return result, err
