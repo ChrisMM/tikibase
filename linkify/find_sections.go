@@ -15,7 +15,7 @@ var sectionRE *regexp.Regexp
 var sectionOnce sync.Once
 
 // findExistingSections provides the lines containing sections in the given text.
-func findExistingSections(text string) []string {
+func findSections(text string) []string {
 	sectionOnce.Do(func() { sectionRE = regexp.MustCompile("(?m)^#+.*?\n") })
 	return helpers.DedupeStrings(sectionRE.FindAllString(text, -1))
 }

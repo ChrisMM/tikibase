@@ -16,8 +16,8 @@ func linkifyDoc(text, title, target string) string {
 
 	// replace all existing links, sections, and URLs
 	replacer := newUniqueReplacer()
-	replacer.AddMany(findExistingLinks(text))
-	replacer.AddMany(findExistingSections(text))
+	replacer.AddMany(findLinks(text))
+	replacer.AddMany(findSections(text))
 	replacedText := replacer.Replace(text)
 
 	// return if there are no occurrences of title now
