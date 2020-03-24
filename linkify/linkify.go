@@ -18,23 +18,27 @@ func Linkify(text, title, target string) string {
 	}
 
 	// replace all existing linkified versions with placeholders.
+	replacedText := text
 	replacements := make(map[string]string)
 	existingLinks := FindExistingLinks(text, title)
 	for e := range existingLinks {
 		replacements[existingLinks[e]] = fmt.Sprintf("{{%s}}", helpers.RandomString(10))
-		text = strings.ReplaceAll(text, existingLinks[e], replacements[existingLinks[e]])
+		replacedText = strings.ReplaceAll(replacedText, existingLinks[e], replacements[existingLinks[e]])
 	}
 
 	// return if there are no occurrences of title now
+	if !TextContainsTitle(replacedText, title) {
+		return text
+	}
 
 	// replace all occurrences of title with a linkified version
 	re := regexp.MustCompile(fmt.Sprintf("(?i)%s", title))
-	text = re.ReplaceAllString(text, fmt.Sprintf("[%s](%s)", title, target))
+	replacedText = re.ReplaceAllString(replacedText, fmt.Sprintf("[%s](%s)", title, target))
 
 	// restore all placeholders
 	for r := range replacements {
-		text = strings.ReplaceAll(text, replacements[r], r)
+		replacedText = strings.ReplaceAll(replacedText, replacements[r], r)
 	}
 
-	return text
+	return replacedText
 }
