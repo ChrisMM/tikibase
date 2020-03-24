@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/kevgo/tikibase/domain"
+	"github.com/kevgo/tikibase/occurrences"
 )
 
 // Run executes the fix" command in the given directory.
@@ -32,7 +33,7 @@ func Run(dir string) (err error) {
 		missingOccurrencesLinks := allOccurrencesLinks.RemoveLinksFromDocs(linksInDoc.ReferencedDocs())
 		dedupedOccurrencesLinks := missingOccurrencesLinks.CombineLinksFromSameDocuments()
 		dedupedOccurrencesLinks.SortBySourceDocumentTitle()
-		newOccurrencesSection, err := CreateOccurrencesSection(dedupedOccurrencesLinks, docs[i])
+		newOccurrencesSection, err := occurrences.CreateSection(dedupedOccurrencesLinks, docs[i])
 		if err != nil {
 			return fmt.Errorf("error creating new occurrences sections for document %q: %w", fileName, err)
 		}

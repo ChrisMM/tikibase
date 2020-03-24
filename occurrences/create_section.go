@@ -1,4 +1,4 @@
-package fix
+package occurrences
 
 import (
 	"fmt"
@@ -6,8 +6,8 @@ import (
 	"github.com/kevgo/tikibase/domain"
 )
 
-// CreateOccurrencesSection provides a domain.Section containing the given occurrences of a document.
-func CreateOccurrencesSection(links domain.TikiLinks, doc *domain.Document) (result *domain.Section, err error) {
+// CreateSection provides a domain.Section containing the given occurrences of a document.
+func CreateSection(links domain.TikiLinks, doc *domain.Document) (result *domain.Section, err error) {
 	builder := domain.NewSectionBuilder("### occurrences\n\n", doc)
 	for i := range links {
 		sourceSection := links[i].SourceSection()
