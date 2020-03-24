@@ -1,7 +1,7 @@
 package check
 
-// BrokenLink describes a broken link.
-type BrokenLink struct {
+// brokenLink describes a broken link.
+type brokenLink struct {
 
 	// path of the file containing the broken link
 	Filename string

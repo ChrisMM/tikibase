@@ -6,9 +6,9 @@ import (
 	"github.com/kevgo/tikibase/helpers"
 )
 
-// FindGroups provides groups of words that differ only in capitalization.
+// findGroups provides groups of words that differ only in capitalization.
 // The given string list must be sorted case-insensitively.
-func FindGroups(list []string) (result [][]string) {
+func findGroups(list []string) (result [][]string) {
 	current := 0 // index of the current element
 	forward := 0 // for looking forward to see if the next elements are similar to the current one
 	for forward < len(list) {

@@ -1,16 +1,15 @@
-package linkify_test
+package linkify
 
 import (
 	"regexp"
 	"testing"
 
-	"github.com/kevgo/tikibase/linkify"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestReplacer_Replace(t *testing.T) {
 	text := "one two three four"
-	ur := linkify.NewUniqueReplacer()
+	ur := newUniqueReplacer()
 	ur.AddMany([]string{"one", "three"})
 	replaced := ur.Replace(text)
 	assert.NotEqual(t, text, replaced)

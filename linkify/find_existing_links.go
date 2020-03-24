@@ -5,8 +5,8 @@ import (
 	"sort"
 )
 
-// FindExistingLinks provides all links with the given title in the given text.
-func FindExistingLinks(text string) (result []string) {
+// findExistingLinks provides all links with the given title in the given text.
+func findExistingLinks(text string) (result []string) {
 	re := regexp.MustCompile(`\[.*?\]\(.*?\)`)
 	matches := re.FindAllString(text, -1)
 	collector := make(map[string]struct{})

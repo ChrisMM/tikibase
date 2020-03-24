@@ -42,7 +42,7 @@ func Run(dir string) (err error) {
 			if strings.EqualFold(title, docTitle) {
 				continue
 			}
-			linkified = Linkify(linkified, title, titles[title])
+			linkified = linkifyDoc(linkified, title, titles[title])
 		}
 		if linkified != docContent {
 			err = tikibase.UpdateDocument(docs[d], linkified)

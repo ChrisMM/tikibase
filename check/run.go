@@ -10,7 +10,7 @@ import (
 
 // Result contains the outcome of a TikiBase check.
 type Result struct {
-	BrokenLinks        []BrokenLink
+	BrokenLinks        []brokenLink
 	Duplicates         []string
 	MixedCapSections   [][]string
 	NonLinkedResources []string
@@ -42,7 +42,7 @@ func Run(dir string) (result Result, err error) {
 		target := internalLinks[l].Target()
 		docFileName := internalLinks[l].SourceSection().Document().FileName()
 		if isBrokenLink(target, docFileName, targets) {
-			result.BrokenLinks = append(result.BrokenLinks, BrokenLink{docFileName, target})
+			result.BrokenLinks = append(result.BrokenLinks, brokenLink{docFileName, target})
 		}
 	}
 
@@ -65,7 +65,7 @@ func Run(dir string) (result Result, err error) {
 	}
 	titles = helpers.UniqueStrings(titles)
 	helpers.SortCaseInsensitive(titles)
-	result.MixedCapSections = FindGroups(titles)
+	result.MixedCapSections = findGroups(titles)
 	return result, err
 }
 

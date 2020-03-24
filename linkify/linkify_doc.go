@@ -5,23 +5,23 @@ import (
 	"regexp"
 )
 
-// Linkify replaces all occurrences of the given title
+// linkifyDoc replaces all occurrences of the given title
 // outside of a link in the given text
 // with a linkified version.
-func Linkify(text, title, target string) string {
+func linkifyDoc(text, title, target string) string {
 	// return if there are no occurrences of title
-	if !TextContainsTitle(text, title) {
+	if !textContainsTitle(text, title) {
 		return text
 	}
 
 	// replace all existing links, sections, and URLs
-	replacer := NewUniqueReplacer()
-	replacer.AddMany(FindExistingLinks(text))
-	replacer.AddMany(FindExistingSections(text))
+	replacer := newUniqueReplacer()
+	replacer.AddMany(findExistingLinks(text))
+	replacer.AddMany(findExistingSections(text))
 	replacedText := replacer.Replace(text)
 
 	// return if there are no occurrences of title now
-	if !TextContainsTitle(replacedText, title) {
+	if !textContainsTitle(replacedText, title) {
 		return text
 	}
 

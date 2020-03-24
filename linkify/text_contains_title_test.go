@@ -1,9 +1,7 @@
-package linkify_test
+package linkify
 
 import (
 	"testing"
-
-	"github.com/kevgo/tikibase/linkify"
 )
 
 func TestTextContainsText(t *testing.T) {
@@ -15,7 +13,7 @@ func TestTextContainsText(t *testing.T) {
 		"two one":    false,
 	}
 	for tt := range tests {
-		if linkify.TextContainsTitle(tt, "one two") != tests[tt] {
+		if textContainsTitle(tt, "one two") != tests[tt] {
 			t.Errorf("mismatch for %q", tt)
 		}
 	}

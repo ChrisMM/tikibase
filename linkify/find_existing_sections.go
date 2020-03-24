@@ -13,8 +13,8 @@ var sectionRE *regexp.Regexp
 //nolint:gochecknoglobals
 var sectionOnce sync.Once
 
-// FindExistingSections provides the lines containing sections in the given text.
-func FindExistingSections(text string) []string {
+// findExistingSections provides the lines containing sections in the given text.
+func findExistingSections(text string) []string {
 	sectionOnce.Do(func() { sectionRE = regexp.MustCompile("(?m)^#+.*?\n") })
 	hits := sectionRE.FindAllString(text, -1)
 	deduper := make(map[string]struct{})
