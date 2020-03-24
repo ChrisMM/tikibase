@@ -2,6 +2,7 @@ package linkify
 
 import (
 	"regexp"
+	"sort"
 )
 
 // FindExistingLinks provides all links with the given title in the given text.
@@ -15,5 +16,6 @@ func FindExistingLinks(text string) (result []string) {
 	for c := range collector {
 		result = append(result, c)
 	}
+	sort.Strings(result)
 	return result
 }
