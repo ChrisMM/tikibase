@@ -14,22 +14,32 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Changed
 
+- Run godog features in CircleCI in strict mode ([jaysonesmith])
+- Removed TestMain call in `suite_test.go` for CI. ([jaysonesmith])
+
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+- Fixed the time attributes in the JUnit formatter. ([232](https://github.com/cucumber/godog/pull/232) - [lonnblad])
+- Re enable custom formatters. ([238](https://github.com/cucumber/godog/pull/238) - [ericmcbride])
+- Added back suite_test.go ([jaysonesmith])
+- Normalise module paths for use on Windows ([242](https://github.com/cucumber/godog/pull/242) - [gjtaylor])
+- Fixed panic in indenting function `s` ([247](https://github.com/cucumber/godog/pull/247) - [titouanfreville])
+- Fixed wrong version in API example ([263](https://github.com/cucumber/godog/pull/263) - [denis-trofimov])
 
 ## [0.8.1]
 
 ### Added
 
-- Link in Readme to the Slack community. ([210](https://github.com/cucumber/godog/pull/210) [smikulcik])
-- Added run tests for Cucumber formatting. ([214](https://github.com/cucumber/godog/pull/214), [216](https://github.com/cucumber/godog/pull/216) [lonnblad])
+- Link in Readme to the Slack community. ([210](https://github.com/cucumber/godog/pull/210) - [smikulcik])
+- Added run tests for Cucumber formatting. ([214](https://github.com/cucumber/godog/pull/214), [216](https://github.com/cucumber/godog/pull/216) - [lonnblad])
 
 ### Changed
 
-- Renamed the `examples` directory to `_examples`, removing dependencies from the Go module ([218](https://github.com/cucumber/godog/pull/218) [axw])
+- Renamed the `examples` directory to `_examples`, removing dependencies from the Go module ([218](https://github.com/cucumber/godog/pull/218) - [axw])
 
 ### Deprecated
 
@@ -37,7 +47,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Fixed
 
-- Find/Replaced references to DATA-DOG/godog -> cucumber/godog for docs. ([209](https://github.com/cucumber/godog/pull/209) [smikulcik])
+- Find/Replaced references to DATA-DOG/godog -> cucumber/godog for docs. ([209](https://github.com/cucumber/godog/pull/209) - [smikulcik])
 - Fixed missing links in changelog to be correctly included! ([jaysonesmith])
 
 ## [0.8.0]
@@ -67,4 +77,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 [jaysonesmith]:     https://github.com/jaysonesmith
 [lonnblad]:         https://github.com/lonnblad
 [smikulcik]:        https://github.com/smikulcik
-
+[ericmcbride]:      https://github.com/ericmcbride
+[gjtaylor]:         https://github.com/gjtaylor
+[titouanfreville]:  https://github.com/titouanfreville
+[denis-trofimov]:   https://github.com/denis-trofimov
