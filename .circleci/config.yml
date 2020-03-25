@@ -7,7 +7,6 @@ jobs:
     working_directory: /go/src/github.com/kevgo/tikibase
     steps:
       - checkout
-      - run: make unit
-      - run: go get github.com/cucumber/godog/cmd/godog
-      - run: rm -rf vendor
-      - run: godog --format=progress
+      - run: GO111MODULE=on go test ./...
+      - run: GO111MODULE=on go get github.com/cucumber/godog/cmd/godog
+      - run: .circleci/run-godog.sh

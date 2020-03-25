@@ -1,6 +1,6 @@
 module github.com/kevgo/tikibase
 
-go 1.13
+go 1.14
 
 require (
 	github.com/cucumber/godog v0.9.0
