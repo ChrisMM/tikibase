@@ -24,7 +24,7 @@ var statsCmd = &cobra.Command{
 		result, err := stats.Run(".")
 		if err != nil {
 			helpers.PrintErrors(err)
-			os.Exit(255)
+			os.Exit(errExitCode)
 		}
 		fmt.Printf("documents: %d\n", result.DocsCount)
 		fmt.Printf(" sections: %d\n", result.SectionsCount)

@@ -23,7 +23,7 @@ var findCmd = &cobra.Command{
 		results, err := find.Run(".", *typeFlag)
 		if err != nil {
 			helpers.PrintErrors(err)
-			os.Exit(255)
+			os.Exit(errExitCode)
 		}
 		for _, result := range results {
 			fmt.Println(result)

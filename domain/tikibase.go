@@ -20,6 +20,9 @@ type TikiBase struct {
 	config config.Schema
 }
 
+// NewFilePerms defines the default file permissions for files in this Tikibase.
+const NewFilePerms = 0644
+
 // NewTikiBase creates a new TikiBase instance using the given directory path as its storage directory.
 // The given file path must exist and be a directory.
 func NewTikiBase(dir string) (result *TikiBase, err error) {
@@ -44,7 +47,7 @@ func (tikiBase *TikiBase) CreateDocument(filename string, content string) (resul
 	}
 	doc := newDocumentWithText(filename, content)
 	filePath := filepath.Join(tikiBase.dir, doc.FileName())
-	err = ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
+	err = ioutil.WriteFile(filePath, []byte(doc.Content()), NewFilePerms)
 	if err != nil {
 		return result, fmt.Errorf("cannot create new document %q: %w", filename, err)
 	}
@@ -101,7 +104,7 @@ func (tikiBase *TikiBase) LoadDocument(filename string) (result *Document, err e
 // SaveDocument stores the given Document in this TikiBase.
 func (tikiBase *TikiBase) SaveDocument(doc *Document) error {
 	filePath := filepath.Join(tikiBase.dir, doc.FileName())
-	err := ioutil.WriteFile(filePath, []byte(doc.Content()), 0644)
+	err := ioutil.WriteFile(filePath, []byte(doc.Content()), NewFilePerms)
 	if err != nil {
 		return fmt.Errorf("cannot save document %q: %w", doc.FileName(), err)
 	}

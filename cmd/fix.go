@@ -23,7 +23,7 @@ var fixCmd = &cobra.Command{
 		err := fix.Run(".")
 		if err != nil {
 			helpers.PrintErrors(err)
-			os.Exit(255)
+			os.Exit(errExitCode)
 		}
 	},
 }

@@ -27,7 +27,7 @@ func TestTikiBase_CreateDocument(t *testing.T) {
 	assert.Nil(t, err, "file not found:", filePath)
 	assert.False(t, fileInfo.IsDir(), "file should not be a directory")
 	fileMode := fileInfo.Mode()
-	assert.Equalf(t, os.FileMode(0644), fileMode, "file should have access 0644 but has %#o", fileMode)
+	assert.Equalf(t, os.FileMode(domain.NewFilePerms), fileMode, "file should have access %o but has %#o", domain.NewFilePerms, fileMode)
 }
 
 func TestTikiBase_Documents(t *testing.T) {
@@ -111,7 +111,7 @@ func TestTikiBase_SaveDocument(t *testing.T) {
 	assert.Nil(t, err, "file not found")
 	assert.False(t, fileInfo.IsDir(), "file should not be a directory")
 	fileMode := fileInfo.Mode()
-	assert.Equalf(t, os.FileMode(0644), fileMode, "file should have access 0644 but has %#o", fileMode)
+	assert.Equalf(t, os.FileMode(domain.NewFilePerms), fileMode, "file should have access 0644 but has %#o", fileMode)
 }
 
 func TestTikiBase_StorageDir(t *testing.T) {

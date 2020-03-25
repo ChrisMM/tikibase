@@ -7,6 +7,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// errExitCode defines the exit code when internal errors happen.
+const errExitCode = 255
+
 //nolint:gochecknoglobals
 // rootCmd defines the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -23,6 +26,6 @@ TikiBase provides machine-assistance for editing and querying via CLI tools that
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		os.Exit(errExitCode)
 	}
 }

@@ -28,7 +28,7 @@ Please report internal errors at https://github.com/kevgo/tikibase/issues/new`,
 		result, err := check.Run(".")
 		if err != nil {
 			helpers.PrintErrors(err)
-			os.Exit(255)
+			os.Exit(errExitCode)
 		}
 		handleCheckResults(result)
 	},

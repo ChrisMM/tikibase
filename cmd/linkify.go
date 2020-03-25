@@ -19,7 +19,7 @@ var linkifyCmd = &cobra.Command{
 		err := linkify.Run(".")
 		if err != nil {
 			helpers.PrintErrors(err)
-			os.Exit(255)
+			os.Exit(errExitCode)
 		}
 	},
 }

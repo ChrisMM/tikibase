@@ -16,13 +16,14 @@ cuke-parallel:  # runs the feature specs
 
 fix:   # fixes all auto-correctable issues
 	@find . -name '*.go' | grep -v vendor | xargs gofmt -l -s -w
+	# @golangci-lint run --enable-all --fix
 .PHONY: fix
 
 help:   # prints all make targets
 	@cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
 lint:  # runs all linters
-	@golangci-lint run --enable-all -D lll -D godox -D wsl -D whitespace
+	@golangci-lint run --enable-all -D lll -D godox -D wsl -D whitespace -D gomnd
 
 ps: fix test # "pitstop" command, run after making changes to the code
 
@@ -31,7 +32,7 @@ stats:  # shows code statistics
 
 test:  # runs all tests
 	@go test ./... &
-	@golangci-lint run --enable-all -D lll -D godox -D wsl -D whitespace &
+	@golangci-lint run --enable-all -D lll -D godox -D wsl -D whitespace -D gomnd &
 	@godog --concurrency=$(shell nproc --all) --format=progress
 .PHONY: test
 

@@ -24,13 +24,13 @@ Please see the documentation of those commands for details on what they do.
 		err := fix.Run(".")
 		if err != nil {
 			helpers.PrintErrors(err)
-			os.Exit(255)
+			os.Exit(errExitCode)
 		}
 
 		result, err := check.Run(".")
 		if err != nil {
 			helpers.PrintErrors(err)
-			os.Exit(255)
+			os.Exit(errExitCode)
 		}
 
 		handleCheckResults(result)

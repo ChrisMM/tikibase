@@ -6,6 +6,9 @@ import (
 	"github.com/kevgo/tikibase/helpers"
 )
 
+// replacementLength defines the length of replacement strings.
+const replacementLength = 10
+
 // uniqueReplacer substitutes text passages in text with unique placeholders.
 type uniqueReplacer struct {
 	replacements map[string]string
@@ -18,7 +21,7 @@ func newUniqueReplacer() *uniqueReplacer {
 
 // Add registers the given replacement for the given term.
 func (ur *uniqueReplacer) Add(term string) {
-	ur.replacements[term] = helpers.RandomString(10)
+	ur.replacements[term] = helpers.RandomString(replacementLength)
 }
 
 // AddMany registers the given replacement for the given term.
