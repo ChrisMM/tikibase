@@ -16,7 +16,7 @@ var linkifyCmd = &cobra.Command{
 	Long:    `Finds text passages that look like titles of other documents and makes them links to the respective document.`,
 	Aliases: []string{"l"},
 	Run: func(cmd *cobra.Command, args []string) {
-		err := linkify.Run(".")
+		err := linkify.Run(".", true)
 		if err != nil {
 			helpers.PrintErrors(err)
 			os.Exit(errExitCode)

@@ -226,7 +226,7 @@ func (w *workspaceFeature) itProvidesTheStatistics(table *messages.PickleStepArg
 }
 
 func (w *workspaceFeature) linkify() (err error) {
-	return linkify.Run(w.root)
+	return linkify.Run(w.root, false)
 }
 
 func (w *workspaceFeature) runningStatistics() error {

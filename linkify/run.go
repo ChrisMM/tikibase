@@ -8,7 +8,7 @@ import (
 )
 
 // Run creates missing links in this TikiBase.
-func Run(dir string) (err error) {
+func Run(dir string, log bool) (err error) {
 	tikibase, err := domain.NewTikiBase(dir)
 	if err != nil {
 		return err
@@ -33,6 +33,9 @@ func Run(dir string) (err error) {
 	// scan all documents for missing link titles
 	for d := range docs {
 		docContent := docs[d].Content()
+		if log {
+			fmt.Print(".")
+		}
 		linkified := docContent
 		for title := range titles {
 			docTitle, err := docs[d].TitleSection().Title()
@@ -50,6 +53,9 @@ func Run(dir string) (err error) {
 				return err
 			}
 		}
+	}
+	if log {
+		fmt.Println()
 	}
 	return nil
 }
