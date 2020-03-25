@@ -12,6 +12,7 @@ The `tikibase` tool provides these commands:
   - resources (non-markdown files) that aren't linked to from a markdown file
   - multiple occurrences of the same section in a file
   - inconsistent capitalization of sections
+  - documents with empty titles
 - **find:** semantic search
   - find all parsers: `tikibase find --is parser`
   - find all Markdown parsers: `tikibase find --is parser,markdown` or

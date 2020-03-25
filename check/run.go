@@ -10,10 +10,11 @@ import (
 
 // Result contains the outcome of a TikiBase check.
 type Result struct {
-	BrokenLinks        []brokenLink
-	Duplicates         []string
-	MixedCapSections   [][]string
-	NonLinkedResources []string
+	BrokenLinks              []brokenLink
+	Duplicates               []string
+	DocumentsWithEmptyTitles []string
+	MixedCapSections         [][]string
+	NonLinkedResources       []string
 }
 
 // Run executes the "check" command.
@@ -50,6 +51,17 @@ func Run(dir string) (result Result, err error) {
 	for _, fileName := range resourceFiles.FileNames() {
 		if !internalLinks.HasLinkTo(fileName) {
 			result.NonLinkedResources = append(result.NonLinkedResources, fileName)
+		}
+	}
+
+	// determine documents with empty titles
+	for d := range docs {
+		title, err := docs[d].TitleSection().Title()
+		if err != nil {
+			return result, err
+		}
+		if strings.TrimSpace(title) == "" {
+			result.DocumentsWithEmptyTitles = append(result.DocumentsWithEmptyTitles, docs[d].FileName())
 		}
 	}
 

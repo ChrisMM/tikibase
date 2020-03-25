@@ -159,7 +159,7 @@ func (section *Section) TikiLinks(dc Documents) (result TikiLinks, err error) {
 // Title returns the human-friendly title of this TikiSection,
 // i.e. its title tag without the "###"" in front
 func (section *Section) Title() (string, error) {
-	titleLine := strings.SplitN(section.content, "\n", 1)[0]
+	titleLine := strings.SplitN(section.content, "\n", 2)[0]
 	stripTitleTagOnce.Do(func() { stripTitleTagRE = regexp.MustCompile(`#+\s*(.*)`) })
 	matches := stripTitleTagRE.FindStringSubmatch(titleLine)
 	if len(matches) == 0 {

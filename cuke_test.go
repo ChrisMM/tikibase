@@ -157,6 +157,18 @@ func (w *workspaceFeature) itFindsTheDuplicates(table *messages.PickleStepArgume
 	return nil
 }
 
+func (w *workspaceFeature) itFindsTheEmptyDocumentTitles(table *messages.PickleStepArgument_PickleTable) error {
+	want := []string{}
+	for r := range table.Rows {
+		want = append(want, table.Rows[r].Cells[0].Value)
+	}
+	have := w.checkResult.DocumentsWithEmptyTitles
+	if !reflect.DeepEqual(have, want) {
+		return fmt.Errorf("expected %v, got %v", want, have)
+	}
+	return nil
+}
+
 func (w *workspaceFeature) itFindsTheNonlinkedResources(table *messages.PickleStepArgument_PickleTable) error {
 	expected := make([]string, len(table.Rows))
 	for i := range table.Rows {
@@ -259,6 +271,7 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^it finds no errors$`, wf.itFindsNoErrors)
 	s.Step(`^it finds the broken links:$`, wf.itFindsTheBrokenLinks)
 	s.Step(`^it finds the duplicates:$`, wf.itFindsTheDuplicates)
+	s.Step(`^it finds the empty document titles:$`, wf.itFindsTheEmptyDocumentTitles)
 	s.Step(`^it finds the non-linked resources:$`, wf.itFindsTheNonlinkedResources)
 	s.Step(`^it finds the section types:$`, wf.itFindsTheSectionTypes)
 	s.Step(`^it finds these sections with mixed capitalization:$`, wf.itFindsTheseSectionsWithMixedCapitalization)
