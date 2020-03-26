@@ -8,5 +8,18 @@ Feature: Empty sections
       Hello
       """
     When checking the TikiBase
-    Then it finds the empty document titles:
+    Then it finds these documents with empty sections:
+      | 1.md |
+
+  Scenario: empty section
+    Given the workspace contains file "1.md" with content:
+      """
+      # Foo
+
+      ###
+
+      Hello
+      """
+    When checking the TikiBase
+    Then it finds these documents with empty sections:
       | 1.md |
