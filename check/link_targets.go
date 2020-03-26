@@ -13,48 +13,35 @@ import (
 // Examples: `1.md`, `1.md#foo`
 type linkTargets map[string]struct{}
 
-func findLinkTargets(docs domain.Documents, resources domain.ResourceFiles) (result linkTargets, duplicates []string, err error) {
+func findLinkTargets(docs domain.Documents, resources domain.ResourceFiles) (result linkTargets, err error) {
 	result = make(linkTargets)
 
 	// add links targets for documents
 	for i := range docs {
 
 		// add target for the document itself
-		err := result.Add(docs[i].FileName())
-		if err != nil {
-			duplicates = append(duplicates, docs[i].FileName())
-		}
+		result.Add(docs[i].FileName())
 
 		// add target for the sections in the document
 		sections := docs[i].AllSections()
 		for s := range sections {
 			linkTarget, err := sections[s].LinkTarget()
 			if err != nil {
-				return result, duplicates, fmt.Errorf("cannot determine link targets in document %q: %w", docs[i].FileName(), err)
+				return result, fmt.Errorf("cannot determine link targets in document %q: %w", docs[i].FileName(), err)
 			}
-			err = result.Add(linkTarget)
-			if err != nil {
-				duplicates = append(duplicates, linkTarget)
-			}
+			result.Add(linkTarget)
 		}
 	}
 
 	// add link targets for resources
 	for r := range resources {
-		err := result.Add(resources[r])
-		if err != nil {
-			duplicates = append(duplicates, resources[r])
-		}
+		result.Add(resources[r])
 	}
-	return result, duplicates, nil
+	return result, nil
 }
 
-func (ltc linkTargets) Add(linkTarget string) error {
-	if ltc.Contains(linkTarget) {
-		return fmt.Errorf("duplicate link target: %s", linkTarget)
-	}
+func (ltc linkTargets) Add(linkTarget string) {
 	ltc[linkTarget] = struct{}{}
-	return nil
 }
 
 func (ltc linkTargets) Contains(linkTarget string) bool {
@@ -69,4 +56,13 @@ func (ltc linkTargets) String() (result string) {
 	}
 	sort.Strings(values)
 	return "[" + strings.Join(values, ", ") + "]"
+}
+
+// ScaffoldLinkTargets provides linkTargets instances for testing.
+func scaffoldLinkTargets(targets []string) linkTargets {
+	result := make(linkTargets)
+	for t := range targets {
+		result.Add(targets[t])
+	}
+	return result
 }

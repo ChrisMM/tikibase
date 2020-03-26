@@ -2,10 +2,8 @@ package check
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/kevgo/tikibase/domain"
-	"github.com/kevgo/tikibase/helpers"
 )
 
 // Result contains the outcome of a TikiBase check.
@@ -31,51 +29,21 @@ func Run(dir string) (result Result, err error) {
 	if err != nil {
 		return
 	}
-	var targets linkTargets
-	targets, result.Duplicates, err = findLinkTargets(docs, resourceFiles)
-	if err != nil {
-		return
-	}
 	internalLinks, _ := docs.Links()
 
-	// determine broken links
-	for l := range internalLinks {
-		target := internalLinks[l].Target()
-		docFileName := internalLinks[l].SourceSection().Document().FileName()
-		if isBrokenLink(target, docFileName, targets) {
-			result.BrokenLinks = append(result.BrokenLinks, brokenLink{docFileName, target})
-		}
+	result.BrokenLinks = findBrokenLinks(docs, resourceFiles, internalLinks)
+	result.Duplicates, err = findDuplicateTargets(docs)
+	if err != nil {
+		return result, fmt.Errorf("cannot determine duplicate link targets: %w", err)
 	}
-
-	// determine non-linked resources
-	for r := range resourceFiles {
-		if !internalLinks.HasLinkTo(resourceFiles[r]) {
-			result.NonLinkedResources = append(result.NonLinkedResources, resourceFiles[r])
-		}
-	}
-
-	// determine documents with empty sections
+	result.NonLinkedResources = findNonLinkedResources(resourceFiles, internalLinks)
 	result.DocumentsWithEmptySections, err = docsWithEmptySections(docs)
-
-	// determine mixed cap sections
-	titles := []string{}
-	sections := docs.ContentSections()
-	for s := range sections {
-		title, err := sections[s].Title()
-		if err != nil {
-			return result, fmt.Errorf("cannot determine mixed cap sections: %w", err)
-		}
-		titles = append(titles, title)
+	if err != nil {
+		return result, fmt.Errorf("cannot determine documents with empty sections: %w", err)
 	}
-	titles = helpers.DedupeStrings(titles)
-	helpers.SortCaseInsensitive(titles)
-	result.MixedCapSections = findGroups(titles)
-	return result, err
-}
-
-func isBrokenLink(target string, filename string, targets linkTargets) bool {
-	if strings.HasPrefix(target, "#") {
-		return !targets.Contains(filename + target)
+	result.MixedCapSections, err = findMixedCapSections(docs)
+	if err != nil {
+		return result, fmt.Errorf("cannot find mixed-cap sections: %w", err)
 	}
-	return !targets.Contains(target)
+	return result, nil
 }

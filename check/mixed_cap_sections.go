@@ -1,10 +1,27 @@
 package check
 
 import (
+	"fmt"
 	"strings"
 
+	"github.com/kevgo/tikibase/domain"
 	"github.com/kevgo/tikibase/helpers"
 )
+
+func findMixedCapSections(docs domain.Documents) (result [][]string, err error) {
+	titles := []string{}
+	sections := docs.ContentSections()
+	for s := range sections {
+		title, err := sections[s].Title()
+		if err != nil {
+			return result, fmt.Errorf("cannot determine mixed cap sections: %w", err)
+		}
+		titles = append(titles, title)
+	}
+	titles = helpers.DedupeStrings(titles)
+	helpers.SortCaseInsensitive(titles)
+	return findGroups(titles), nil
+}
 
 // findGroups provides groups of words that differ only in capitalization.
 // The given string list must be sorted case-insensitively.
