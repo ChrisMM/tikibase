@@ -27,7 +27,7 @@ func Run(dir string) (result Result, err error) {
 		return
 	}
 	result.DocsCount = len(docFiles.FileNames())
-	result.ResourcesCount = len(resourceFiles.FileNames())
+	result.ResourcesCount = len(resourceFiles)
 	docs, err := docFiles.Documents()
 	if err != nil {
 		return

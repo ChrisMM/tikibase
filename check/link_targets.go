@@ -40,10 +40,10 @@ func findLinkTargets(docs domain.Documents, resources domain.ResourceFiles) (res
 	}
 
 	// add link targets for resources
-	for _, fileName := range resources.FileNames() {
-		err := result.Add(fileName)
+	for r := range resources {
+		err := result.Add(resources[r])
 		if err != nil {
-			duplicates = append(duplicates, fileName)
+			duplicates = append(duplicates, resources[r])
 		}
 	}
 	return result, duplicates, nil

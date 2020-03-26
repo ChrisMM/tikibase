@@ -69,7 +69,7 @@ func TestTikiBase_Files_noConfig(t *testing.T) {
 	docs, resources, err := tb.Files()
 	assert.Nil(t, err)
 	assert.Equal(t, []string{"one.md", "two.md"}, docs.FileNames())
-	assert.Equal(t, []string{"img.png"}, resources.FileNames())
+	assert.Equal(t, []string{"img.png"}, []string(resources))
 }
 
 func TestTikiBase_Files_withConfig(t *testing.T) {
@@ -89,7 +89,7 @@ func TestTikiBase_Files_withConfig(t *testing.T) {
 	docs, resources, err := tb.Files()
 	assert.Nil(t, err)
 	assert.Equal(t, []string{"one.md"}, docs.FileNames())
-	assert.Equal(t, []string{"img.png"}, resources.FileNames())
+	assert.Equal(t, []string{"img.png"}, []string(resources))
 }
 
 func TestTikiBase_Load(t *testing.T) {

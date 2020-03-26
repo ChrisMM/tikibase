@@ -31,16 +31,9 @@ func (df DocumentFiles) FileNames() []string {
 
 // ResourceFiles describes the non-Markdown files in a TikiBase,
 // typically images and PDFs.
-type ResourceFiles struct {
-	fileNames []string
-}
-
-// FileNames provides the names of the files in this collection.
-func (rf ResourceFiles) FileNames() []string {
-	return rf.fileNames
-}
+type ResourceFiles []string
 
 // ScaffoldResourceFiles provides resource file collections for testing.
 func ScaffoldResourceFiles(files []string) (result ResourceFiles) {
-	return ResourceFiles{files}
+	return ResourceFiles(files)
 }

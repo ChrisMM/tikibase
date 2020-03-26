@@ -81,7 +81,7 @@ func (tikiBase *TikiBase) Files() (docs DocumentFiles, resources ResourceFiles, 
 		if strings.HasSuffix(filename, ".md") {
 			docs.fileNames = append(docs.fileNames, filename)
 		} else {
-			resources.fileNames = append(resources.fileNames, filename)
+			resources = append(resources, filename)
 		}
 	}
 	docs.tikiBase = tikiBase

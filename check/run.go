@@ -48,9 +48,9 @@ func Run(dir string) (result Result, err error) {
 	}
 
 	// determine non-linked resources
-	for _, fileName := range resourceFiles.FileNames() {
-		if !internalLinks.HasLinkTo(fileName) {
-			result.NonLinkedResources = append(result.NonLinkedResources, fileName)
+	for r := range resourceFiles {
+		if !internalLinks.HasLinkTo(resourceFiles[r]) {
+			result.NonLinkedResources = append(result.NonLinkedResources, resourceFiles[r])
 		}
 	}
 
