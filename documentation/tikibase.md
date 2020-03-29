@@ -1,7 +1,13 @@
 # TikiBase
 
-A TikiBase is a timeless, low-tech, wiki-like knowledge base designed to last
-for decades. It makes semi-structured rich-text information embedded with
+A successful knowledge management solution must live for many decades, have the
+ability to rejuvenate itself (modernize outdated content, improve the
+organization of things), connect existing ideas in new ways, and capture ideas
+that don’t fit into or contradict the existing system.
+
+A TikiBase is such a knowledge base. It is a timeless, low-tech, wiki-like
+knowledge base designed to last for decades. It makes semi-structured rich-text
+information embedded with
 [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework)- like
 associations available on all current and future compute platforms. It can be
 used completely manually.
