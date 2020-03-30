@@ -1,9 +1,6 @@
 package linkify
 
 import (
-	"fmt"
-	"regexp"
-
 	"github.com/kevgo/tikibase/domain"
 )
 
@@ -25,9 +22,7 @@ func linkifyDoc(doc *domain.Document, docsMappings []docMapping) string {
 		if docsMappings[dm].file == doc.FileName() {
 			continue
 		}
-		regex := regexp.MustCompile(fmt.Sprintf(`(?i)\b%s\b`, docsMappings[dm].name))
-		link := fmt.Sprintf("[%s](%s)", docsMappings[dm].name, docsMappings[dm].file)
-		replacer.Replace(regex, link)
+		replacer.Replace(docsMappings[dm].lookFor, docsMappings[dm].replaceWith)
 	}
 
 	return replacer.Apply(docContent)

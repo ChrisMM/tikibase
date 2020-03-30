@@ -13,9 +13,6 @@ func TestDocsMappings(t *testing.T) {
 	})
 	have, err := docsMappings(docs)
 	assert.Nil(t, err)
-	want := []docMapping{
-		{name: "The One", file: "one.md"},
-		{name: "one", file: "one.md"},
-	}
-	assert.Equal(t, want, have)
+	assert.Equal(t, "[The One](one.md)", have[0].replaceWith)
+	assert.Equal(t, "one.md", have[0].file)
 }

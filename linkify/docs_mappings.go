@@ -1,13 +1,17 @@
 package linkify
 
 import (
+	"fmt"
+	"regexp"
+
 	"github.com/kevgo/tikibase/domain"
 	"github.com/kevgo/tikibase/helpers"
 )
 
 type docMapping struct {
-	name string
-	file string
+	lookFor     *regexp.Regexp
+	replaceWith string
+	file        string
 }
 
 func docsMappings(docs domain.Documents) (result []docMapping, err error) {
@@ -29,8 +33,9 @@ func docsMappings(docs domain.Documents) (result []docMapping, err error) {
 	result = make([]docMapping, 0, len(keys))
 	for k := range keys {
 		result = append(result, docMapping{
-			name: keys[k],
-			file: docsNames[keys[k]],
+			lookFor:     regexp.MustCompile(fmt.Sprintf(`(?i)\b%s\b`, keys[k])),
+			replaceWith: fmt.Sprintf("[%s](%s)", keys[k], docsNames[keys[k]]),
+			file:        docsNames[keys[k]],
 		})
 	}
 	return result, nil
