@@ -38,7 +38,7 @@ func Run(dir string, log bool) (err error) {
 		}
 		linkified := docContent
 		for title := range titles {
-			docTitle, err := docs[d].TitleSection().Title()
+			docTitle, err := docs[d].Title()
 			if err != nil {
 				return err
 			}

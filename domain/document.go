@@ -107,7 +107,7 @@ func (doc *Document) Links() (result []Link) {
 
 // Names provides the human-readable names of this document.
 func (doc *Document) Names() (result []string, err error) {
-	title, err := doc.TitleSection().Title()
+	title, err := doc.Title()
 	if err != nil {
 		return result, fmt.Errorf("cannot determine names: %w", err)
 	}
@@ -147,6 +147,11 @@ func (doc *Document) RemoveSection(section *Section) *Document {
 // and has the given old section replaced with the given new section.
 func (doc *Document) ReplaceSection(oldSection *Section, newSection *Section) *Document {
 	return newDocumentWithSections(doc.filename, doc.AllSections().Replace(oldSection, newSection))
+}
+
+// Title provides the title of this document.
+func (doc *Document) Title() (result string, err error) {
+	return doc.TitleSection().Title()
 }
 
 // TikiLinks returns the TikiLinks in this Document.

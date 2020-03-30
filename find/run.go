@@ -28,7 +28,7 @@ func Run(dir string, types []string) (result []string, err error) {
 				continue
 			}
 		}
-		title, err := docs[i].TitleSection().Title()
+		title, err := docs[i].Title()
 		if err != nil {
 			return result, fmt.Errorf("error getting the title of a document, please run \"tikibase check\" to investigate")
 		}

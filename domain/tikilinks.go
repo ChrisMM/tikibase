@@ -90,11 +90,11 @@ func (links TikiLinks) RemoveLinksFromDocs(docs Documents) (result TikiLinks) {
 // SortBySourceDocumentTitle sorts this TikiLinkCollection alphabetically by the target document title.
 func (links TikiLinks) SortBySourceDocumentTitle() {
 	sort.Slice(links, func(i, j int) bool {
-		title1, err := links[i].SourceSection().Document().TitleSection().Title()
+		title1, err := links[i].SourceSection().Document().Title()
 		if err != nil {
 			panic(err)
 		}
-		title2, err := links[j].SourceSection().Document().TitleSection().Title()
+		title2, err := links[j].SourceSection().Document().Title()
 		if err != nil {
 			panic(err)
 		}

@@ -116,6 +116,13 @@ func TestDocument_TikiLinks(t *testing.T) {
 	assert.Equal(t, docs[0], actual[0].TargetDocument())
 }
 
+func TestDocument_Title(t *testing.T) {
+	doc := domain.ScaffoldDocument(domain.DocumentScaffold{Content: "# My Title\n\nTitle section content.\n\n### Content Section\n Content section content.\n"})
+	title, err := doc.Title()
+	assert.Nil(t, err)
+	assert.Equal(t, "My Title", title)
+}
+
 func TestDocument_TitleSection(t *testing.T) {
 	doc := domain.ScaffoldDocument(domain.DocumentScaffold{Content: "# My Title\n\nTitle section content.\n\n### Content Section\n Content section content.\n"})
 	section := doc.TitleSection()
@@ -125,7 +132,7 @@ func TestDocument_TitleSection(t *testing.T) {
 func TestScaffoldDocument(t *testing.T) {
 	actual := domain.ScaffoldDocument(domain.DocumentScaffold{})
 	assert.NotEqual(t, "", actual.FileName(), "no default FileName")
-	titleSectionTitle, err := actual.TitleSection().Title()
+	titleSectionTitle, err := actual.Title()
 	assert.Nil(t, err)
 	assert.NotEqual(t, "", titleSectionTitle, "no default section")
 }
