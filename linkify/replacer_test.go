@@ -7,12 +7,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestReplacer_Replace(t *testing.T) {
-	text := "one two three four"
-	ur := uniqueReplacer{}
-	ur.AddMany([]string{"one", "three"})
-	replaced := ur.Replace(text)
-	assert.NotEqual(t, text, replaced)
-	assert.Regexp(t, regexp.MustCompile(`\w+ two \w+ four`), replaced)
-	assert.Equal(t, text, ur.Restore(replaced))
+func TestReplacer(t *testing.T) {
+	text := "Amazon Web Services is a product of Amazon."
+	ur := ignoringReplacer{}
+	ur.Ignore("Amazon Web Services")
+	ur.Replace(regexp.MustCompile("Amazon"), "Jeff Besos")
+	replaced := ur.Apply(text)
+	assert.Equal(t, "Amazon Web Services is a product of Jeff Besos.", replaced)
 }

@@ -1,6 +1,8 @@
 package linkify
 
 import (
+	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/kevgo/tikibase/helpers"
@@ -9,46 +11,54 @@ import (
 // replacementLength defines the length of replacement strings.
 const replacementLength = 10
 
-// uniqueReplacer substitutes text passages in text with unique placeholders.
-// Replacements are applied in the order added.
-// The zero value is an empty replacer.
-type uniqueReplacer struct {
+// ignoringReplacer replaces given regexes in given text while ignoring given parts of the text.
+// Ignores and replacements are case insensitive and applied in the order they were registered.
+// The zero value is an empty ignoringReplacer.
+type ignoringReplacer struct {
 	replacements []replacement
 }
 
 // replacement specifies one replacement.
 type replacement struct {
-	lookFor     string
+	lookFor     *regexp.Regexp
 	replaceWith string
+	restoreWith string
 }
 
-// Add registers the given replacement for the given term.
-func (ur *uniqueReplacer) Add(term string) {
-	ur.replacements = append(ur.replacements, replacement{
-		lookFor:     term,
+// Apply applies the registered replacements to the given text.
+func (c *ignoringReplacer) Apply(text string) string {
+	// add all the placeholders
+	for r := range c.replacements {
+		text = c.replacements[r].lookFor.ReplaceAllString(text, c.replacements[r].replaceWith)
+	}
+	// restore all the placeholders
+	for r := range c.replacements {
+		text = strings.ReplaceAll(text, c.replacements[r].replaceWith, c.replacements[r].restoreWith)
+	}
+	return text
+}
+
+// Ignore makes this replacer ignore the given text when replacing stuff.
+func (c *ignoringReplacer) Ignore(term string) {
+	c.replacements = append(c.replacements, replacement{
+		lookFor:     regexp.MustCompile(fmt.Sprintf(`(?i)%s`, regexp.QuoteMeta(term))),
 		replaceWith: helpers.RandomString(replacementLength),
+		restoreWith: term,
 	})
 }
 
-// AddMany registers the given replacement for the given term.
-func (ur *uniqueReplacer) AddMany(terms []string) {
+// IgnoreMany makes this replacer ignore the given strings when replacing stuff.
+func (c *ignoringReplacer) IgnoreMany(terms []string) {
 	for t := range terms {
-		ur.Add(terms[t])
+		c.Ignore(terms[t])
 	}
 }
 
-// Replace replaces all registered replacements in the given text.
-func (ur *uniqueReplacer) Replace(text string) string {
-	for r := range ur.replacements {
-		text = strings.ReplaceAll(text, ur.replacements[r].lookFor, ur.replacements[r].replaceWith)
-	}
-	return text
-}
-
-// Restore removes the replacements in the given string.
-func (ur *uniqueReplacer) Restore(text string) string {
-	for r := range ur.replacements {
-		text = strings.ReplaceAll(text, ur.replacements[r].replaceWith, ur.replacements[r].lookFor)
-	}
-	return text
+// Replace makes this replacer replace all occurrences of the given regex with the given text.
+func (c *ignoringReplacer) Replace(re *regexp.Regexp, restoreValue string) {
+	c.replacements = append(c.replacements, replacement{
+		lookFor:     re,
+		replaceWith: helpers.RandomString(replacementLength),
+		restoreWith: restoreValue,
+	})
 }

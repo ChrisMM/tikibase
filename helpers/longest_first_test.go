@@ -10,6 +10,6 @@ import (
 func TestLongestFirst(t *testing.T) {
 	list := []string{"wonder", "wonderland", "wonderful", "wander"}
 	helpers.LongestFirst(list)
-	want := []string{"wander", "wonder", "wonderful", "wonderland"}
+	want := []string{"wonderland", "wonderful", "wander", "wonder"}
 	assert.Equal(t, want, list)
 }

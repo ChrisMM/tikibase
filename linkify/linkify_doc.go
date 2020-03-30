@@ -3,33 +3,32 @@ package linkify
 import (
 	"fmt"
 	"regexp"
+
+	"github.com/kevgo/tikibase/domain"
 )
 
 // linkifyDoc replaces all occurrences of the given title
 // outside of a link in the given text
 // with a linkified version.
-func linkifyDoc(text, title, target string) string {
-	// return if there are no occurrences of title
-	if !textContainsTitle(text, title) {
-		return text
+func linkifyDoc(doc *domain.Document, docsMappings []docMapping) string {
+	// cover all existing links, sections, and URLs in the document text
+	docContent := doc.Content()
+
+	replacer := ignoringReplacer{}
+	replacer.IgnoreMany(findLinks(docContent))
+	replacer.IgnoreMany(findSections(docContent))
+	replacer.IgnoreMany(findUrls(docContent))
+
+	// replace all doc names with a link to the respective doc
+	for dm := range docsMappings {
+		// don't linkify a doc to itself
+		if docsMappings[dm].file == doc.FileName() {
+			continue
+		}
+		regex := regexp.MustCompile(fmt.Sprintf(`(?i)\b%s\b`, docsMappings[dm].name))
+		link := fmt.Sprintf("[%s](%s)", docsMappings[dm].name, docsMappings[dm].file)
+		replacer.Replace(regex, link)
 	}
 
-	// replace all existing links, sections, and URLs
-	replacer := uniqueReplacer{}
-	replacer.AddMany(findLinks(text))
-	replacer.AddMany(findSections(text))
-	replacer.AddMany(findUrls(text))
-	replacedText := replacer.Replace(text)
-
-	// return if there are no occurrences of title now
-	if !textContainsTitle(replacedText, title) {
-		return text
-	}
-
-	// replace all occurrences of title with a linkified version
-	re := regexp.MustCompile(fmt.Sprintf(`(?i)\b%s\b`, title))
-	replacedText = re.ReplaceAllString(replacedText, fmt.Sprintf("[%s](%s)", title, target))
-
-	// restore all placeholders
-	return replacer.Restore(replacedText)
+	return replacer.Apply(docContent)
 }

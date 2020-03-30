@@ -11,7 +11,7 @@ func LongestFirst(list []string) {
 		len1 := len(list[i])
 		len2 := len(list[j])
 		if len1 != len2 {
-			return len1 < len2
+			return len1 > len2
 		}
 		return strings.ToLower(list[i]) < strings.ToLower(list[j])
 	})
