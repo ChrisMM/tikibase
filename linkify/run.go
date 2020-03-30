@@ -19,14 +19,14 @@ func Run(dir string, log bool) (err error) {
 	}
 
 	// find all document titles
-	titles := make(map[string]string) // text -> filename
+	docsNames := make(map[string]string) // doc name -> filename
 	for d := range docs {
-		names, err := docs[d].Names()
+		docNames, err := docs[d].Names()
 		if err != nil {
 			return err
 		}
-		for n := range names {
-			titles[names[n]] = docs[d].FileName()
+		for dn := range docNames {
+			docsNames[docNames[dn]] = docs[d].FileName()
 		}
 	}
 
@@ -41,11 +41,11 @@ func Run(dir string, log bool) (err error) {
 			return err
 		}
 		linkified := docContent
-		for title := range titles {
+		for title := range docsNames {
 			if strings.EqualFold(title, docTitle) {
 				continue
 			}
-			linkified = linkifyDoc(linkified, title, titles[title])
+			linkified = linkifyDoc(linkified, title, docsNames[title])
 		}
 		if linkified != docContent {
 			err = tikibase.UpdateDocument(docs[d], linkified)
