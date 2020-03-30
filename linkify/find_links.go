@@ -7,7 +7,9 @@ import (
 )
 
 // findLinks provides all links with the given title in the given text.
-func findLinks(text string) (result []string) {
+func findLinks(text string) []string {
 	re := regexp.MustCompile(`\[.*?\]\(.*?\)`)
-	return helpers.DedupeStrings(re.FindAllString(text, -1))
+	result := helpers.DedupeStrings(re.FindAllString(text, -1))
+	helpers.LongestFirst(result)
+	return result
 }
