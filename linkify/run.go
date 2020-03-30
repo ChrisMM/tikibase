@@ -36,12 +36,12 @@ func Run(dir string, log bool) (err error) {
 		if log {
 			fmt.Print(".")
 		}
+		docTitle, err := docs[d].Title()
+		if err != nil {
+			return err
+		}
 		linkified := docContent
 		for title := range titles {
-			docTitle, err := docs[d].Title()
-			if err != nil {
-				return err
-			}
 			if strings.EqualFold(title, docTitle) {
 				continue
 			}
