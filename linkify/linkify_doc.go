@@ -11,10 +11,10 @@ func linkifyDoc(doc *domain.Document, docsMappings []docMapping) string {
 	// cover all existing links, sections, and URLs in the document text
 	docContent := doc.Content()
 
-	replacer := ignoringReplacer{}
-	replacer.IgnoreMany(findLinks(docContent))
-	replacer.IgnoreMany(findSections(docContent))
-	replacer.IgnoreMany(findUrls(docContent))
+	replacer := NewIgnoringReplacer()
+	replacer.Ignore(findLinks(docContent)...)
+	replacer.Ignore(findSections(docContent)...)
+	replacer.Ignore(findUrls(docContent)...)
 
 	// replace all doc names with a link to the respective doc
 	for dm := range docsMappings {
@@ -22,7 +22,11 @@ func linkifyDoc(doc *domain.Document, docsMappings []docMapping) string {
 		if docsMappings[dm].file == doc.FileName() {
 			continue
 		}
-		replacer.Replace(docsMappings[dm].lookFor, docsMappings[dm].replaceWith)
+		// don't add the current mapping if the current doc already contains that link
+		if replacer.Ignores(docsMappings[dm].replaceWith) {
+			continue
+		}
+		replacer.ReplaceOnce(docsMappings[dm].lookFor, docsMappings[dm].replaceWith)
 	}
 
 	return replacer.Apply(docContent)
