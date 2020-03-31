@@ -29,7 +29,7 @@ type replacement struct {
 func (c *ignoringReplacer) Apply(text string) string {
 	// add all the placeholders
 	for r := range c.replacements {
-		text = c.replacements[r].lookFor.ReplaceAllString(text, c.replacements[r].replaceWith)
+		text = c.replacements[r].lookFor.ReplaceAllLiteralString(text, c.replacements[r].replaceWith)
 	}
 	// restore all the placeholders
 	for r := range c.replacements {
