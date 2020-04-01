@@ -55,6 +55,21 @@ func TestDocument_Id(t *testing.T) {
 	}
 }
 
+func TestDocument_LinkedDocs(t *testing.T) {
+	docs := domain.ScaffoldDocuments([]domain.DocumentScaffold{
+		{FileName: "1.md", Content: "# One"},
+		{FileName: "2.md", Content: "# Two"},
+		{FileName: "numbers.md", Content: "# Numbers\n\n[one](1.md) and [two](2.md) and then [one](1.md) again"},
+	})
+	have, err := docs[2].LinkedDocs(docs)
+	assert.Nil(t, err)
+	filenames := []string{}
+	for h := range have {
+		filenames = append(filenames, have[h].FileName())
+	}
+	assert.ElementsMatch(t, []string{"1.md", "2.md"}, filenames)
+}
+
 func TestDocument_Names(t *testing.T) {
 	tests := []struct {
 		filename string

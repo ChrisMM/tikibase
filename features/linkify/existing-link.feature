@@ -5,16 +5,20 @@ Feature: don't linkify parts of existing links
       """
       # Byte
       """
+    And the workspace contains file "kilo-byte.md" with content:
+      """
+      # Kilobyte
+      """
     And the workspace contains file "storage.md" with content:
       """
       # Storage
 
-      several [kilo-bytes](kilo-byte.md) of storage
+      several [Kilobytes](kilo-byte.md) of storage
       """
     When linkifying
     Then the workspace should contain the file "storage.md" with content:
       """
       # Storage
 
-      several [kilo-bytes](kilo-byte.md) of storage
+      several [Kilobytes](kilo-byte.md) of storage
       """

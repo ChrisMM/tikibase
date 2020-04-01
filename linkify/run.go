@@ -33,7 +33,10 @@ func Run(dir string, log logger) (err error) {
 	for i := 0; i < threadCount; i++ {
 		group.Go(func() error {
 			for doc := range docsChan {
-				linkified := linkifyDoc(doc, mappings)
+				linkified, err := linkifyDoc(doc, docs, mappings)
+				if err != nil {
+					return fmt.Errorf("cannot linkify document %q: %w", doc.FileName(), err)
+				}
 				if linkified != doc.Content() {
 					err = tikibase.UpdateDocument(doc, linkified)
 					if err != nil {

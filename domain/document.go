@@ -97,6 +97,23 @@ func (doc *Document) ID() string {
 	return strings.TrimSuffix(doc.filename, filepath.Ext(doc.filename))
 }
 
+// LinkedDocs provides the documents that this document links to.
+func (doc *Document) LinkedDocs(docs Documents) (result []*Document, err error) {
+	links, err := doc.TikiLinks(docs)
+	if err != nil {
+		return result, fmt.Errorf("cannot determine the linked docs of %q: %w", doc.FileName(), err)
+	}
+	unifier := make(map[string]*Document)
+	for l := range links {
+		target := links[l].TargetDocument()
+		unifier[target.FileName()] = target
+	}
+	for filename := range unifier {
+		result = append(result, unifier[filename])
+	}
+	return result, nil
+}
+
 // Links provides all Links in this document.
 func (doc *Document) Links() (result []Link) {
 	for i := range doc.sections {
