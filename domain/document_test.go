@@ -77,7 +77,7 @@ func TestDocument_Names(t *testing.T) {
 			// with different filename
 			filename: "amazon-web-services.md",
 			content:  "# AWS\n",
-			want:     []string{"AWS", "amazon web services"},
+			want:     []string{"AWS"},
 		},
 	}
 	for tt := range tests {

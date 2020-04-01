@@ -111,8 +111,6 @@ func (doc *Document) Names() (result []string, err error) {
 	if err != nil {
 		return result, fmt.Errorf("cannot determine names: %w", err)
 	}
-
-	// add title
 	namesTitleOnce.Do(func() { namesTitleRE = regexp.MustCompile(`\(.*\)$`) })
 	abbreviations := namesTitleRE.FindStringSubmatch(title)
 	if len(abbreviations) > 0 {
@@ -122,12 +120,6 @@ func (doc *Document) Names() (result []string, err error) {
 		}
 	} else {
 		result = []string{title}
-	}
-
-	// add filename
-	filename := strings.Replace(strings.ReplaceAll(doc.filename, "-", " "), ".md", "", 1)
-	if !strings.EqualFold(filename, result[0]) {
-		result = append(result, filename)
 	}
 	return result, nil
 }
