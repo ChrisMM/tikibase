@@ -9,6 +9,7 @@ require (
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
 	github.com/spf13/cobra v0.0.7
 	github.com/stretchr/testify v1.5.1
+	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a
 	gopkg.in/yaml.v2 v2.2.8
 	mvdan.cc/xurls/v2 v2.1.0
 )

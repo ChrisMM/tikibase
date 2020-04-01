@@ -2,8 +2,10 @@ package linkify
 
 import (
 	"fmt"
+	"runtime"
 
 	"github.com/kevgo/tikibase/domain"
+	"golang.org/x/sync/errgroup"
 )
 
 type logger func()
@@ -25,16 +27,27 @@ func Run(dir string, log logger) (err error) {
 		return err
 	}
 
-	// scan all documents for missing link titles
-	for d := range docs {
-		linkified := linkifyDoc(docs[d], mappings)
-		if linkified != docs[d].Content() {
-			err = tikibase.UpdateDocument(docs[d], linkified)
-			if err != nil {
-				return err
+	threadCount := runtime.NumCPU() * 4 // 4x concurrency per core seems a good compromise given the workers do file system operations
+	var group errgroup.Group
+	docsChan := make(chan *domain.Document)
+	for i := 0; i < threadCount; i++ {
+		group.Go(func() error {
+			for doc := range docsChan {
+				linkified := linkifyDoc(doc, mappings)
+				if linkified != doc.Content() {
+					err = tikibase.UpdateDocument(doc, linkified)
+					if err != nil {
+						return fmt.Errorf("cannot update document %q: %w", doc.FileName(), err)
+					}
+				}
 			}
-		}
-		log()
+			return nil
+		})
 	}
-	return nil
+	for d := range docs {
+		docsChan <- docs[d]
+	}
+	close(docsChan)
+
+	return group.Wait()
 }
