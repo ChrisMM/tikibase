@@ -27,6 +27,7 @@ func linkifyDoc(doc *domain.Document, docs domain.Documents, docsMappings []docM
 	replacer.Ignore(findLinks(docContent)...)
 	replacer.Ignore(findSections(docContent)...)
 	replacer.Ignore(findUrls(docContent)...)
+	replacer.Ignore(findBlockquotes(docContent)...)
 	replacer.Ignore(existingLinkedDocTitles...)
 
 	// replace all doc names with a link to the respective doc
