@@ -16,6 +16,7 @@ import (
 	"github.com/kevgo/tikibase/find"
 	"github.com/kevgo/tikibase/fix"
 	"github.com/kevgo/tikibase/linkify"
+	"github.com/kevgo/tikibase/remove"
 	"github.com/kevgo/tikibase/stats"
 	"github.com/kevgo/tikibase/test"
 )
@@ -56,6 +57,10 @@ func (w *workspaceFeature) createWorkspace(arg *messages.Pickle) {
 	if err != nil {
 		log.Fatalf("cannot create workspace: %s", err.Error())
 	}
+}
+
+func (w *workspaceFeature) deletingFile(filename string) error {
+	return remove.Run(w.root, filename)
 }
 
 func (w *workspaceFeature) fileIsUnchanged(filename string) error {
@@ -266,6 +271,7 @@ func FeatureContext(s *godog.Suite) {
 	wf := &workspaceFeature{fileContents: make(map[string]string)}
 	s.BeforeScenario(wf.createWorkspace)
 	s.Step(`^checking the TikiBase$`, wf.checkingTheTikiBase)
+	s.Step(`^deleting file "([^"]*)"$`, wf.deletingFile)
 	s.Step(`^file "([^"]*)" is unchanged$`, wf.fileIsUnchanged)
 	s.Step(`^linkifying$`, wf.linkify)
 	s.Step(`^it finds:$`, wf.itFinds)
