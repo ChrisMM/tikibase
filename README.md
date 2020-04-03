@@ -29,7 +29,7 @@ The `tikibase` tool provides these commands:
 
 ### configuration
 
-Update the file **tikibase.yml** in your Tikibase directory to configure this
+Review (update) the file **tikibase.yml** in your Tikibase directory to configure this
 tool. Here is the default configuration:
 
 ```yml
