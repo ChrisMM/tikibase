@@ -3,6 +3,7 @@ package linkify
 import (
 	"fmt"
 
+	"github.com/jinzhu/inflection"
 	"github.com/kevgo/tikibase/domain"
 	"github.com/kevgo/tikibase/helpers"
 )
@@ -36,6 +37,14 @@ func docsMappings(docs domain.Documents) (result []docMapping, err error) {
 			replaceWith: fmt.Sprintf("[%s](%s)", keys[k], docsNames[keys[k]]),
 			file:        docsNames[keys[k]],
 		})
+		plural := inflection.Plural(keys[k])
+		if plural != keys[k] {
+			result = append(result, docMapping{
+				lookFor:     plural,
+				replaceWith: fmt.Sprintf("[%s](%s)", plural, docsNames[keys[k]]),
+				file:        docsNames[keys[k]],
+			})
+		}
 	}
 	return result, nil
 }

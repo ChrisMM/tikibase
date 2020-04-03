@@ -51,6 +51,5 @@ func Run(dir string, log logger) (err error) {
 		docsChan <- docs[d]
 	}
 	close(docsChan)
-
 	return group.Wait()
 }

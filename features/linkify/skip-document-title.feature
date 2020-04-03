@@ -7,18 +7,18 @@ Feature: don't linkify document title
   Scenario: match in document title
     Given the workspace contains file "byte.md" with content:
       """
-      # Byte
+      # byte
       """
     And the workspace contains file "kilo-byte.md" with content:
       """
       # Kilo Byte
 
-      roughly a thousand bytes
+      roughly a thousand times more
       """
     When linkifying
     Then the workspace should contain the file "kilo-byte.md" with content:
       """
       # Kilo Byte
 
-      roughly a thousand bytes
+      roughly a thousand times more
       """
