@@ -2,12 +2,15 @@ package remove
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/kevgo/tikibase/domain"
 )
 
 // Run performs the "delete" command.
 func Run(dir, filename string) error {
+	os.Remove(filepath.Join(dir, filename))
 	tikibase, err := domain.NewTikiBase(dir)
 	if err != nil {
 		return err

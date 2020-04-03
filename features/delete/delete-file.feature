@@ -12,7 +12,8 @@ Feature: deleting a file
       This feeld [old](old.md).
       """
     When deleting file "old.md"
-    Then the workspace should contain the file "1.md" with content:
+    Then the workspace should no longer contain file "old.md"
+    And the workspace should contain the file "1.md" with content:
       """
       # One
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 	"reflect"
 	"strconv"
@@ -266,6 +267,14 @@ func (w *workspaceFeature) shouldContainFileWithContent(filename string, text *m
 	return nil
 }
 
+func (w *workspaceFeature) theWorkspaceNoLongerContainsFile(filename string) error {
+	_, err := os.Stat(filepath.Join(w.root, filename))
+	if os.IsNotExist(err) {
+		return nil
+	}
+	return fmt.Errorf("file %q still exists", filename)
+}
+
 //nolint:deadcode,unused
 func FeatureContext(s *godog.Suite) {
 	wf := &workspaceFeature{fileContents: make(map[string]string)}
@@ -288,5 +297,6 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^running Statistics$`, wf.runningStatistics)
 	s.Step(`^the workspace contains a binary file "([^"]*)"$`, wf.containsBinaryFile)
 	s.Step(`^the workspace contains file "([^"]*)" with content:$`, wf.containsFileWithContent)
+	s.Step(`^the workspace should no longer contain file "([^"]*)"$`, wf.theWorkspaceNoLongerContainsFile)
 	s.Step(`^the workspace should contain the file "([^"]*)" with content:$`, wf.shouldContainFileWithContent)
 }
